@@ -43,7 +43,7 @@ python -m ruff format --check scripts tests config/scrapers
 python -m compileall -q scripts config/scrapers
 python -m pytest -q
 python scripts/validate_data.py
-python scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json
+python -m pytest tests/test_refresh_catalog.py -q
 ```
 
 ## Project layout
@@ -99,7 +99,7 @@ python scripts/generate_dashboard.py
 - **Import errors from `scripts/`:** run commands from the repository root.
   `python scripts/*.py` puts `scripts/` on `sys.path`.
 - **Stale README:** regenerate with `python scripts/generate_dashboard.py`.
-- **Fixture dry-run:** `python scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json`
+- **Fixture dry-run:** `python -m pytest tests/test_refresh_catalog.py -q` (`--fixture` must not write `data/active/internships.json`)
 
 ## Related docs
 

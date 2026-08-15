@@ -54,6 +54,9 @@ def format_age(when: date, now: date) -> str:
 
 
 def age_for_row(row: dict, now: date) -> str:
+    """Posting recency: posted_at else first_seen. Program hubs without posted_at are —."""
+    if row.get("row_kind") == "program_fallback" and not row.get("posted_at"):
+        return "—"
     raw = row.get("posted_at") or row.get("first_seen")
     if not raw:
         return "—"

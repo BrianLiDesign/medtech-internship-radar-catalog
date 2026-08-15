@@ -41,7 +41,7 @@ A co-op whose term is Summer 2027 / summer-shaped. In v1. Multi-term rotating co
 
 ## Age
 
-README recency: `posted_at` if known, else `first_seen`. Not `last_seen` / last-verified.
+README recency for **postings**: `posted_at` if known, else `first_seen`. Program-fallback hubs have no posting date, so Age is `—` unless `posted_at` is set. Not `last_seen` / last-verified.
 
 ## Verification / liveness
 

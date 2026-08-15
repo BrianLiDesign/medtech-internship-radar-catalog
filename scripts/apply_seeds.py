@@ -100,6 +100,35 @@ def merge_seeds_with_existing(seed_rows: list[dict], existing: list[dict]) -> li
     return new_seeds + kept
 
 
+def ensure_program_fallbacks(catalog: list[dict], seed_rows: list[dict]) -> list[dict]:
+    """Add seed fallbacks for companies that have no active catalog row.
+
+    Does not rewrite existing fallbacks (first_seen stays frozen).
+    """
+    covered = {row["company"] for row in catalog}
+    extra = [dict(row) for row in seed_rows if row["company"] not in covered]
+    return catalog + extra
+
+
+def restore_missing_fallbacks(
+    catalog_path: Path,
+    seed_path: Path = DEFAULT_SEEDS,
+    *,
+    season_path: Path = DEFAULT_SEASON_FILE,
+    seen_on: str | None = None,
+) -> list[dict]:
+    """Write seed fallbacks for companies that dropped to zero active rows."""
+    document = load_seed_document(seed_path)
+    season = document.get("season") or _current_season(season_path)
+    seen = seen_on or document.get("first_seen") or date.today().isoformat()
+    seed_rows = [row_from_seed(seed, season=season, seen_on=seen) for seed in document["seeds"]]
+    output = Path(catalog_path)
+    restored = ensure_program_fallbacks(load_existing_catalog(output), seed_rows)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(restored, indent=2) + "\n", encoding="utf-8")
+    return restored
+
+
 def apply_seeds(
     seed_path: Path,
     output_path: Path,

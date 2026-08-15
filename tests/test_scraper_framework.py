@@ -236,6 +236,15 @@ def test_scrape_cli_merges_fixture_postings_and_keeps_other_fallbacks(tmp_path):
     assert "Inspire Medical" in {row["company"] for row in rows}
 
 
+def test_fixture_merge_refuses_production_catalog():
+    import pytest
+
+    from scrape_internships import DEFAULT_CATALOG, scrape_and_merge
+
+    with pytest.raises(ValueError, match="production catalog"):
+        scrape_and_merge(catalog_path=DEFAULT_CATALOG, fixture_path=BSC_FIXTURE)
+
+
 def test_registered_scrapers_are_allowlisted_and_not_candidates():
     allowlist = {
         company["name"]

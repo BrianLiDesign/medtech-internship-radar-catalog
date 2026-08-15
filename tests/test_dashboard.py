@@ -63,6 +63,31 @@ def test_age_uses_posted_at_when_set_else_first_seen():
     assert dexcom.endswith("| 1mo |")
 
 
+def test_program_fallback_age_is_em_dash_without_posted_at():
+    hub = internship(
+        company="Medtronic",
+        title="University internships",
+        row_kind="program_fallback",
+        role_family="Other STEM",
+        first_seen="2026-08-14",
+        last_seen="2026-08-14",
+    )
+    dated_hub = internship(
+        id="22222222-2222-4222-8222-222222222222",
+        company="Abbott",
+        title="University Internship Program",
+        row_kind="program_fallback",
+        role_family="Other STEM",
+        posted_at="2026-08-11",
+        first_seen="2026-08-14",
+    )
+    readme = generate_readme([hub, dated_hub], season="summer-2027", now=NOW)
+    medtronic = next(line for line in readme.splitlines() if "| Medtronic |" in line)
+    abbott = next(line for line in readme.splitlines() if "| Abbott |" in line)
+    assert medtronic.endswith("| — |")
+    assert abbott.endswith("| 3d |")
+
+
 def test_row_without_apply_url_is_omitted():
     listed = internship(company="Medtronic", title="Has Apply")
     omitted = internship(

@@ -2,8 +2,8 @@
 """Run allowlisted internship scrapers and upsert posting rows.
 
 Workday companies without an adapter stay on program_fallback. Candidate
-companies are never scraped. Pass --fixture to merge a mocked PCSX JSON
-payload with no live network.
+Pass --fixture to merge a mocked PCSX JSON payload into a **temp** catalog
+(never `data/active/internships.json`). Live refresh omits --fixture.
 """
 
 from __future__ import annotations
@@ -77,6 +77,11 @@ def scrape_and_merge(
     candidates_path: Path = DEFAULT_CANDIDATES,
 ) -> list[dict]:
     """Discover allowlisted scrapers, scrape, upsert by internship ID, and save."""
+    if fixture_path is not None and Path(catalog_path).resolve() == DEFAULT_CATALOG.resolve():
+        raise ValueError(
+            "refusing to merge --fixture into the production catalog "
+            "(data/active/internships.json); pass --catalog to a temp file"
+        )
     seen = seen_on or date.today().isoformat()
     existing = load_json_list(catalog_path)
     allowlist = load_company_names(allowlist_path, "companies")

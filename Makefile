@@ -28,4 +28,4 @@ validate:
 	$(PYTHON) scripts/validate_data.py
 
 e2e:
-	$(PYTHON) scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json
+	$(PYTHON) -m pytest tests/test_refresh_catalog.py -q

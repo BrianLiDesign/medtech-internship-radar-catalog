@@ -15,6 +15,7 @@ CLOSE_REASON_MISSES = "consecutive_misses"
 CLOSE_REASON_FORCE = "force_close"
 CLOSE_REASON_URL = "url_dead"
 DEAD_URL_STATUSES = frozenset({404, 410})
+ATS_CLOSED_MARKERS = ("no longer accepting applications",)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE = REPO_ROOT / "data" / "active" / "internships.json"
@@ -31,15 +32,31 @@ class Observation:
     url_status: int | None = None
 
 
-def probe_url_status(session: object | None, url: str) -> int | None:
-    """Return HTTP status for a URL, or None if it cannot be probed."""
+def probe_url(session: object | None, url: str) -> tuple[int | None, str]:
+    """Return (HTTP status, body) for a URL, or (None, "") if it cannot be probed."""
     if session is None or not url:
-        return None
+        return None, ""
     try:
         response = session.get(url, timeout=PROBE_TIMEOUT, allow_redirects=True)
     except Exception:
-        return None
-    return getattr(response, "status_code", None)
+        return None, ""
+    status = getattr(response, "status_code", None)
+    text = getattr(response, "text", "") or ""
+    return status, text
+
+
+def probe_url_status(session: object | None, url: str) -> int | None:
+    """Return HTTP status for a URL, or None if it cannot be probed."""
+    status, _body = probe_url(session, url)
+    return status
+
+
+def looks_ats_closed(*, status: int | None, body: str) -> bool:
+    """True when an apply URL is gone or the ATS page says the req is closed."""
+    if status in DEAD_URL_STATUSES:
+        return True
+    text = body.lower()
+    return any(marker in text for marker in ATS_CLOSED_MARKERS)
 
 
 def observation_for_row(
@@ -51,10 +68,15 @@ def observation_for_row(
 ) -> Observation:
     if row["id"] in signals:
         return signals[row["id"]]
+    url = row.get("program_url") or row.get("apply_url") or ""
     if row.get("row_kind") == "program_fallback":
-        url = row.get("program_url") or row.get("apply_url") or ""
         return Observation(seen=True, url_status=probe_url_status(session, url))
-    return Observation(seen=row.get("last_seen") == today)
+    status, body = probe_url(session, row.get("apply_url") or "")
+    return Observation(
+        seen=row.get("last_seen") == today,
+        ats_closed=looks_ats_closed(status=status, body=body) if session is not None else False,
+        url_status=status,
+    )
 
 
 def apply_archive_rules(

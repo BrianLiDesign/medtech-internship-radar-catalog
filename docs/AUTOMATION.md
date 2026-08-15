@@ -6,10 +6,10 @@ Pipeline: **scrape → validate → archive → generate README**.
 
 ## Local dry-run (mocked HTTP)
 
-Uses the Boston Scientific Eightfold fixture. No live ATS, Workday, or GitHub (`gh`) calls.
+Uses the Boston Scientific Eightfold fixture against **temp copies** of the catalog. Never merge `--fixture` into `data/active/internships.json` — that writes synthetic job IDs as if they were live postings.
 
 ```bash
-python scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json
+python -m pytest tests/test_refresh_catalog.py -q
 ```
 
 Or the Makefile target:
@@ -21,15 +21,22 @@ make e2e
 If `make` is unavailable (typical on Windows PowerShell):
 
 ```bash
-python scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json
+python -m pytest tests/test_refresh_catalog.py -q
 ```
 
-That command:
+`--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--health`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:
 
-1. Merges fixture postings into `data/active/internships.json` (no live network)
+```bash
+python scripts/refresh_catalog.py
+```
+
+That live command:
+
+1. Scrapes allowlisted adapters (no fixture) into `data/active/internships.json`
 2. Validates active + archived catalogs
-3. Applies archive rules (ATS-closed, two consecutive posting misses, two program-URL deaths, or `--force-close`)
-4. Writes `data/health.json`, `README.md`, and `README-Inactive.md`
+3. Probes apply URLs and archives ATS-closed / two-miss / dead program-URL rows
+4. Restores a program-fallback seed if a company has zero active rows
+5. Writes `data/health.json`, `README.md`, and `README-Inactive.md`
 
 ## Merge an issue into the catalog
 

@@ -77,6 +77,46 @@ def test_ats_closed_archives_immediately():
     assert closed["close_reason"] == "ats_closed"
 
 
+def test_posting_html_no_longer_accepting_archives_immediately():
+    from unittest.mock import Mock
+
+    response = Mock()
+    response.status_code = 200
+    response.text = "<html><body>No longer accepting applications.</body></html>"
+    session = Mock()
+    session.get.return_value = response
+    row = posting(miss_count=0, last_seen="2026-08-14")
+    active, archived = apply_archive_rules(
+        [row],
+        [],
+        today="2026-08-14",
+        session=session,
+    )
+    assert active == []
+    assert archived[0]["close_reason"] == "ats_closed"
+    assert archived[0]["closed_at"] == "2026-08-14"
+    session.get.assert_called()
+
+
+def test_posting_open_html_stays_active_on_same_day_seen():
+    from unittest.mock import Mock
+
+    response = Mock()
+    response.status_code = 200
+    response.text = "<html><body>Apply now for this internship.</body></html>"
+    session = Mock()
+    session.get.return_value = response
+    row = posting(miss_count=0, last_seen="2026-08-14")
+    active, archived = apply_archive_rules(
+        [row],
+        [],
+        today="2026-08-14",
+        session=session,
+    )
+    assert archived == []
+    assert [item["id"] for item in active] == [row["id"]]
+
+
 def test_force_close_archives():
     row = posting(miss_count=0)
     active, archived = apply_archive_rules(

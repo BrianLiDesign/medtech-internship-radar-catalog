@@ -5,7 +5,13 @@ from pathlib import Path
 
 from jsonschema import Draft7Validator
 
-from apply_seeds import apply_seeds, load_seed_document, merge_seeds_with_existing
+from apply_seeds import (
+    apply_seeds,
+    ensure_program_fallbacks,
+    load_seed_document,
+    merge_seeds_with_existing,
+    restore_missing_fallbacks,
+)
 from internship_ids import internship_id
 from validate_data import validate_catalog_file
 
@@ -205,3 +211,61 @@ def test_load_seed_document_reads_local_fixture():
     document = load_seed_document(FIXTURE_SEEDS)
     assert len(document["seeds"]) == 2
     assert document["season"] == "summer-2027"
+
+
+def test_ensure_program_fallbacks_restores_company_with_no_rows():
+    medtronic = {
+        "id": "keep-fallback",
+        "company": "Medtronic",
+        "title": "University internships",
+        "apply_url": "https://www.medtronic.com/en-us/our-company/careers/early-careers.html",
+        "row_kind": "program_fallback",
+        "first_seen": "2026-08-14",
+    }
+    bsc_seed = {
+        "id": "bsc-fallback",
+        "company": "Boston Scientific",
+        "title": "Students and early careers",
+        "apply_url": "https://www.bostonscientific.com/en-US/careers/students.html",
+        "row_kind": "program_fallback",
+        "first_seen": "2026-08-15",
+    }
+    medtronic_seed = dict(medtronic)
+    medtronic_seed["first_seen"] = "2026-08-15"
+    restored = ensure_program_fallbacks([medtronic], [medtronic_seed, bsc_seed])
+    companies = {row["company"] for row in restored}
+    assert companies == {"Medtronic", "Boston Scientific"}
+    kept = next(row for row in restored if row["company"] == "Medtronic")
+    assert kept["first_seen"] == "2026-08-14"
+    assert kept["id"] == "keep-fallback"
+
+
+def test_restore_missing_fallbacks_adds_boston_scientific(tmp_path):
+    catalog = tmp_path / "internships.json"
+    catalog.write_text(
+        json.dumps(
+            [
+                {
+                    "id": "keep-fallback",
+                    "company": "Medtronic",
+                    "title": "University internships",
+                    "apply_url": "https://www.medtronic.com/en-us/our-company/careers/early-careers.html",
+                    "row_kind": "program_fallback",
+                    "first_seen": "2026-08-14",
+                }
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    rows = restore_missing_fallbacks(
+        catalog,
+        PRODUCTION_SEEDS,
+        seen_on="2026-08-15",
+    )
+    assert "Boston Scientific" in {row["company"] for row in rows}
+    written = json.loads(catalog.read_text(encoding="utf-8"))
+    assert written == rows
+    bsc = next(row for row in rows if row["company"] == "Boston Scientific")
+    assert bsc["row_kind"] == "program_fallback"
+    assert bsc["source"] == "seed"

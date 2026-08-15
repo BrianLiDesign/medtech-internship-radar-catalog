@@ -13,6 +13,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from apply_seeds import restore_missing_fallbacks
 from archive_closed import archive_catalog_files
 from generate_dashboard import write_readme
 from scrape_internships import scrape_and_merge
@@ -27,6 +28,7 @@ DEFAULT_README = REPO_ROOT / "README.md"
 DEFAULT_INACTIVE = REPO_ROOT / "README-Inactive.md"
 DEFAULT_HEALTH = REPO_ROOT / "data" / "health.json"
 DEFAULT_ARTIFACT = REPO_ROOT / "logs" / "scrape_failures.json"
+DEFAULT_SEEDS = REPO_ROOT / "config" / "seeds" / "program_fallbacks.json"
 
 
 def load_failed_scrapers(artifact_path: Path) -> list[str]:
@@ -100,6 +102,12 @@ def refresh_catalog(
         archived_path,
         today=sweep_day,
         session=probe_session,
+    )
+    restore_missing_fallbacks(
+        catalog_path,
+        DEFAULT_SEEDS,
+        season_path=season_path,
+        seen_on=sweep_day,
     )
     active = json.loads(Path(catalog_path).read_text(encoding="utf-8"))
     archived = json.loads(Path(archived_path).read_text(encoding="utf-8"))
