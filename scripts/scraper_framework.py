@@ -93,8 +93,11 @@ class InternshipScraper(ABC):
             postings.append(self.to_catalog_row(parsed, seen_on=seen_on, season=catalog_season))
         return ScrapeResult(company=self.company, postings=postings)
 
-    def fetch_json(self, url: str) -> dict | None:
-        """GET JSON with timeout and rate limit. Blocked responses yield None."""
+    def fetch_json(self, url: str):
+        """GET JSON with timeout and rate limit. Blocked responses yield None.
+
+        Lever boards return a JSON array; Greenhouse/Eightfold return objects.
+        """
         self._wait_for_rate_limit()
         try:
             response = self.session.get(url, timeout=self.timeout, headers=self.headers)
@@ -272,7 +275,20 @@ def posted_at_from_unix(timestamp: object) -> str | None:
         value = int(timestamp)  # type: ignore[arg-type]
     except (TypeError, ValueError):
         return None
+    if abs(value) >= 10_000_000_000:
+        value //= 1000
     return datetime.fromtimestamp(value, tz=timezone.utc).date().isoformat()
+
+
+def posted_at_from_iso(value: object) -> str | None:
+    """Take YYYY-MM-DD from an ISO-8601 timestamp (Python 3.9-safe)."""
+    text = str(value or "").strip()
+    if len(text) < 10 or text[4] != "-" or text[7] != "-":
+        return None
+    try:
+        return datetime.strptime(text[:10], "%Y-%m-%d").date().isoformat()
+    except ValueError:
+        return None
 
 
 def keep_parsed_posting(parsed: dict) -> bool:

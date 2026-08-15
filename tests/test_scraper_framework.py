@@ -265,3 +265,14 @@ def test_registered_scrapers_are_allowlisted_and_not_candidates():
     registered = set(discover_scrapers())
     assert registered <= allowlist
     assert registered.isdisjoint(candidates)
+    assert {"Boston Scientific", "Penumbra", "Inspire Medical"} <= registered
+
+
+def test_posted_at_helpers_accept_seconds_millis_and_iso_prefix():
+    from scraper_framework import posted_at_from_iso, posted_at_from_unix
+
+    assert posted_at_from_unix(1750000000) == "2025-06-15"
+    assert posted_at_from_unix(1750000000000) == "2025-06-15"
+    assert posted_at_from_iso("2026-04-15T10:00:00-05:00") == "2026-04-15"
+    assert posted_at_from_iso("not-a-date") is None
+    assert posted_at_from_unix("nope") is None

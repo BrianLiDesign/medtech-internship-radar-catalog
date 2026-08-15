@@ -97,7 +97,7 @@
       "name": "Penumbra",
       "hub_url": "https://jobs.lever.co/penumbrainc",
       "ats": "lever",
-      "notes": "Public Lever job board (jobs.lever.co/penumbrainc). Intern reqs appear here; no separate university-recruiting narrative page found. ATS: lever. Wave 1 uses program-fallback (no Lever scraper)."
+      "notes": "Public Lever job board (jobs.lever.co/penumbrainc). Intern reqs appear here; no separate university-recruiting narrative page found. ATS: lever. Adapter: config/scrapers/penumbra_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Align",
@@ -193,7 +193,7 @@
       "name": "Inspire Medical",
       "hub_url": "https://www.inspiresleep.com/en-us/careers/internships/",
       "ats": "greenhouse",
-      "notes": "Public 12-week Inspire Internship Program landing. Job applications go through Greenhouse (job-boards.greenhouse.io/inspiremedicalsystemsinc). Wave 2 uses program-fallback (no Greenhouse scraper)."
+      "notes": "Public 12-week Inspire Internship Program landing. Job applications go through Greenhouse (job-boards.greenhouse.io/inspiremedicalsystemsinc). Adapter: config/scrapers/inspire_medical_scraper.py (US STEM intern postings; hub remains if the board has none)."
     }
   ]
 }
