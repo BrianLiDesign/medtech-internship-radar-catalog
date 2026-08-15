@@ -1,0 +1,15 @@
+MedTech Internship Radar Catalog
+Copyright (c) 2026 Brian Li
+
+This repository uses a dual license:
+
+1. Dataset files under `data/` are licensed under Creative Commons
+   Attribution 4.0 International (CC-BY 4.0). See [LICENSE-DATA.md](LICENSE-DATA.md).
+
+2. All other files (scripts, configuration, tests, documentation, and
+   automation) are licensed under the MIT License. See [LICENSE.md](LICENSE.md).
+
+When redistributing:
+
+- Include attribution for the dataset as required by CC-BY 4.0.
+- Include the MIT license notice when redistributing code.

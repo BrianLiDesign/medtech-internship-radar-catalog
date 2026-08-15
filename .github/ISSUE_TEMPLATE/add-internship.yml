@@ -1,0 +1,116 @@
+name: Add internship
+description: Suggest a US STEM internship or summer co-op req at an allowlisted company
+title: "[Internship] "
+labels:
+  - internship
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for a **specific req** (title + apply URL) at an allowlisted company.
+
+        Maintainers merge suggestions into the catalog after identity + schema checks.
+        Do **not** open a pull request that edits `data/active/internships.json` or
+        `data/archived/internships.json`.
+
+        To propose a **new employer**, see CONTRIBUTING.md
+        (candidates → allowlist → scraper). Candidate companies are not in this dropdown.
+  - type: dropdown
+    id: company
+    attributes:
+      label: Company
+      description: Allowlisted companies only.
+      options:
+        - Medtronic
+        - Intuitive
+        - Abbott
+        - Dexcom
+        - Insulet
+        - Tandem
+        - Stryker
+        - Boston Scientific
+        - Edwards
+        - BD
+        - Zimmer Biomet
+        - GE HealthCare
+        - J&J MedTech
+        - Siemens Healthineers
+        - Philips
+        - Penumbra
+        - Align
+        - Smith+Nephew
+        - Baxter
+        - ResMed
+        - Hologic
+        - Teleflex
+        - Integra LifeSciences
+        - Globus Medical
+        - Arthrex
+        - STERIS
+        - CONMED
+        - Olympus
+        - CooperCompanies
+        - Biotronik
+        - Alcon
+        - Inspire Medical
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: Job title as shown on the posting.
+      placeholder: Software Engineer Intern
+    validations:
+      required: true
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: US city/state, or Remote (US). Join sites with "; " when one apply URL covers many cities.
+      placeholder: Minneapolis, MN
+    validations:
+      required: true
+  - type: input
+    id: apply-url
+    attributes:
+      label: Apply URL
+      description: Direct apply link for this req (not a Workday search URL).
+      placeholder: https://example.com/job/R-12345
+    validations:
+      required: true
+  - type: dropdown
+    id: degree
+    attributes:
+      label: Degree
+      description: Unspecified shows as BS/MS on the README.
+      options:
+        - Unspecified
+        - BS
+        - MS
+        - BS/MS
+      default: 0
+    validations:
+      required: true
+  - type: dropdown
+    id: season
+    attributes:
+      label: Season
+      options:
+        - summer-2027
+        - summer-2028
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: req-id
+    attributes:
+      label: Requisition ID (optional)
+      description: Employer req / job ID if shown on the posting. Wins identity over the apply URL.
+      placeholder: R-12345
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes (optional)
+      description: Anything else maintainers should know (posted date, returning-only, work authorization text).
+      placeholder: Posted 2026-08-01. Text says US work authorization required; no sponsorship.

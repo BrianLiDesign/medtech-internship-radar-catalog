@@ -1,0 +1,6 @@
+{
+  "description": "Companies parked for a later allowlist — not scrapers and not in config/allowlist.json. Wave 2 promoted remaining device candidates onto the allowlist. Hospitals/pharma stay out.",
+  "version": "1.0",
+  "last_updated": "2026-08-14",
+  "candidates": []
+}

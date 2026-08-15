@@ -1,0 +1,39 @@
+[
+  {
+    "id": "24ce68b9-5c16-5171-9e1c-89e11fc15db0",
+    "company": "Medtronic",
+    "title": "Software Engineering Intern",
+    "apply_url": "https://jobs.example.com/medtronic/software-intern",
+    "season": "summer-2027",
+    "role_family": "Software",
+    "location": "Minneapolis, MN",
+    "degree": "bs",
+    "row_kind": "posting",
+    "source": "seed",
+    "first_seen": "2026-08-14",
+    "last_seen": "2026-08-14",
+    "req_id": "R-1001",
+    "posted_at": "2026-08-01",
+    "work_auth": "unspecified",
+    "eligibility": "open",
+    "ats": "example",
+    "short_description": "Summer software internship on a connected-device team."
+  },
+  {
+    "id": "fcefe43c-ec2b-5fba-925e-38d28c57957e",
+    "company": "Intuitive",
+    "title": "University Internships",
+    "apply_url": "https://careers.intuitive.com/internships",
+    "season": "summer-2027",
+    "role_family": "Other STEM",
+    "location": "Sunnyvale, CA",
+    "degree": "unspecified",
+    "row_kind": "program_fallback",
+    "source": "seed",
+    "first_seen": "2026-08-14",
+    "last_seen": "2026-08-14",
+    "program_url": "https://careers.intuitive.com/internships",
+    "canonical_apply_url": "https://careers.intuitive.com/internships",
+    "short_description": "Company internship portal used when individual reqs are not scrapeable."
+  }
+]

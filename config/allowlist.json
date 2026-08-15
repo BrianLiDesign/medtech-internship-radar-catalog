@@ -1,0 +1,199 @@
+{
+  "description": "Allowlist of US medtech and diabetes-device employers (v1 locked twelve plus post-v1 waves). hub_url is a public internships / university recruiting / early-careers page — not a login-only Workday search.",
+  "version": "1.0",
+  "last_updated": "2026-08-14",
+  "companies": [
+    {
+      "name": "Medtronic",
+      "hub_url": "https://www.medtronic.com/en-us/our-company/careers/early-careers.html",
+      "ats": "workday",
+      "notes": "Public Early Careers intern landing (internships, WISE, recruiting timeline, Apply for internships). Medtronic careers pages refer to the Workday Jobs Hub; do not use medtronic.wd1.myworkdayjobs.com as the hub URL."
+    },
+    {
+      "name": "Intuitive",
+      "hub_url": "https://careers.intuitive.com/en/career-opportunities/students-and-university/",
+      "ats": "unknown",
+      "notes": "Public Students & University intern/co-op landing with live intern reqs. Career site is careers.intuitive.com (not Greenhouse or Lever). Underlying ATS not confirmed from the page."
+    },
+    {
+      "name": "Abbott",
+      "hub_url": "https://www.jobs.abbott/us/en/university-internship-program",
+      "ats": "workday",
+      "notes": "Public University Internship Program page on jobs.abbott (Phenom career site). Applications go through Abbott's Workday-backed candidate home. Alternate early-careers narrative: https://www.abbott.com/en-us/careers/students"
+    },
+    {
+      "name": "Dexcom",
+      "hub_url": "https://careers.dexcom.com/careers/internship",
+      "ats": "workday",
+      "notes": "Public intern listing on careers.dexcom.com (Phenom). Page search config includes position.system_id:workday. This is an intern category listing, not a separate university-recruiting narrative page."
+    },
+    {
+      "name": "Insulet",
+      "hub_url": "https://www.insulet.com/working-at-insulet/students-and-early-careers",
+      "ats": "workday",
+      "notes": "Public Student Opportunities page (12-week summer internship + six-month co-ops). Open-roles destination is Workday: insulet.wd5.myworkdayjobs.com (session cookies verified). Do not use the Workday search URL as the hub."
+    },
+    {
+      "name": "Tandem",
+      "hub_url": "https://www.tandemdiabetes.com/about-us/careers/internship-program",
+      "ats": "workday",
+      "notes": "Public Internship Program landing (apply early spring; internships begin in June). Intern req apply links resolve to tandemdiabetes.wd12.myworkdayjobs.com. Do not use that Workday URL as the hub."
+    },
+    {
+      "name": "Stryker",
+      "hub_url": "https://careers.stryker.com/students-and-graduates",
+      "ats": "workday",
+      "notes": "Public Students and Graduates intern landing (US paid summer internships). careers.stryker.com is the Phenom career site in front of Stryker Workday recruiting."
+    },
+    {
+      "name": "Boston Scientific",
+      "hub_url": "https://www.bostonscientific.com/en-US/careers/students.html",
+      "ats": "eightfold",
+      "notes": "Public Students and early careers intern/co-op landing. Job search/apply is bostonscientific.eightfold.ai (Eightfold, not Greenhouse/Lever/Workday). Keep the branded students page as the hub."
+    },
+    {
+      "name": "Edwards",
+      "hub_url": "https://www.edwards.com/careers/university-recruiting/internship-programs",
+      "ats": "workday",
+      "notes": "Public US Summer Internship Program page under university recruiting (Irvine CA / Draper UT). Apply/search is Edwards Workday (edwards.wd5.myworkdayjobs.com). Do not use the Workday search URL as the hub."
+    },
+    {
+      "name": "BD",
+      "hub_url": "https://jobs.bd.com/en/early-talent",
+      "ats": "workday",
+      "notes": "Public Early Talent page including the Summer Internship Program. jobs.bd.com intern search labels results as Workday (Talentbrew/Phenom in front of Workday)."
+    },
+    {
+      "name": "Zimmer Biomet",
+      "hub_url": "https://careers.zimmerbiomet.com/us/en/grow-with-us",
+      "ats": "unknown",
+      "notes": "Public Grow With Us page documents US internships and early-career programs (Phenom career site, cdn.phenompeople.com). Mixed with leadership programs; no separate intern-only landing found. Underlying ATS not confirmed from this page."
+    },
+    {
+      "name": "GE HealthCare",
+      "hub_url": "https://careers.gehealthcare.com/global/en/internship",
+      "ats": "workday",
+      "notes": "Public Internships landing (engineering, IT, quality/regulatory, operations, finance, commercial). Reqs use Workday-style IDs (R#######EXTERNALEN) on careers.gehealthcare.com. Alternate hub: https://careers.gehealthcare.com/global/en/students-graduates"
+    },
+    {
+      "name": "J&J MedTech",
+      "hub_url": "https://www.careers.jnj.com/en/early-career-programs/internships/",
+      "ats": "unknown",
+      "notes": "Public J&J internships page (MedTech is one of several J&J businesses on this hub). Automated HEAD often 403; page is indexed and documented as the intern apply hub."
+    },
+    {
+      "name": "Siemens Healthineers",
+      "hub_url": "https://www.siemens-healthineers.com/en-us/careers/students",
+      "ats": "unknown",
+      "notes": "Public US Students and Graduates intern landing (project-based internships across Healthineers businesses including Varian)."
+    },
+    {
+      "name": "Philips",
+      "hub_url": "https://www.careers.philips.com/student/na/en/internships-apprenticeship",
+      "ats": "unknown",
+      "notes": "Public North America internships / apprenticeship / co-op student careers page."
+    },
+    {
+      "name": "Penumbra",
+      "hub_url": "https://jobs.lever.co/penumbrainc",
+      "ats": "lever",
+      "notes": "Public Lever job board (jobs.lever.co/penumbrainc). Intern reqs appear here; no separate university-recruiting narrative page found. ATS: lever. Wave 1 uses program-fallback (no Lever scraper)."
+    },
+    {
+      "name": "Align",
+      "hub_url": "https://jobs.aligntech.com/careers",
+      "ats": "unknown",
+      "notes": "Public Align Technology careers hub; page includes a Summer Internship Program (US) section. jobs.aligntech.com/earlycareers returns 404. Wave 1 uses program-fallback."
+    },
+    {
+      "name": "Smith+Nephew",
+      "hub_url": "https://www.smith-nephew.com/en-us/careers",
+      "ats": "workday",
+      "notes": "Public US careers hub with Internships and Early careers sections (US sites include Memphis, Andover, Fort Worth, Austin, Mansfield). Recruiting notices cite myworkday. Do not use Workday search as the hub. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Baxter",
+      "hub_url": "https://jobs.baxter.com/en/category/intern-jobs/152/83228/1",
+      "ats": "workday",
+      "notes": "Public Phenom intern-jobs category on jobs.baxter.com (US summer intern/co-op reqs appear seasonally; applications create a Workday profile). Dedicated baxter.com internships-early-talent URL 404s. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "ResMed",
+      "hub_url": "https://careers.resmed.com/careers/early-careers/",
+      "ats": "workday",
+      "notes": "Public Early careers intern/graduate landing with USA/Canada listings. Apply/search is ResMed Workday (resmed.wd3.myworkdayjobs.com). Do not use that Workday URL as the hub. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Hologic",
+      "hub_url": "https://na.careers.hologic.com/en/student-opportunities",
+      "ats": "unknown",
+      "notes": "Public North America Student Opportunities intern/co-op landing (12-week summer internships; US sites include Marlborough, Newark, San Diego). Phenom career site. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Teleflex",
+      "hub_url": "https://careers.teleflex.com/",
+      "ats": "unknown",
+      "notes": "Public careers job board; intern and co-op reqs (R&D, NPD, industrial engineering) post here. Campus T.I.D.E. intern program exists; no separate university-recruiting narrative page found. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Integra LifeSciences",
+      "hub_url": "https://www.integralife.com/careers/career-areas/early-talent-student-opportunities",
+      "ats": "unknown",
+      "notes": "Public Early Talent & Student Opportunities page (summer internships June–August, co-ops, rotational associate). Job search is jobs.integralife.com (Phenom). Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Globus Medical",
+      "hub_url": "https://www.globusmedical.com/about/careers/",
+      "ats": "unknown",
+      "notes": "Public careers page documents the Globus Co-Op Program (university cooperative education; intern/co-op reqs also posted). No separate intern-only landing found. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Arthrex",
+      "hub_url": "https://careers.arthrex.com/NorthAmerica/content/Arthrex-Internships/?locale=en_US",
+      "ats": "unknown",
+      "notes": "Public North America internships landing (internships, engineering rotational co-ops, summer associate). Student Center lists intern reqs. Career site uses SAP SuccessFactors. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "STERIS",
+      "hub_url": "https://careers.steris.com/us/en/early-careers",
+      "ats": "unknown",
+      "notes": "Public US early-careers landing (12-week paid internships; engineering co-ops). Phenom career site careers.steris.com. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "CONMED",
+      "hub_url": "https://careers.conmed.com/internships",
+      "ats": "unknown",
+      "notes": "Public CONMED Internship Program landing (10-week US summer internship; R&D and other functions). Phenom career site. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Olympus",
+      "hub_url": "https://www.olympusamerica.com/careers/current-students",
+      "ats": "unknown",
+      "notes": "Public Olympus Corporation of the Americas Current Students intern/co-op landing (paid 10–13 week internships including BME/ME/EE; apply via careers.olympusamerica.com). Wave 2 uses program-fallback."
+    },
+    {
+      "name": "CooperCompanies",
+      "hub_url": "https://www.coopercos.com/global-internship-program/",
+      "ats": "unknown",
+      "notes": "Public Global Internship Program page covering CooperVision and CooperSurgical. Apply via Cooper Oracle Cloud job search (search term: intern). Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Biotronik",
+      "hub_url": "https://www.biotronik.com/en-us/careers/career-levels/students",
+      "ats": "unknown",
+      "notes": "Public North America Students intern/working-student landing. US internships also run at Biotronik/MSEI (Lake Oswego). Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Alcon",
+      "hub_url": "https://www.alcon.com/careers/early-careers/",
+      "ats": "workday",
+      "notes": "Public Early Careers landing with US Internships (12-week summer) and US Co-Ops. Apply/search is Alcon Workday (alcon.wd5.myworkdayjobs.com). Do not use that Workday URL as the hub. Wave 2 uses program-fallback."
+    },
+    {
+      "name": "Inspire Medical",
+      "hub_url": "https://www.inspiresleep.com/en-us/careers/internships/",
+      "ats": "greenhouse",
+      "notes": "Public 12-week Inspire Internship Program landing. Job applications go through Greenhouse (job-boards.greenhouse.io/inspiremedicalsystemsinc). Wave 2 uses program-fallback (no Greenhouse scraper)."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "season": "summer-2027",
+  "first_seen": "2026-08-14",
+  "seeds": [
+    {
+      "company": "Medtronic",
+      "title": "University internships",
+      "apply_url": "https://example.test/medtronic/interns?utm_source=radar",
+      "program_url": "https://example.test/medtronic/interns",
+      "location": "Minneapolis, MN",
+      "ats": "workday",
+      "short_description": "Fixture intern hub used in unit tests."
+    },
+    {
+      "company": "Intuitive",
+      "title": "Student and university internships",
+      "apply_url": "https://example.test/intuitive/interns",
+      "program_url": "https://example.test/intuitive/interns",
+      "location": "Sunnyvale, CA",
+      "ats": "unknown",
+      "short_description": "Second fixture intern hub used in unit tests."
+    }
+  ]
+}

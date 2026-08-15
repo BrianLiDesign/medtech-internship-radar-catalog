@@ -1,0 +1,52 @@
+{
+  "status": 200,
+  "data": {
+    "count": 5,
+    "positions": [
+      {
+        "id": 563602809367335,
+        "displayJobId": "627000",
+        "name": "R&D Systems Engineering Intern",
+        "locations": ["Arden Hills, MN, United States | N/A"],
+        "standardizedLocations": ["US-MN"],
+        "department": "Interns/Graduates",
+        "atsJobId": "627000",
+        "positionUrl": "/careers/job/563602809367335",
+        "workLocationOption": "onsite"
+      },
+      {
+        "id": 563602809367336,
+        "displayJobId": "627001",
+        "name": "Software Engineer Intern",
+        "locations": ["Marlborough, MA, United States"],
+        "department": "Interns/Graduates",
+        "atsJobId": "627001",
+        "positionUrl": "/careers/job/563602809367336"
+      },
+      {
+        "id": 563602813034437,
+        "displayJobId": "631217",
+        "name": "Finance GBS Intern",
+        "locations": ["Warsaw, Spain | N/A"],
+        "atsJobId": "631217",
+        "positionUrl": "/careers/job/563602813034437"
+      },
+      {
+        "id": 563602813340006,
+        "displayJobId": "632623",
+        "name": "Marketing Intern, Neuromodulation- Madrid",
+        "locations": ["Madrid, Spain | N/A"],
+        "atsJobId": "632623",
+        "positionUrl": "/careers/job/563602813340006"
+      },
+      {
+        "id": 563602809367399,
+        "displayJobId": "628888",
+        "name": "HR Intern",
+        "locations": ["Maple Grove, MN, United States"],
+        "atsJobId": "628888",
+        "positionUrl": "/careers/job/563602809367399"
+      }
+    ]
+  }
+}
