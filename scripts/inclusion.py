@@ -35,7 +35,7 @@ _PHD_RE = re.compile(r"\bph\.?d\.?\b", re.IGNORECASE)
 _INTERN_RE = re.compile(r"\bintern(?:ship)?s?\b", re.IGNORECASE)
 _COOP_RE = re.compile(r"\bco-?ops?\b", re.IGNORECASE)
 _SUMMER_RE = re.compile(r"\bsummer\b", re.IGNORECASE)
-_TWO_LETTER_RE = re.compile(r"\b[A-Za-z]{2}\b")
+_TWO_LETTER_RE = re.compile(r",\s*([A-Za-z]{2})\b")
 
 
 def include_posting(title: str, location: str, **_optional: object) -> bool:

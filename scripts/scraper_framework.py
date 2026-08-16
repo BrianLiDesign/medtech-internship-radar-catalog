@@ -93,14 +93,22 @@ class InternshipScraper(ABC):
             postings.append(self.to_catalog_row(parsed, seen_on=seen_on, season=catalog_season))
         return ScrapeResult(company=self.company, postings=postings)
 
-    def fetch_json(self, url: str):
-        """GET JSON with timeout and rate limit. Blocked responses yield None.
+    def fetch_json(self, url: str, *, json_body: dict | None = None):
+        """GET or POST JSON with timeout and rate limit. Blocked responses yield None.
 
-        Lever boards return a JSON array; Greenhouse/Eightfold return objects.
+        Lever boards return a JSON array; Greenhouse/Eightfold/Phenom return objects.
         """
         self._wait_for_rate_limit()
         try:
-            response = self.session.get(url, timeout=self.timeout, headers=self.headers)
+            if json_body is None:
+                response = self.session.get(url, timeout=self.timeout, headers=self.headers)
+            else:
+                response = self.session.post(
+                    url,
+                    json=json_body,
+                    timeout=self.timeout,
+                    headers=self.headers,
+                )
         except Exception as exc:
             self._mark_blocked(str(exc))
             return None
@@ -120,6 +128,23 @@ class InternshipScraper(ABC):
             self._mark_blocked("not authorized")
             return None
         return payload
+
+    def fetch_text(self, url: str) -> str | None:
+        """GET HTML/text with timeout and rate limit. Blocked responses yield None."""
+        self._wait_for_rate_limit()
+        try:
+            response = self.session.get(url, timeout=self.timeout, headers=self.headers)
+        except Exception as exc:
+            self._mark_blocked(str(exc))
+            return None
+        status = getattr(response, "status_code", 0)
+        if status in (401, 403, 429) or status >= 500:
+            self._mark_blocked(f"HTTP {status}")
+            return None
+        if status >= 400:
+            self._mark_blocked(f"HTTP {status}")
+            return None
+        return response.text or ""
 
     def to_catalog_row(self, parsed: dict, *, seen_on: str, season: str) -> dict:
         """Map a parsed posting onto a schema-complete catalog row."""
@@ -309,11 +334,14 @@ def _looks_unauthorized(payload: object) -> bool:
 
 
 def _is_company_scraper(name: str, obj: object) -> bool:
+    company = getattr(obj, "company", "")
     return (
         isinstance(obj, type)
         and issubclass(obj, InternshipScraper)
         and obj is not InternshipScraper
         and name.endswith("Scraper")
+        and isinstance(company, str)
+        and bool(company.strip())
     )
 
 

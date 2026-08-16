@@ -1,7 +1,7 @@
 {
   "description": "Allowlist of US medtech and diabetes-device employers (v1 locked twelve plus post-v1 waves). hub_url is a public internships / university recruiting / early-careers page — not a login-only Workday search.",
   "version": "1.0",
-  "last_updated": "2026-08-14",
+  "last_updated": "2026-08-15",
   "companies": [
     {
       "name": "Medtronic",
@@ -13,19 +13,19 @@
       "name": "Intuitive",
       "hub_url": "https://careers.intuitive.com/en/career-opportunities/students-and-university/",
       "ats": "unknown",
-      "notes": "Public Students & University intern/co-op landing with live intern reqs. Career site is careers.intuitive.com (not Greenhouse or Lever). Underlying ATS not confirmed from the page."
+      "notes": "Public Students & University intern/co-op landing with live intern reqs. Career site is careers.intuitive.com. Job board is SmartRecruiters (api.smartrecruiters.com/v1/companies/Intuitive/postings). Adapter: config/scrapers/intuitive_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Abbott",
       "hub_url": "https://www.jobs.abbott/us/en/university-internship-program",
       "ats": "workday",
-      "notes": "Public University Internship Program page on jobs.abbott (Phenom career site). Applications go through Abbott's Workday-backed candidate home. Alternate early-careers narrative: https://www.abbott.com/en-us/careers/students"
+      "notes": "Public University Internship Program page on jobs.abbott (Phenom career site). Applications go through Abbott's Workday-backed candidate home. Alternate early-careers narrative: https://www.abbott.com/en-us/careers/students. Adapter: config/scrapers/abbott_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Dexcom",
       "hub_url": "https://careers.dexcom.com/careers/internship",
       "ats": "workday",
-      "notes": "Public intern listing on careers.dexcom.com (Phenom). Page search config includes position.system_id:workday. This is an intern category listing, not a separate university-recruiting narrative page."
+      "notes": "Public intern listing on careers.dexcom.com. Eightfold PCSX JSON at /api/pcsx/search (domain=dexcom.com). Adapter: config/scrapers/dexcom_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Insulet",
@@ -43,13 +43,13 @@
       "name": "Stryker",
       "hub_url": "https://careers.stryker.com/students-and-graduates",
       "ats": "workday",
-      "notes": "Public Students and Graduates intern landing (US paid summer internships). careers.stryker.com is the Phenom career site in front of Stryker Workday recruiting."
+      "notes": "Public Students and Graduates intern landing (US paid summer internships). careers.stryker.com is a Paradox career site in front of Stryker Workday recruiting. Adapter: config/scrapers/stryker_scraper.py (Paradox __PRELOAD_STATE__ intern search; hub remains if none are US STEM). Do not use Workday CXS/search."
     },
     {
       "name": "Boston Scientific",
       "hub_url": "https://www.bostonscientific.com/en-US/careers/students.html",
       "ats": "eightfold",
-      "notes": "Public Students and early careers intern/co-op landing. Job search/apply is bostonscientific.eightfold.ai (Eightfold, not Greenhouse/Lever/Workday). Keep the branded students page as the hub."
+      "notes": "Public Students and early careers intern/co-op landing. Job search/apply is bostonscientific.eightfold.ai (Eightfold PCSX). Adapter: config/scrapers/boston_scientific_scraper.py. Keep the branded students page as the hub."
     },
     {
       "name": "Edwards",
@@ -61,37 +61,37 @@
       "name": "BD",
       "hub_url": "https://jobs.bd.com/en/early-talent",
       "ats": "workday",
-      "notes": "Public Early Talent page including the Summer Internship Program. jobs.bd.com intern search labels results as Workday (Talentbrew/Phenom in front of Workday)."
+      "notes": "Public Early Talent page including the Summer Internship Program. jobs.bd.com intern search is TalentBrew (JSON /en/search-jobs/results wrapping listing HTML) in front of Workday apply. Adapter: config/scrapers/bd_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Zimmer Biomet",
       "hub_url": "https://careers.zimmerbiomet.com/us/en/grow-with-us",
       "ats": "unknown",
-      "notes": "Public Grow With Us page documents US internships and early-career programs (Phenom career site, cdn.phenompeople.com). Mixed with leadership programs; no separate intern-only landing found. Underlying ATS not confirmed from this page."
+      "notes": "Public Grow With Us page documents US internships and early-career programs (Phenom career site, cdn.phenompeople.com). Mixed with leadership programs; no separate intern-only landing found. Adapter: config/scrapers/zimmer_biomet_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "GE HealthCare",
       "hub_url": "https://careers.gehealthcare.com/global/en/internship",
       "ats": "workday",
-      "notes": "Public Internships landing (engineering, IT, quality/regulatory, operations, finance, commercial). Reqs use Workday-style IDs (R#######EXTERNALEN) on careers.gehealthcare.com. Alternate hub: https://careers.gehealthcare.com/global/en/students-graduates"
+      "notes": "Public Internships landing (engineering, IT, quality/regulatory, operations, finance, commercial). Reqs use Workday-style IDs (R#######EXTERNALEN) on careers.gehealthcare.com. Alternate hub: https://careers.gehealthcare.com/global/en/students-graduates. Adapter: config/scrapers/ge_health_care_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "J&J MedTech",
       "hub_url": "https://www.careers.jnj.com/en/early-career-programs/internships/",
       "ats": "unknown",
-      "notes": "Public J&J internships page (MedTech is one of several J&J businesses on this hub). Automated HEAD often 403; page is indexed and documented as the intern apply hub."
+      "notes": "Public J&J internships page (MedTech is one of several J&J businesses on this hub). Automated HEAD often 403; page is indexed and documented as the intern apply hub. Adapter: config/scrapers/jj_med_tech_scraper.py (intern job cards on the internships landing; hub remains if none are US STEM)."
     },
     {
       "name": "Siemens Healthineers",
       "hub_url": "https://www.siemens-healthineers.com/en-us/careers/students",
       "ats": "unknown",
-      "notes": "Public US Students and Graduates intern landing (project-based internships across Healthineers businesses including Varian)."
+      "notes": "Public US Students and Graduates intern landing (project-based internships across Healthineers businesses including Varian). Adapter: config/scrapers/siemens_healthineers_scraper.py (Phenom /widgets on careers.siemens-healthineers.com; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Philips",
       "hub_url": "https://www.careers.philips.com/student/na/en/internships-apprenticeship",
       "ats": "unknown",
-      "notes": "Public North America internships / apprenticeship / co-op student careers page."
+      "notes": "Public North America internships / apprenticeship / co-op student careers page. Adapter: config/scrapers/philips_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Penumbra",
@@ -103,7 +103,7 @@
       "name": "Align",
       "hub_url": "https://jobs.aligntech.com/careers",
       "ats": "unknown",
-      "notes": "Public Align Technology careers hub; page includes a Summer Internship Program (US) section. jobs.aligntech.com/earlycareers returns 404. Wave 1 uses program-fallback."
+      "notes": "Public Align Technology careers hub (Pinpoint board, jobs.aligntech.com/jobs.json) including a Summer Internship Program (US) section. Adapter: config/scrapers/align_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Smith+Nephew",
@@ -115,7 +115,7 @@
       "name": "Baxter",
       "hub_url": "https://jobs.baxter.com/en/category/intern-jobs/152/83228/1",
       "ats": "workday",
-      "notes": "Public Phenom intern-jobs category on jobs.baxter.com (US summer intern/co-op reqs appear seasonally; applications create a Workday profile). Dedicated baxter.com internships-early-talent URL 404s. Wave 2 uses program-fallback."
+      "notes": "Public intern-jobs listing on jobs.baxter.com (TalentBrew search-jobs JSON; US summer intern/co-op reqs appear seasonally; applications create a Workday profile). Dedicated baxter.com internships-early-talent URL 404s. Adapter: config/scrapers/baxter_scraper.py (hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "ResMed",
@@ -127,13 +127,13 @@
       "name": "Hologic",
       "hub_url": "https://na.careers.hologic.com/en/student-opportunities",
       "ats": "unknown",
-      "notes": "Public North America Student Opportunities intern/co-op landing (12-week summer internships; US sites include Marlborough, Newark, San Diego). Phenom career site. Wave 2 uses program-fallback."
+      "notes": "Public North America Student Opportunities intern/co-op landing (12-week summer internships; US sites include Marlborough, Newark, San Diego). Apply/search is Oracle Recruiting CE (ebwb.fa.us2.oraclecloud.com). Adapter: config/scrapers/hologic_scraper.py (public recruitingCEJobRequisitions JSON; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Teleflex",
       "hub_url": "https://careers.teleflex.com/",
       "ats": "unknown",
-      "notes": "Public careers job board; intern and co-op reqs (R&D, NPD, industrial engineering) post here. Campus T.I.D.E. intern program exists; no separate university-recruiting narrative page found. Wave 2 uses program-fallback."
+      "notes": "Public careers job board; intern and co-op reqs (R&D, NPD, industrial engineering) post here. Campus T.I.D.E. intern program exists; no separate university-recruiting narrative page found. Job search is jobs2web (careers.teleflex.com/search). Adapter: config/scrapers/teleflex_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "Integra LifeSciences",
@@ -151,31 +151,31 @@
       "name": "Arthrex",
       "hub_url": "https://careers.arthrex.com/NorthAmerica/content/Arthrex-Internships/?locale=en_US",
       "ats": "unknown",
-      "notes": "Public North America internships landing (internships, engineering rotational co-ops, summer associate). Student Center lists intern reqs. Career site uses SAP SuccessFactors. Wave 2 uses program-fallback."
+      "notes": "Public North America internships landing (internships, engineering rotational co-ops, summer associate). Student Center lists intern reqs. Career site is jobs2web in front of SAP SuccessFactors. Adapter: config/scrapers/arthrex_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "STERIS",
       "hub_url": "https://careers.steris.com/us/en/early-careers",
       "ats": "unknown",
-      "notes": "Public US early-careers landing (12-week paid internships; engineering co-ops). Phenom career site careers.steris.com. Wave 2 uses program-fallback."
+      "notes": "Public US early-careers landing (12-week paid internships; engineering co-ops). Phenom career site careers.steris.com. Adapter: config/scrapers/steris_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "CONMED",
       "hub_url": "https://careers.conmed.com/internships",
       "ats": "unknown",
-      "notes": "Public CONMED Internship Program landing (10-week US summer internship; R&D and other functions). Phenom career site. Wave 2 uses program-fallback."
+      "notes": "Public CONMED Internship Program landing (10-week US summer internship; R&D and other functions). Phenom career site. Adapter: config/scrapers/conmed_scraper.py (Phenom /widgets; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Olympus",
       "hub_url": "https://www.olympusamerica.com/careers/current-students",
       "ats": "unknown",
-      "notes": "Public Olympus Corporation of the Americas Current Students intern/co-op landing (paid 10–13 week internships including BME/ME/EE; apply via careers.olympusamerica.com). Wave 2 uses program-fallback."
+      "notes": "Public Olympus Corporation of the Americas Current Students intern/co-op landing (paid 10–13 week internships including BME/ME/EE; apply via careers.olympusamerica.com). Job search is jobs2web. Adapter: config/scrapers/olympus_scraper.py (US STEM intern postings; hub remains if the board has none)."
     },
     {
       "name": "CooperCompanies",
       "hub_url": "https://www.coopercos.com/global-internship-program/",
       "ats": "unknown",
-      "notes": "Public Global Internship Program page covering CooperVision and CooperSurgical. Apply via Cooper Oracle Cloud job search (search term: intern). Wave 2 uses program-fallback."
+      "notes": "Public Global Internship Program page covering CooperVision and CooperSurgical. Apply via Cooper Oracle Cloud job search (hcjy.fa.us2.oraclecloud.com, search term: intern). Adapter: config/scrapers/cooper_companies_scraper.py (public recruitingCEJobRequisitions JSON; hub remains if the board has no US STEM intern reqs)."
     },
     {
       "name": "Biotronik",

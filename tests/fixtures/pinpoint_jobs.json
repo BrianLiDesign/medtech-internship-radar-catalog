@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "id": "1001",
+      "title": "Software Engineer Intern",
+      "url": "https://jobs-aligntech.aligntech.com/en/jobs/1001",
+      "requisition_id": "ALGN-INT-1",
+      "department": "Engineering",
+      "published_at": "2026-04-15T00:00:00Z",
+      "location": {"id": "40574", "name": "US-California-San Jose"}
+    },
+    {
+      "id": "1002",
+      "title": "Dental Clinical Support Internship",
+      "url": "https://jobs-aligntech.aligntech.com/en/jobs/1002",
+      "requisition_id": "ALGN-CRI-1",
+      "location": {"id": "40486", "name": "CRI-Costa Rica-Belen"}
+    },
+    {
+      "id": "1003",
+      "title": "Director, International Tax",
+      "url": "https://jobs-aligntech.aligntech.com/en/jobs/1003",
+      "location": {"id": "40574", "name": "US-California-San Jose"}
+    },
+    {
+      "id": "1004",
+      "title": "HR Intern",
+      "url": "https://jobs-aligntech.aligntech.com/en/jobs/1004",
+      "location": {"id": "40574", "name": "US-California-San Jose"}
+    },
+    {
+      "id": "1005",
+      "title": "iTero Business Operations Intern",
+      "url": "https://jobs-aligntech.aligntech.com/en/jobs/1005",
+      "location": {"id": "40337", "name": "EMEA-Poland"}
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "offset": 0,
+  "limit": 100,
+  "totalFound": 5,
+  "content": [
+    {
+      "id": "us-swe-intern",
+      "name": "Software Engineer Intern",
+      "refNumber": "JOB-SWE-1",
+      "releasedDate": "2026-04-15T21:41:38.327Z",
+      "location": {
+        "city": "Sunnyvale",
+        "region": "CA",
+        "country": "United States",
+        "countryCode": "us",
+        "remote": false,
+        "fullLocation": "Sunnyvale, CA, United States"
+      },
+      "department": {"label": "Engineering"}
+    },
+    {
+      "id": "fall-intern",
+      "name": "Computer Vision Engineering Intern - Fall 2026",
+      "refNumber": "JOB216224",
+      "releasedDate": "2026-06-22T21:41:38.327Z",
+      "location": {
+        "countryCode": "us",
+        "fullLocation": "Sunnyvale, CA, United States"
+      }
+    },
+    {
+      "id": "counsel",
+      "name": "Assistant General Counsel, International Trade",
+      "refNumber": "JOB214343",
+      "location": {
+        "countryCode": "us",
+        "fullLocation": "Sunnyvale, CA, United States"
+      }
+    },
+    {
+      "id": "hr-intern",
+      "name": "HR Intern",
+      "refNumber": "JOB-HR-1",
+      "location": {
+        "countryCode": "us",
+        "fullLocation": "Sunnyvale, CA, United States"
+      }
+    },
+    {
+      "id": "uk-intern",
+      "name": "Quality Engineer Intern",
+      "refNumber": "JOB-UK-1",
+      "location": {
+        "countryCode": "gb",
+        "fullLocation": "London, United Kingdom"
+      }
+    }
+  ]
+}

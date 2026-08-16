@@ -265,7 +265,25 @@ def test_registered_scrapers_are_allowlisted_and_not_candidates():
     registered = set(discover_scrapers())
     assert registered <= allowlist
     assert registered.isdisjoint(candidates)
-    assert {"Boston Scientific", "Penumbra", "Inspire Medical"} <= registered
+    assert {
+        "Boston Scientific",
+        "Penumbra",
+        "Inspire Medical",
+        "Abbott",
+        "Zimmer Biomet",
+        "GE HealthCare",
+        "STERIS",
+        "CONMED",
+        "Philips",
+        "Siemens Healthineers",
+        "Intuitive",
+        "CooperCompanies",
+        "Hologic",
+        "BD",
+        "Baxter",
+        "Dexcom",
+        "Align",
+    } <= registered
 
 
 def test_posted_at_helpers_accept_seconds_millis_and_iso_prefix():

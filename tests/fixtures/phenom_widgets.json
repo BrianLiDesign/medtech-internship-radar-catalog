@@ -1,0 +1,53 @@
+{
+  "refineSearch": {
+    "data": {
+      "jobs": [
+        {
+          "title": "Software Engineer Intern",
+          "reqId": "US-SWE-1",
+          "jobId": "US-SWE-1",
+          "jobSeqNo": "ABLAUS1ENUSEXTERNAL",
+          "applyUrl": "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Illinois/Software-Engineer-Intern_US-SWE-1/apply",
+          "cityStateCountry": "Abbott Park, Illinois, United States of America",
+          "country": "United States of America",
+          "category": "Engineering",
+          "type": "Internship",
+          "postedDate": "2026-04-15T00:00:00.000+0000"
+        },
+        {
+          "title": "IT Intern",
+          "reqId": "31149049",
+          "applyUrl": "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Malaysia/IT-Intern_31149049/apply",
+          "cityStateCountry": "Petaling Jaya, Selangor, Malaysia",
+          "country": "Malaysia",
+          "type": "Internship",
+          "postedDate": "2026-06-24T00:00:00.000+0000"
+        },
+        {
+          "title": "HR Intern",
+          "reqId": "HR-1",
+          "applyUrl": "https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/Illinois/HR-Intern_HR-1/apply",
+          "cityStateCountry": "Abbott Park, Illinois, United States of America",
+          "country": "United States of America",
+          "type": "Internship"
+        },
+        {
+          "title": "Commercial Sales Leadership Program Internship",
+          "reqId": "SALES-1",
+          "applyUrl": "https://example.com/sales-intern",
+          "cityStateCountry": "Waukesha, Wisconsin, United States of America",
+          "country": "United States of America",
+          "type": "Co-op/Intern"
+        },
+        {
+          "title": "Manufacturing Engineering Co-Op - Fall 2026",
+          "reqId": "FALL-1",
+          "applyUrl": "https://example.com/fall-coop",
+          "cityStateCountry": "Montgomery, Alabama, United States",
+          "country": "United States of America",
+          "type": "Full-Time"
+        }
+      ]
+    }
+  }
+}

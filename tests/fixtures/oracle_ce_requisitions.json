@@ -1,0 +1,47 @@
+{
+  "items": [
+    {
+      "Keyword": "intern",
+      "TotalJobsCount": 4,
+      "Offset": 0,
+      "Limit": 25,
+      "SiteNumber": "CX_1",
+      "requisitionList": [
+        {
+          "Id": "US-SWE-1",
+          "Title": "Software Engineer Intern",
+          "PostedDate": "2026-04-15",
+          "PrimaryLocationCountry": "US",
+          "PrimaryLocation": "Victor, New York",
+          "JobFamily": "Engineering",
+          "Department": "R&D"
+        },
+        {
+          "Id": "CR-1",
+          "Title": "Facilities Intern",
+          "PostedDate": "2026-07-08",
+          "PrimaryLocationCountry": "CR",
+          "PrimaryLocation": "La Garita, Costa Rica"
+        },
+        {
+          "Id": "SALES-1",
+          "Title": "Commercial Sales Intern",
+          "PostedDate": "2026-05-01",
+          "PrimaryLocationCountry": "US",
+          "PrimaryLocation": "Marlborough, Massachusetts"
+        },
+        {
+          "Id": "FALL-1",
+          "Title": "Manufacturing Engineering Co-Op - Fall 2026",
+          "PostedDate": "2026-03-01",
+          "PrimaryLocationCountry": "US",
+          "PrimaryLocation": "Pleasanton, California"
+        }
+      ]
+    }
+  ],
+  "count": 1,
+  "hasMore": false,
+  "limit": 25,
+  "offset": 0
+}

@@ -51,6 +51,10 @@ def test_london_uk_intern_is_dropped():
     assert include_posting("Software Engineer Intern", "London, UK") is False
 
 
+def test_costa_rica_city_starting_with_la_is_not_treated_as_louisiana():
+    assert include_posting("Facilities Intern", "La Garita, Costa Rica") is False
+
+
 def test_rotating_coop_is_dropped():
     assert include_posting("Summer Rotating Co-op Software", "Boston, MA") is False
 
