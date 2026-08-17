@@ -1,6 +1,8 @@
 {
-  "last_sweep": "2026-08-14",
-  "updated_count": 13,
-  "failed_scrapers": [],
+  "last_sweep": "2026-08-17",
+  "updated_count": 2,
+  "failed_scrapers": [
+    "Medtronic"
+  ],
   "archived_count": 2
 }

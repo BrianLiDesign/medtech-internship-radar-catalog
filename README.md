@@ -20,7 +20,7 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 | Boston Scientific | Students and early careers | Marlborough, MA | BS/MS | [![Apply](assets/apply.svg)](https://www.bostonscientific.com/en-US/careers/students.html) | — |
 | CONMED | Internship Program | Largo, FL | BS/MS | [![Apply](assets/apply.svg)](https://careers.conmed.com/internships) | — |
 | CooperCompanies | Global Internship Program | San Ramon, CA | BS/MS | [![Apply](assets/apply.svg)](https://www.coopercos.com/global-internship-program/) | — |
-| Dexcom | Summer Internship Program | San Diego, CA | BS/MS | [![Apply](assets/apply.svg)](https://careers.dexcom.com/careers/internship) | — |
+| Dexcom | 2027 US Summer Internship - Early Interest | San Diego, California | BS/MS | [![Apply](assets/apply.svg)](https://careers.dexcom.com/careers/job/40100410) | 6mo |
 | Edwards | Summer Internship Program | Irvine, CA | BS/MS | [![Apply](assets/apply.svg)](https://www.edwards.com/careers/university-recruiting/internship-programs) | — |
 | GE HealthCare | Internships | Chicago, IL | BS/MS | [![Apply](assets/apply.svg)](https://careers.gehealthcare.com/global/en/internship) | — |
 | Globus Medical | Co-Op Program internships | Audubon, PA | BS/MS | [![Apply](assets/apply.svg)](https://www.globusmedical.com/about/careers/) | — |
@@ -36,7 +36,7 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 | Philips | Internships and apprenticeships | Cambridge, MA | BS/MS | [![Apply](assets/apply.svg)](https://www.careers.philips.com/student/na/en/internships-apprenticeship) | — |
 | ResMed | Early careers internships | San Diego, CA | BS/MS | [![Apply](assets/apply.svg)](https://careers.resmed.com/careers/early-careers/) | — |
 | STERIS | Early careers internships | Mentor, OH | BS/MS | [![Apply](assets/apply.svg)](https://careers.steris.com/us/en/early-careers) | — |
-| Siemens Healthineers | Students and graduates internships | Malvern, PA | BS/MS | [![Apply](assets/apply.svg)](https://www.siemens-healthineers.com/en-us/careers/students) | — |
+| Siemens Healthineers | SkillBridge Intern - Medical Imaging Service Engineer, Nationwide Opportunities | Dallas, Texas, United States of America | BS/MS | [![Apply](assets/apply.svg)](https://onehealthineers.wd3.myworkdayjobs.com/SHSJB/job/DAL-A/SkillBridge-Intern---Medical-Imaging-Service-Engineer--Nationwide-Opportunities_R-30018/apply) | 7d |
 | Smith+Nephew | Internships and early careers | Andover, MA | BS/MS | [![Apply](assets/apply.svg)](https://www.smith-nephew.com/en-us/careers) | — |
 | Stryker | Students and graduates internships | Portage, MI | BS/MS | [![Apply](assets/apply.svg)](https://careers.stryker.com/students-and-graduates) | — |
 | Tandem | Internship Program | San Diego, CA | BS/MS | [![Apply](assets/apply.svg)](https://www.tandemdiabetes.com/about-us/careers/internship-program) | — |
@@ -49,7 +49,7 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 
 | Last sweep | Updated this sweep | Failed scrapers | Archived |
 | --- | --- | --- | --- |
-| 2026-08-14 | 13 | — | 2 |
+| 2026-08-17 | 2 | Medtronic | 2 |
 
 Closed listings for this season: [README-Inactive.md](README-Inactive.md).
 
