@@ -203,13 +203,41 @@ def test_returning_and_citizen_only_tags_do_not_drop_the_row():
     assert row["row_kind"] == "posting"
 
 
+def _fallback_row(company: str, apply_url: str) -> dict:
+    return {
+        "id": f"{company}-hub",
+        "company": company,
+        "title": f"{company} internships",
+        "apply_url": apply_url,
+        "row_kind": "program_fallback",
+        "first_seen": "2026-08-14",
+        "last_seen": "2026-08-14",
+    }
+
+
 def test_scrape_cli_merges_fixture_postings_and_keeps_other_fallbacks(tmp_path):
     from scrape_internships import scrape_and_merge
 
-    repo_root = Path(__file__).resolve().parents[1]
-    catalog_src = repo_root / "data" / "active" / "internships.json"
     catalog_path = tmp_path / "internships.json"
-    catalog_path.write_text(catalog_src.read_text(encoding="utf-8"), encoding="utf-8")
+    catalog_path.write_text(
+        json.dumps(
+            [
+                _fallback_row(
+                    "Boston Scientific",
+                    "https://www.bostonscientific.com/en-US/careers/students.html",
+                ),
+                _fallback_row(
+                    "Medtronic",
+                    "https://www.medtronic.com/en-us/our-company/careers/early-careers.html",
+                ),
+                _fallback_row(
+                    "Inspire Medical",
+                    "https://www.inspiresleep.com/en-us/careers/internships/",
+                ),
+            ]
+        ),
+        encoding="utf-8",
+    )
     rows = scrape_and_merge(
         catalog_path=catalog_path,
         fixture_path=BSC_FIXTURE,
@@ -224,15 +252,7 @@ def test_scrape_cli_merges_fixture_postings_and_keeps_other_fallbacks(tmp_path):
     assert all(row["row_kind"] == "posting" for row in bsc)
     assert all(row["source"] == "scrape" for row in bsc)
     assert all(row["row_kind"] == "program_fallback" for row in others)
-    allowlist = {
-        company["name"]
-        for company in json.loads(
-            (Path(__file__).resolve().parents[1] / "config" / "allowlist.json").read_text(
-                encoding="utf-8"
-            )
-        )["companies"]
-    }
-    assert {row["company"] for row in others} == allowlist - {"Boston Scientific"}
+    assert {row["company"] for row in others} == {"Medtronic", "Inspire Medical"}
     assert "Inspire Medical" in {row["company"] for row in rows}
 
 
