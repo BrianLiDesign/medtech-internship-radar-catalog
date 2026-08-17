@@ -283,6 +283,14 @@ def test_registered_scrapers_are_allowlisted_and_not_candidates():
         "Baxter",
         "Dexcom",
         "Align",
+        "Medtronic",
+        "Insulet",
+        "Tandem",
+        "Smith+Nephew",
+        "ResMed",
+        "Globus Medical",
+        "Biotronik",
+        "Alcon",
     } <= registered
 
 

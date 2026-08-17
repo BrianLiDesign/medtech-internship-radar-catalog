@@ -7,7 +7,7 @@
       "name": "Medtronic",
       "hub_url": "https://www.medtronic.com/en-us/our-company/careers/early-careers.html",
       "ats": "workday",
-      "notes": "Public Early Careers intern landing (internships, WISE, recruiting timeline, Apply for internships). Medtronic careers pages refer to the Workday Jobs Hub; do not use medtronic.wd1.myworkdayjobs.com as the hub URL."
+      "notes": "Public Early Careers intern landing (internships, WISE, recruiting timeline, Apply for internships). Medtronic careers pages refer to the Workday Jobs Hub; do not use medtronic.wd1.myworkdayjobs.com as the hub URL. Adapter: config/scrapers/medtronic_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none). Catalog UA currently hits an Incorrect Browser wall. Do not use Workday CXS/search."
     },
     {
       "name": "Intuitive",
@@ -31,13 +31,13 @@
       "name": "Insulet",
       "hub_url": "https://www.insulet.com/working-at-insulet/students-and-early-careers",
       "ats": "workday",
-      "notes": "Public Student Opportunities page (12-week summer internship + six-month co-ops). Open-roles destination is Workday: insulet.wd5.myworkdayjobs.com (session cookies verified). Do not use the Workday search URL as the hub."
+      "notes": "Public Student Opportunities page (12-week summer internship + six-month co-ops). Open-roles destination is Workday: insulet.wd5.myworkdayjobs.com (session cookies verified). Do not use the Workday search URL as the hub. Adapter: config/scrapers/insulet_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none)."
     },
     {
       "name": "Tandem",
       "hub_url": "https://www.tandemdiabetes.com/about-us/careers/internship-program",
       "ats": "workday",
-      "notes": "Public Internship Program landing (apply early spring; internships begin in June). Intern req apply links resolve to tandemdiabetes.wd12.myworkdayjobs.com. Do not use that Workday URL as the hub."
+      "notes": "Public Internship Program landing (apply early spring; internships begin in June). Intern req apply links resolve to tandemdiabetes.wd12.myworkdayjobs.com. Do not use that Workday URL as the hub. Adapter: config/scrapers/tandem_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none)."
     },
     {
       "name": "Stryker",
@@ -109,7 +109,7 @@
       "name": "Smith+Nephew",
       "hub_url": "https://www.smith-nephew.com/en-us/careers",
       "ats": "workday",
-      "notes": "Public US careers hub with Internships and Early careers sections (US sites include Memphis, Andover, Fort Worth, Austin, Mansfield). Recruiting notices cite myworkday. Do not use Workday search as the hub. Wave 2 uses program-fallback."
+      "notes": "Public US careers hub with Internships and Early careers sections (US sites include Memphis, Andover, Fort Worth, Austin, Mansfield). Recruiting notices cite myworkday. Do not use Workday search as the hub. Adapter: config/scrapers/smith_nephew_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none)."
     },
     {
       "name": "Baxter",
@@ -121,7 +121,7 @@
       "name": "ResMed",
       "hub_url": "https://careers.resmed.com/careers/early-careers/",
       "ats": "workday",
-      "notes": "Public Early careers intern/graduate landing with USA/Canada listings. Apply/search is ResMed Workday (resmed.wd3.myworkdayjobs.com). Do not use that Workday URL as the hub. Wave 2 uses program-fallback."
+      "notes": "Public Early careers intern/graduate landing with USA/Canada listings. Apply/search is ResMed Workday (resmed.wd3.myworkdayjobs.com). Do not use that Workday URL as the hub. Adapter: config/scrapers/resmed_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none). Alumni /people/ profiles are not reqs."
     },
     {
       "name": "Hologic",
@@ -145,7 +145,7 @@
       "name": "Globus Medical",
       "hub_url": "https://www.globusmedical.com/about/careers/",
       "ats": "unknown",
-      "notes": "Public careers page documents the Globus Co-Op Program (university cooperative education; intern/co-op reqs also posted). No separate intern-only landing found. Wave 2 uses program-fallback."
+      "notes": "Public careers page documents the Globus Co-Op Program (university cooperative education; intern/co-op reqs also posted). No separate intern-only landing found. Adapter: config/scrapers/globus_medical_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none). Featured career blurbs are not intern reqs."
     },
     {
       "name": "Arthrex",
@@ -181,13 +181,13 @@
       "name": "Biotronik",
       "hub_url": "https://www.biotronik.com/en-us/careers/career-levels/students",
       "ats": "unknown",
-      "notes": "Public North America Students intern/working-student landing. US internships also run at Biotronik/MSEI (Lake Oswego). Wave 2 uses program-fallback."
+      "notes": "Public North America Students intern/working-student landing. US internships also run at Biotronik/MSEI (Lake Oswego). SuccessFactors career portal is loginFlowRequired. Adapter: config/scrapers/biotronik_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none). Do not scrape staging jobs2web."
     },
     {
       "name": "Alcon",
       "hub_url": "https://www.alcon.com/careers/early-careers/",
       "ats": "workday",
-      "notes": "Public Early Careers landing with US Internships (12-week summer) and US Co-Ops. Apply/search is Alcon Workday (alcon.wd5.myworkdayjobs.com). Do not use that Workday URL as the hub. Wave 2 uses program-fallback."
+      "notes": "Public Early Careers landing with US Internships (12-week summer) and US Co-Ops. Apply/search is Alcon Workday (alcon.wd5.myworkdayjobs.com). Do not use that Workday URL as the hub. Adapter: config/scrapers/alcon_scraper.py (JSON-LD JobPosting / intern job cards on the hub; hub remains if none)."
     },
     {
       "name": "Inspire Medical",
