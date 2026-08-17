@@ -1,0 +1,51 @@
+{
+  "results": [
+    {
+      "hits": [
+        {
+          "id": "Req-US-SWE-1",
+          "objectID": "Req-US-SWE-1",
+          "JobPostingTitle": "Software Engineer Intern",
+          "Location": "Irvine, California",
+          "Country": "United States of America",
+          "EmployeeType": "Intern (Fixed Term) (Trainee)",
+          "Category": "Engineering",
+          "ApplyUrl": "https://edwards.wd5.myworkdayjobs.com/EdwardsCareers/job/Irvine-California/Software-Engineer-Intern_Req-US-SWE-1/apply"
+        },
+        {
+          "id": "Req-49543",
+          "objectID": "Req-49543",
+          "JobPostingTitle": "Intern, Global Supply Chain",
+          "Location": "Singapore Commercial – Distribution Center",
+          "Country": "Singapore",
+          "EmployeeType": "Intern (Fixed Term) (Trainee)",
+          "Category": "Administration",
+          "ApplyUrl": "https://edwards.wd5.myworkdayjobs.com/EdwardsCareers/job/Singapore-Commercial--Distribution-Center/Intern--Global-Supply-Chain_Req-49543-1/apply"
+        },
+        {
+          "id": "Req-HR-1",
+          "objectID": "Req-HR-1",
+          "JobPostingTitle": "HR Intern",
+          "Location": "Irvine, California",
+          "Country": "United States of America",
+          "EmployeeType": "Intern (Fixed Term) (Trainee)",
+          "ApplyUrl": "https://edwards.wd5.myworkdayjobs.com/EdwardsCareers/job/Irvine-California/HR-Intern_Req-HR-1/apply"
+        },
+        {
+          "id": "Req-SALES-1",
+          "objectID": "Req-SALES-1",
+          "JobPostingTitle": "Commercial Sales Intern",
+          "Location": "Draper, Utah",
+          "Country": "United States of America",
+          "EmployeeType": "Intern (Fixed Term) (Trainee)",
+          "ApplyUrl": "https://edwards.wd5.myworkdayjobs.com/EdwardsCareers/job/Draper-Utah/Commercial-Sales-Intern_Req-SALES-1/apply"
+        }
+      ],
+      "nbHits": 4,
+      "nbPages": 1,
+      "page": 0,
+      "hitsPerPage": 50,
+      "query": "intern"
+    }
+  ]
+}

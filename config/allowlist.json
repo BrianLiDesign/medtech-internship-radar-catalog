@@ -55,7 +55,7 @@
       "name": "Edwards",
       "hub_url": "https://www.edwards.com/careers/university-recruiting/internship-programs",
       "ats": "workday",
-      "notes": "Public US Summer Internship Program page under university recruiting (Irvine CA / Draper UT). Apply/search is Edwards Workday (edwards.wd5.myworkdayjobs.com). Do not use the Workday search URL as the hub."
+      "notes": "Public US Summer Internship Program page under university recruiting (Irvine CA / Draper UT). Job search is InstantSearch on www.edwards.com/careers/jobsearch (Algolia index EdwardsCareersJobs; search-only frontend key). Apply URLs are individual Edwards Workday job pages with req ids. Adapter: config/scrapers/edwards_scraper.py (US STEM intern postings; hub remains if the board has none). Do not use Workday CXS/search or the Workday search URL as the hub."
     },
     {
       "name": "BD",
@@ -139,7 +139,7 @@
       "name": "Integra LifeSciences",
       "hub_url": "https://www.integralife.com/careers/career-areas/early-talent-student-opportunities",
       "ats": "unknown",
-      "notes": "Public Early Talent & Student Opportunities page (summer internships June–August, co-ops, rotational associate). Job search is jobs.integralife.com (Phenom). Wave 2 uses program-fallback."
+      "notes": "Public Early Talent & Student Opportunities page (summer internships June–August, co-ops, rotational associate). Job search is www.integralife.com/careers/job-search; intern keyword listing is Kentico HTML partials at GET /api/jobs/search (apply URLs are individual Integra Workday job pages with JR- ids). Adapter: config/scrapers/integra_life_sciences_scraper.py (US STEM intern postings; hub remains if the board has none). Do not use Workday CXS/search or jobs.integralife.com (redirects to the marketing careers hub). Kentico /api/content/jobs 404s."
     },
     {
       "name": "Globus Medical",
