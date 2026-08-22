@@ -4,13 +4,26 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 
 ## Browse by role
 
-[Other STEM](#other-stem) (32)
+[BME/R&D](#bmerd) (1) · [Data/ML](#dataml) (1) · [Other STEM](#other-stem) (33)
+
+## BME/R&D
+
+| Company | Role | Location | Degree | Apply | Age |
+| --- | --- | --- | --- | --- | --- |
+| Abbott | Research Park Intern - Student Researcher | Champaign, Illinois, United States | BS/MS | [![Apply](assets/apply.svg)](https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/United-States---Illinois---Champaign/Research-Park-Intern---Student-Researcher_31128619/apply) | 2d |
+
+## Data/ML
+
+| Company | Role | Location | Degree | Apply | Age |
+| --- | --- | --- | --- | --- | --- |
+| Philips | Graduate Level Co-op – Data Scientist – Plymouth, MN – Summer 2027 | Plymouth, Minnesota, United States, Minnesota, United States of America | BS/MS | [![Apply](assets/apply.svg)](https://philips.wd3.myworkdayjobs.com/jobs-and-careers/job/Plymouth-Minnesota-United-States/Graduate-Level-Co-op---Data-Scientist---Plymouth--MN---Summer-2027_590567/apply?source=Philips_Career_Site) | 2d |
 
 ## Other STEM
 
 | Company | Role | Location | Degree | Apply | Age |
 | --- | --- | --- | --- | --- | --- |
-| Abbott | University Internship Program | Abbott Park, IL | BS/MS | [![Apply](assets/apply.svg)](https://www.jobs.abbott/us/en/university-internship-program) | — |
+| Abbott | 2027 Finance Internship | Abbott Park, Illinois, United States | BS/MS | [![Apply](assets/apply.svg)](https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/United-States---Illinois---Abbott-Park/XMLNAME-2027-Finance-Internship_31159945/apply) | 1d |
+| Abbott | 2027 IT Intern | Waukegan, Illinois, United States | BS/MS | [![Apply](assets/apply.svg)](https://abbott.wd5.myworkdayjobs.com/abbottcareers/job/United-States---Illinois---Waukegan/XMLNAME-2027-IT-Intern_31159432/apply) | 5d |
 | Alcon | Early Careers internships | Fort Worth, TX | BS/MS | [![Apply](assets/apply.svg)](https://www.alcon.com/careers/early-careers/) | — |
 | Align | Summer Internship Program | Tempe, AZ | BS/MS | [![Apply](assets/apply.svg)](https://jobs.aligntech.com/careers) | — |
 | Arthrex | Internships | Naples, FL | BS/MS | [![Apply](assets/apply.svg)](https://careers.arthrex.com/NorthAmerica/content/Arthrex-Internships/?locale=en_US) | — |
@@ -33,10 +46,10 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 | Medtronic | University internships | Minneapolis, MN | BS/MS | [![Apply](assets/apply.svg)](https://www.medtronic.com/en-us/our-company/careers/early-careers.html) | — |
 | Olympus | Current Students internships | Center Valley, PA | BS/MS | [![Apply](assets/apply.svg)](https://www.olympusamerica.com/careers/current-students) | — |
 | Penumbra | Internships | Alameda, CA | BS/MS | [![Apply](assets/apply.svg)](https://jobs.lever.co/penumbrainc) | — |
-| Philips | Internships and apprenticeships | Cambridge, MA | BS/MS | [![Apply](assets/apply.svg)](https://www.careers.philips.com/student/na/en/internships-apprenticeship) | — |
 | ResMed | Early careers internships | San Diego, CA | BS/MS | [![Apply](assets/apply.svg)](https://careers.resmed.com/careers/early-careers/) | — |
 | STERIS | Early careers internships | Mentor, OH | BS/MS | [![Apply](assets/apply.svg)](https://careers.steris.com/us/en/early-careers) | — |
-| Siemens Healthineers | SkillBridge Intern - Medical Imaging Service Engineer, Nationwide Opportunities | Dallas, Texas, United States of America | BS/MS | [![Apply](assets/apply.svg)](https://onehealthineers.wd3.myworkdayjobs.com/SHSJB/job/DAL-A/SkillBridge-Intern---Medical-Imaging-Service-Engineer--Nationwide-Opportunities_R-30018/apply) | 7d |
+| Siemens Healthineers | Education Development Intern | Cary, North Carolina, United States of America | BS/MS | [![Apply](assets/apply.svg)](https://onehealthineers.wd3.myworkdayjobs.com/SHSJB/job/CYA-M/Education-Development-Intern_R-30009/apply) | 4d |
+| Siemens Healthineers | SkillBridge Intern - Medical Imaging Service Engineer, Nationwide Opportunities | Dallas, Texas, United States of America | BS/MS | [![Apply](assets/apply.svg)](https://onehealthineers.wd3.myworkdayjobs.com/SHSJB/job/DAL-A/SkillBridge-Intern---Medical-Imaging-Service-Engineer--Nationwide-Opportunities_R-30018/apply) | 12d |
 | Smith+Nephew | Internships and early careers | Andover, MA | BS/MS | [![Apply](assets/apply.svg)](https://www.smith-nephew.com/en-us/careers) | — |
 | Stryker | Students and graduates internships | Portage, MI | BS/MS | [![Apply](assets/apply.svg)](https://careers.stryker.com/students-and-graduates) | — |
 | Tandem | Internship Program | San Diego, CA | BS/MS | [![Apply](assets/apply.svg)](https://www.tandemdiabetes.com/about-us/careers/internship-program) | — |
@@ -45,11 +58,11 @@ US STEM internships and summer-shaped co-ops at flagship medical device and diab
 
 ## Catalog stats
 
-**32** active listings for `summer-2027`.
+**35** active listings for `summer-2027`.
 
 | Last sweep | Updated this sweep | Failed scrapers | Archived |
 | --- | --- | --- | --- |
-| 2026-08-17 | 2 | Medtronic | 2 |
+| 2026-08-22 | 7 | Medtronic | 2 |
 
 Closed listings for this season: [README-Inactive.md](README-Inactive.md).
 
