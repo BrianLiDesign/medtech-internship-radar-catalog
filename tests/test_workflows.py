@@ -15,6 +15,16 @@ def test_daily_workflow_opens_pr_and_never_pushes_listings_to_main():
     assert "generate_dashboard.py" in text or "refresh_catalog.py" in text
     assert "automation/daily-catalog-refresh" in text
     assert "gh pr create" in text
+    assert "--state open" in text
+    assert "gh workflow run ci.yml" in text
+    assert '--commit "$REFRESH_SHA"' in text
+    assert "gh run watch" in text
+    assert "--exit-status" in text
+    assert "gh pr merge" in text
+    assert "--squash" in text
+    assert "--delete-branch" in text
+    assert '--match-head-commit "$REFRESH_SHA"' in text
+    assert text.index("gh run watch") < text.index("gh pr merge")
     assert "git push origin main" not in text
     assert "HEAD:main" not in text
     assert "HEAD:master" not in text

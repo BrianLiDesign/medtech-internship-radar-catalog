@@ -71,7 +71,7 @@ Do **not** push the dry-run listing changes to `main`. Open a refresh PR (below)
 
 Workflow: [`.github/workflows/daily-catalog-refresh.yml`](../.github/workflows/daily-catalog-refresh.yml)
 
-On a schedule (and `workflow_dispatch`) it runs a live `python scripts/refresh_catalog.py`, commits to `automation/daily-catalog-refresh`, and opens or updates a PR against `main`. It never `git push`es listings to `main`.
+On a schedule (and `workflow_dispatch`) it runs a live `python scripts/refresh_catalog.py`, commits to `automation/daily-catalog-refresh`, and opens or updates an **open** PR against `main`. It explicitly dispatches CI for the generated commit, waits for the checks to pass, then squash-merges the PR and deletes the refresh branch. A failed CI run leaves the PR open for inspection. It never `git push`es listings to `main`.
 
 If this repository has no GitHub remote yet, add the YAML anyway; enable the workflow after `origin` exists.
 

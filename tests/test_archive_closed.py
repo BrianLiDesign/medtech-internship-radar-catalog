@@ -61,6 +61,47 @@ def test_posting_two_consecutive_misses_archives():
     assert closed["miss_count"] >= 2
 
 
+def test_failed_company_scrape_preserves_existing_miss_count():
+    row = posting(miss_count=1)
+    active, archived = apply_archive_rules(
+        [row],
+        [],
+        today="2026-08-14",
+        observations={row["id"]: Observation(seen=False)},
+        unavailable_companies={"Boston Scientific"},
+    )
+    assert archived == []
+    assert active[0]["miss_count"] == 1
+
+
+def test_failed_company_still_archives_a_definitively_dead_posting():
+    row = posting(miss_count=1)
+    active, archived = apply_archive_rules(
+        [row],
+        [],
+        today="2026-08-14",
+        observations={row["id"]: Observation(seen=False, url_status=404)},
+        unavailable_companies={"Boston Scientific"},
+    )
+    assert active == []
+    assert archived[0]["close_reason"] == "ats_closed"
+    assert archived[0]["closed_at"] == "2026-08-14"
+
+
+def test_failed_company_still_archives_an_ats_closed_posting():
+    row = posting(miss_count=1)
+    active, archived = apply_archive_rules(
+        [row],
+        [],
+        today="2026-08-14",
+        observations={row["id"]: Observation(seen=False, ats_closed=True)},
+        unavailable_companies={"Boston Scientific"},
+    )
+    assert active == []
+    assert archived[0]["close_reason"] == "ats_closed"
+    assert archived[0]["closed_at"] == "2026-08-14"
+
+
 def test_ats_closed_archives_immediately():
     row = posting(miss_count=0)
     active, archived = apply_archive_rules(

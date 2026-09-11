@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
 
@@ -39,11 +40,13 @@ jobs:
 
       - name: Commit refresh branch
         id: commit
+        env:
+          REFRESH_BRANCH: automation/daily-catalog-refresh
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B automation/daily-catalog-refresh
+          git checkout -B "$REFRESH_BRANCH"
           git add data/active/internships.json data/archived/internships.json data/health.json README.md README-Inactive.md
 
           if git diff --cached --quiet; then
@@ -52,23 +55,90 @@ jobs:
           fi
 
           git commit -m "chore(data): refresh internship catalog"
-          git push --force-with-lease origin HEAD:automation/daily-catalog-refresh
+          git push --force-with-lease origin "HEAD:$REFRESH_BRANCH"
           echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Open or update pull request
+        id: pull-request
         if: steps.commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          REFRESH_BRANCH: automation/daily-catalog-refresh
         run: |
-          if gh pr view automation/daily-catalog-refresh --json url >/dev/null 2>&1; then
-            gh pr edit automation/daily-catalog-refresh \
+          find_open_pr() {
+            gh pr list \
+              --head "$REFRESH_BRANCH" \
+              --base main \
+              --state open \
+              --json number \
+              --jq '.[0].number // empty'
+          }
+
+          pr_number=$(find_open_pr)
+
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" \
               --title "chore(data): refresh internship catalog" \
               --body "Automated catalog refresh (scrape → validate → archive → generate README). CI on this PR runs tests with mocked HTTP."
           else
             gh pr create \
               --base main \
-              --head automation/daily-catalog-refresh \
+              --head "$REFRESH_BRANCH" \
               --title "chore(data): refresh internship catalog" \
               --body "Automated catalog refresh (scrape → validate → archive → generate README). CI on this PR runs tests with mocked HTTP."
+            pr_number=$(find_open_pr)
           fi
+
+          if [ -z "$pr_number" ]; then
+            echo "Unable to resolve the open refresh pull request" >&2
+            exit 1
+          fi
+          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+
+      - name: Run CI on the refresh commit
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REFRESH_BRANCH: automation/daily-catalog-refresh
+          REFRESH_SHA: ${{ steps.commit.outputs.sha }}
+        shell: bash
+        run: |
+          gh workflow run ci.yml --ref "$REFRESH_BRANCH"
+
+          run_id=""
+          for attempt in {1..30}; do
+            run_id=$(gh run list \
+              --workflow ci.yml \
+              --branch "$REFRESH_BRANCH" \
+              --event workflow_dispatch \
+              --commit "$REFRESH_SHA" \
+              --limit 1 \
+              --json databaseId \
+              --jq '.[0].databaseId // empty')
+            if [ -n "$run_id" ]; then
+              break
+            fi
+            sleep 2
+          done
+
+          if [ -z "$run_id" ]; then
+            echo "Unable to find the dispatched CI run for $REFRESH_SHA" >&2
+            exit 1
+          fi
+          gh run watch "$run_id" --exit-status
+
+      - name: Merge validated refresh
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.pull-request.outputs.number }}
+          REFRESH_SHA: ${{ steps.commit.outputs.sha }}
+        run: >-
+          gh pr merge "$PR_NUMBER"
+          --squash
+          --delete-branch
+          --match-head-commit "$REFRESH_SHA"

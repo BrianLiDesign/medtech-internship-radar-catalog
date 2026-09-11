@@ -92,24 +92,54 @@ def scrape_and_merge(
         session = FixtureSession(json.loads(Path(fixture_path).read_text(encoding="utf-8")))
         delay = 0
     merged = existing
+    failures: list[dict] = []
+    _write_failure_artifact(artifact_path, failures)
     for company, scraper_cls in discover_scrapers().items():
         if company not in allowlist or company in candidates:
             continue
         if fixture_path is not None and company != "Boston Scientific":
             continue
-        scraper = scraper_cls(
-            session=session,
-            rate_limit_delay=delay,
-            artifact_path=artifact_path,
-        )
-        result = scraper.scrape(seen_on=seen)
-        if result.blocked:
+        try:
+            scraper = scraper_cls(
+                session=session,
+                rate_limit_delay=delay,
+                # The runner owns the aggregate artifact. Individual scraper runs
+                # still support their legacy single-failure artifact.
+                artifact_path=None,
+            )
+            result = scraper.scrape(seen_on=seen)
+            if result.blocked:
+                failures.append(
+                    {
+                        "company": company,
+                        "blocked": True,
+                        "error": result.error,
+                    }
+                )
+                continue
+            merged = upsert_catalog(merged, result.postings, seen_on=seen)
+        except Exception as exc:
+            failures.append(
+                {
+                    "company": company,
+                    "blocked": True,
+                    "error": str(exc),
+                }
+            )
             continue
-        merged = upsert_catalog(merged, result.postings, seen_on=seen)
+    _write_failure_artifact(artifact_path, failures)
     output = Path(catalog_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
     return merged
+
+
+def _write_failure_artifact(artifact_path: Path | None, failures: list[dict]) -> None:
+    if artifact_path is None:
+        return
+    output = Path(artifact_path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(failures, indent=2) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:

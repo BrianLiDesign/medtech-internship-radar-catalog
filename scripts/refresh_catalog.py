@@ -90,6 +90,7 @@ def refresh_catalog(
         rate_limit_delay=0 if fixture_path is not None else 1.0,
         artifact_path=artifact_path,
     )
+    failed_scrapers = load_failed_scrapers(artifact_path)
     if run_validation(catalog_path, archived_path, schema_path) != 0:
         return 1
     probe_session = None
@@ -102,6 +103,7 @@ def refresh_catalog(
         archived_path,
         today=sweep_day,
         session=probe_session,
+        unavailable_companies=set(failed_scrapers),
     )
     restore_missing_fallbacks(
         catalog_path,
@@ -116,7 +118,7 @@ def refresh_catalog(
         today=sweep_day,
         active=active,
         archived=archived,
-        failed_scrapers=load_failed_scrapers(artifact_path),
+        failed_scrapers=failed_scrapers,
     )
     write_readme(
         internships_path=catalog_path,

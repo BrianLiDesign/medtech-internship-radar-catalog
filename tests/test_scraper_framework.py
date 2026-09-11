@@ -265,6 +265,114 @@ def test_fixture_merge_refuses_production_catalog():
         scrape_and_merge(catalog_path=DEFAULT_CATALOG, fixture_path=BSC_FIXTURE)
 
 
+def test_scrape_runner_accumulates_failures_continues_and_clears_stale_artifact(
+    tmp_path, monkeypatch
+):
+    import scrape_internships
+    from scraper_framework import ScrapeResult
+
+    calls: list[str] = []
+
+    class BlockedScraper:
+        company = "Blocked Company"
+
+        def __init__(self, **kwargs):
+            del kwargs
+
+        def scrape(self, seen_on):
+            del seen_on
+            calls.append(self.company)
+            return ScrapeResult(
+                company=self.company,
+                blocked=True,
+                error="HTTP 403",
+            )
+
+    class BrokenScraper:
+        company = "Broken Company"
+
+        def __init__(self, **kwargs):
+            del kwargs
+
+        def scrape(self, seen_on):
+            del seen_on
+            calls.append(self.company)
+            raise ValueError("bad payload")
+
+    class HealthyScraper:
+        company = "Healthy Company"
+
+        def __init__(self, **kwargs):
+            del kwargs
+
+        def scrape(self, seen_on):
+            del seen_on
+            calls.append(self.company)
+            return ScrapeResult(company=self.company)
+
+    catalog_path = tmp_path / "internships.json"
+    catalog_path.write_text("[]\n", encoding="utf-8")
+    allowlist_path = tmp_path / "allowlist.json"
+    allowlist_path.write_text(
+        json.dumps(
+            {
+                "companies": [
+                    {"name": BlockedScraper.company},
+                    {"name": BrokenScraper.company},
+                    {"name": HealthyScraper.company},
+                ]
+            }
+        ),
+        encoding="utf-8",
+    )
+    candidates_path = tmp_path / "candidates.json"
+    candidates_path.write_text('{"candidates": []}\n', encoding="utf-8")
+    artifact_path = tmp_path / "scrape_failures.json"
+    artifact_path.write_text('[{"company": "Stale Company"}]\n', encoding="utf-8")
+    monkeypatch.setattr(
+        scrape_internships,
+        "discover_scrapers",
+        lambda: {
+            BlockedScraper.company: BlockedScraper,
+            BrokenScraper.company: BrokenScraper,
+            HealthyScraper.company: HealthyScraper,
+        },
+    )
+
+    scrape_internships.scrape_and_merge(
+        catalog_path,
+        seen_on="2026-08-14",
+        rate_limit_delay=0,
+        artifact_path=artifact_path,
+        allowlist_path=allowlist_path,
+        candidates_path=candidates_path,
+    )
+
+    assert calls == ["Blocked Company", "Broken Company", "Healthy Company"]
+    failures = json.loads(artifact_path.read_text(encoding="utf-8"))
+    assert [failure["company"] for failure in failures] == [
+        "Blocked Company",
+        "Broken Company",
+    ]
+    assert failures[0]["error"] == "HTTP 403"
+    assert failures[1]["error"] == "bad payload"
+
+    monkeypatch.setattr(
+        scrape_internships,
+        "discover_scrapers",
+        lambda: {HealthyScraper.company: HealthyScraper},
+    )
+    scrape_internships.scrape_and_merge(
+        catalog_path,
+        seen_on="2026-08-15",
+        rate_limit_delay=0,
+        artifact_path=artifact_path,
+        allowlist_path=allowlist_path,
+        candidates_path=candidates_path,
+    )
+    assert json.loads(artifact_path.read_text(encoding="utf-8")) == []
+
+
 def test_registered_scrapers_are_allowlisted_and_not_candidates():
     allowlist = {
         company["name"]

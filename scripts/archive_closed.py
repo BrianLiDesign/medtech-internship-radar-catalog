@@ -87,27 +87,29 @@ def apply_archive_rules(
     observations: dict[str, Observation] | None = None,
     force_close_ids: list[str] | None = None,
     session: object | None = None,
+    unavailable_companies: set[str] | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """Return still-active rows and the archived catalog including new closes."""
     forced = set(force_close_ids or [])
     still_active: list[dict] = []
     newly_archived = list(archived)
     signals = observations or {}
+    unavailable = unavailable_companies or set()
     for row in active:
         updated = dict(row)
         signal = observation_for_row(row, today=today, signals=signals, session=session)
+        is_fallback = updated.get("row_kind") == "program_fallback"
         if row["id"] in forced:
             updated["closed_at"] = today
             updated["close_reason"] = CLOSE_REASON_FORCE
             newly_archived.append(updated)
             continue
-        if signal.ats_closed:
+        if signal.ats_closed or (not is_fallback and signal.url_status in DEAD_URL_STATUSES):
             updated["closed_at"] = today
             updated["close_reason"] = CLOSE_REASON_ATS
             newly_archived.append(updated)
             continue
         url_dead = signal.url_status in DEAD_URL_STATUSES
-        is_fallback = updated.get("row_kind") == "program_fallback"
         if is_fallback:
             if url_dead:
                 updated["miss_count"] = int(updated.get("miss_count") or 0) + 1
@@ -116,6 +118,12 @@ def apply_archive_rules(
                     updated["close_reason"] = CLOSE_REASON_URL
                     newly_archived.append(updated)
                     continue
+            still_active.append(updated)
+            continue
+        if updated.get("company") in unavailable:
+            # A failed company scrape is not evidence that its postings closed.
+            # Preserve the previous miss count unless a definitive close signal
+            # above proved otherwise.
             still_active.append(updated)
             continue
         if not signal.seen:
@@ -151,6 +159,7 @@ def archive_catalog_files(
     today: str | None = None,
     force_close_ids: list[str] | None = None,
     session: object | None = None,
+    unavailable_companies: set[str] | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """Load catalogs, apply archive rules, and write both files."""
     sweep_day = today or date.today().isoformat()
@@ -162,6 +171,7 @@ def archive_catalog_files(
         today=sweep_day,
         force_close_ids=force_close_ids,
         session=session,
+        unavailable_companies=unavailable_companies,
     )
     write_catalog(active_path, new_active)
     write_catalog(archived_path, new_archived)
