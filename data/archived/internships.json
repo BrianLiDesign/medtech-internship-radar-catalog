@@ -44,5 +44,29 @@
     "req_id": "627001",
     "closed_at": "2026-08-15",
     "close_reason": "ats_closed"
+  },
+  {
+    "id": "bd6f5128-935c-5d95-b996-9718535ce165",
+    "company": "Boston Scientific",
+    "title": "Systems Design Engineering Intern",
+    "apply_url": "https://bostonscientific.eightfold.ai/careers/job/563602813542892",
+    "season": "summer-2027",
+    "role_family": "Other STEM",
+    "location": "Maple Grove US-MN, United States",
+    "degree": "unspecified",
+    "row_kind": "posting",
+    "source": "scrape",
+    "first_seen": "2026-09-11",
+    "last_seen": "2026-09-11",
+    "work_auth": "unspecified",
+    "eligibility": "open",
+    "miss_count": 2,
+    "canonical_apply_url": "https://bostonscientific.eightfold.ai/careers/job/563602813542892",
+    "ats": "eightfold",
+    "short_description": "Interns/Graduates",
+    "req_id": "634456",
+    "posted_at": "2026-09-09",
+    "closed_at": "2026-09-13",
+    "close_reason": "consecutive_misses"
   }
 ]
