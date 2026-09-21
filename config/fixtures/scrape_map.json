@@ -1,0 +1,16 @@
+{
+  "Boston Scientific": "tests/fixtures/boston_scientific_pcsx.json",
+  "Penumbra": "tests/fixtures/penumbra_lever.json",
+  "Inspire Medical": "tests/fixtures/inspire_greenhouse.json",
+  "Abbott": "tests/fixtures/phenom_widgets.json",
+  "Intuitive": "tests/fixtures/smartrecruiters_postings.json",
+  "Hologic": "tests/fixtures/oracle_ce_requisitions.json",
+  "BD": "tests/fixtures/talentbrew_search_jobs.json",
+  "Align": "tests/fixtures/pinpoint_jobs.json",
+  "Edwards": "tests/fixtures/edwards_algolia.json",
+  "Integra LifeSciences": "tests/fixtures/integra_jobs_search.html",
+  "Teleflex": "tests/fixtures/jobs2web_search.html",
+  "J&J MedTech": "tests/fixtures/jnj_internships.html",
+  "Stryker": "tests/fixtures/stryker_jobs.html",
+  "Medtronic": "tests/fixtures/hub_landing_jobs.html"
+}

@@ -5,13 +5,13 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 
-from scraper_framework import InternshipScraper, keep_parsed_posting
+from scraper_framework import ListingCacheScraper
 
 HUB_URL = "https://www.careers.jnj.com/en/early-career-programs/internships/"
 ORIGIN = "https://www.careers.jnj.com"
 
 
-class JJMedTechScraper(InternshipScraper):
+class JJMedTechScraper(ListingCacheScraper):
     """Parse intern job cards on the public J&J internships landing page."""
 
     company = "J&J MedTech"
@@ -23,24 +23,12 @@ class JJMedTechScraper(InternshipScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": HUB_URL,
         }
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         html = self.fetch_text(HUB_URL)
         if html is None:
-            return []
+            return
         for parsed in _jobs_from_html(html, origin=ORIGIN):
-            self._positions_by_url[parsed["apply_url"]] = parsed
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
+            cache[parsed["apply_url"]] = parsed
 
 
 def _jobs_from_html(html: str, *, origin: str) -> list[dict]:

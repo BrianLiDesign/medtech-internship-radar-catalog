@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+from catalog.io import current_season
 
 from inclusion import include_posting
 from internship_ids import canonical_apply_url, internship_id
@@ -84,7 +85,7 @@ class InternshipScraper(ABC):
                 blocked=True,
                 error=self._error,
             )
-        catalog_season = season or _current_season()
+        catalog_season = season or current_season(DEFAULT_SEASON_FILE)
         postings: list[dict] = []
         for url in urls:
             parsed = self.parse_posting(url)
@@ -213,6 +214,31 @@ class InternshipScraper(ABC):
         self._error = error
 
 
+class ListingCacheScraper(InternshipScraper):
+    """Discover postings in one pass and cache parsed rows keyed by apply URL."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self._positions_by_url: dict[str, dict] = {}
+
+    def find_posting_urls(self) -> list[str]:
+        self._positions_by_url = {}
+        self.populate_listing_cache(self._positions_by_url)
+        return list(self._positions_by_url)
+
+    def parse_posting(self, url: str) -> dict | None:
+        parsed = self._positions_by_url.get(url)
+        if parsed is None:
+            return None
+        if not keep_parsed_posting(parsed):
+            return None
+        return parsed
+
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
+        """Fetch listings and store parsed rows in ``cache`` keyed by apply URL."""
+        raise NotImplementedError(f"{type(self).__name__} must implement populate_listing_cache")
+
+
 def discover_scrapers(scrapers_dir: Path | None = None) -> dict[str, type[InternshipScraper]]:
     """Register subclasses named *Scraper from config/scrapers/."""
     directory = Path(scrapers_dir or DEFAULT_SCRAPERS_DIR)
@@ -319,11 +345,6 @@ def posted_at_from_iso(value: object) -> str | None:
 def keep_parsed_posting(parsed: dict) -> bool:
     """Apply the shared inclusion classifier to a parsed posting."""
     return include_posting(parsed.get("title", ""), parsed.get("location", ""))
-
-
-def _current_season(path: Path = DEFAULT_SEASON_FILE) -> str:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    return payload["season"]
 
 
 def _looks_unauthorized(payload: object) -> bool:

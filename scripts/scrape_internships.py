@@ -3,7 +3,8 @@
 
 Workday companies without an adapter stay on program_fallback. Candidate
 Pass --fixture to merge a mocked PCSX JSON payload into a **temp** catalog
-(never `data/active/internships.json`). Live refresh omits --fixture.
+(never `data/active/internships.json`). Pass --fixture-map for multi-company
+dry-runs. Live refresh omits both.
 """
 
 from __future__ import annotations
@@ -13,6 +14,8 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
+
+from catalog.io import load_json_list, write_json_list
 
 from scraper_framework import discover_scrapers, upsert_catalog
 from validate_data import run_validation
@@ -24,10 +27,11 @@ DEFAULT_SCHEMA = REPO_ROOT / "data" / "schema.json"
 DEFAULT_ALLOWLIST = REPO_ROOT / "config" / "allowlist.json"
 DEFAULT_CANDIDATES = REPO_ROOT / "config" / "candidates.json"
 DEFAULT_ARTIFACT = REPO_ROOT / "logs" / "scrape_failures.json"
+DEFAULT_FIXTURE_MAP = REPO_ROOT / "config" / "fixtures" / "scrape_map.json"
 
 
 class FixtureResponse:
-    """Minimal response object for --fixture (no live HTTP)."""
+    """Minimal JSON response object for fixture sessions."""
 
     def __init__(self, payload: dict, status_code: int = 200) -> None:
         self.payload = payload
@@ -43,22 +47,51 @@ class FixtureResponse:
             raise RuntimeError(f"HTTP {self.status_code}")
 
 
-class FixtureSession:
-    """Session that always returns a local JSON fixture."""
+class FixtureHtmlResponse:
+    """Minimal HTML response object for fixture sessions."""
 
-    def __init__(self, payload: dict) -> None:
+    def __init__(self, text: str, status_code: int = 200) -> None:
+        self.text = text
+        self.status_code = status_code
+        self.headers = {"Content-Type": "text/html; charset=utf-8"}
+
+    def json(self) -> dict:
+        raise ValueError("not json")
+
+    def raise_for_status(self) -> None:
+        if self.status_code >= 400:
+            raise RuntimeError(f"HTTP {self.status_code}")
+
+
+class FixtureSession:
+    """Session that returns a local JSON or HTML fixture for every request."""
+
+    def __init__(self, payload: dict | str) -> None:
         self.payload = payload
 
     def get(self, url: str, timeout: float | None = None, headers: dict | None = None):
         del url, timeout, headers
-        return FixtureResponse(self.payload)
+        if isinstance(self.payload, dict):
+            return FixtureResponse(self.payload)
+        return FixtureHtmlResponse(self.payload)
 
 
-def load_json_list(path: Path) -> list[dict]:
+def load_fixture_map(path: Path) -> dict[str, Path]:
+    """Load company → fixture path entries relative to the repo root."""
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(payload, list):
-        raise ValueError(f"{path}: catalog must be a JSON array")
-    return payload
+    if not isinstance(payload, dict):
+        raise ValueError(f"{path}: fixture map must be a JSON object")
+    resolved: dict[str, Path] = {}
+    for company, relative in payload.items():
+        resolved[str(company)] = (REPO_ROOT / str(relative)).resolve()
+    return resolved
+
+
+def fixture_session_for(path: Path) -> FixtureSession:
+    text = Path(path).read_text(encoding="utf-8")
+    if path.suffix.lower() == ".json":
+        return FixtureSession(json.loads(text))
+    return FixtureSession(text)
 
 
 def load_company_names(path: Path, key: str) -> set[str]:
@@ -70,6 +103,7 @@ def scrape_and_merge(
     catalog_path: Path,
     *,
     fixture_path: Path | None = None,
+    fixture_map_path: Path | None = None,
     seen_on: str | None = None,
     rate_limit_delay: float = 1.0,
     artifact_path: Path | None = None,
@@ -77,34 +111,39 @@ def scrape_and_merge(
     candidates_path: Path = DEFAULT_CANDIDATES,
 ) -> list[dict]:
     """Discover allowlisted scrapers, scrape, upsert by internship ID, and save."""
-    if fixture_path is not None and Path(catalog_path).resolve() == DEFAULT_CATALOG.resolve():
+    if (
+        fixture_path is not None or fixture_map_path is not None
+    ) and Path(catalog_path).resolve() == DEFAULT_CATALOG.resolve():
         raise ValueError(
-            "refusing to merge --fixture into the production catalog "
+            "refusing to merge fixtures into the production catalog "
             "(data/active/internships.json); pass --catalog to a temp file"
         )
     seen = seen_on or date.today().isoformat()
     existing = load_json_list(catalog_path)
     allowlist = load_company_names(allowlist_path, "companies")
     candidates = load_company_names(candidates_path, "candidates")
-    session = None
-    delay = rate_limit_delay
-    if fixture_path is not None:
-        session = FixtureSession(json.loads(Path(fixture_path).read_text(encoding="utf-8")))
-        delay = 0
+    fixture_companies: dict[str, Path] | None = None
+    if fixture_map_path is not None:
+        fixture_companies = load_fixture_map(fixture_map_path)
+    elif fixture_path is not None:
+        fixture_companies = {"Boston Scientific": Path(fixture_path)}
+    use_fixtures = fixture_companies is not None
+    delay = 0 if use_fixtures else rate_limit_delay
     merged = existing
     failures: list[dict] = []
     _write_failure_artifact(artifact_path, failures)
     for company, scraper_cls in discover_scrapers().items():
         if company not in allowlist or company in candidates:
             continue
-        if fixture_path is not None and company != "Boston Scientific":
+        if use_fixtures and company not in fixture_companies:
             continue
+        session = None
+        if use_fixtures:
+            session = fixture_session_for(fixture_companies[company])
         try:
             scraper = scraper_cls(
                 session=session,
                 rate_limit_delay=delay,
-                # The runner owns the aggregate artifact. Individual scraper runs
-                # still support their legacy single-failure artifact.
                 artifact_path=None,
             )
             result = scraper.scrape(seen_on=seen)
@@ -128,9 +167,7 @@ def scrape_and_merge(
             )
             continue
     _write_failure_artifact(artifact_path, failures)
-    output = Path(catalog_path)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+    write_json_list(catalog_path, merged)
     return merged
 
 
@@ -149,7 +186,13 @@ def main(argv: list[str] | None = None) -> int:
         "--fixture",
         type=Path,
         default=None,
-        help="Local Eightfold/PCSX JSON to merge without live HTTP",
+        help="Local single-company JSON fixture (Boston Scientific only)",
+    )
+    parser.add_argument(
+        "--fixture-map",
+        type=Path,
+        default=None,
+        help="JSON map of company name → fixture path for multi-company dry-runs",
     )
     parser.add_argument("--seen-on", default=None)
     parser.add_argument("--artifact", type=Path, default=DEFAULT_ARTIFACT)
@@ -157,6 +200,7 @@ def main(argv: list[str] | None = None) -> int:
     scrape_and_merge(
         catalog_path=args.catalog,
         fixture_path=args.fixture,
+        fixture_map_path=args.fixture_map,
         seen_on=args.seen_on,
         artifact_path=args.artifact,
     )

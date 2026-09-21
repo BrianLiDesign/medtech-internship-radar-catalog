@@ -5,16 +5,13 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urljoin, urlparse
 
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-)
+from scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 25
 MAX_PAGES = 20
 
 
-class Jobs2webInternshipScraper(InternshipScraper):
+class Jobs2webInternshipScraper(ListingCacheScraper):
     """GET {origin}/search/?q=intern (jobs2web listing HTML)."""
 
     origin: str
@@ -29,35 +26,23 @@ class Jobs2webInternshipScraper(InternshipScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{origin}{self.search_path}",
         }
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(MAX_PAGES):
             html = self.fetch_text(self._search_url(page * PAGE_SIZE))
             if html is None:
-                return []
+                return
             jobs = _jobs_from_html(html, origin=self.origin.rstrip("/"))
             if not jobs:
                 break
             new_on_page = 0
             for parsed in jobs:
                 url = parsed["apply_url"]
-                if url in self._positions_by_url:
+                if url in cache:
                     continue
-                self._positions_by_url[url] = parsed
+                cache[url] = parsed
                 new_on_page += 1
             if new_on_page == 0 or len(jobs) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self, startrow: int) -> str:
         query = {

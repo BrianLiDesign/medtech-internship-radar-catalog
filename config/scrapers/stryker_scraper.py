@@ -5,15 +5,15 @@ from __future__ import annotations
 import json
 from urllib.parse import urlencode
 
-from inclusion import include_posting
-from scraper_framework import InternshipScraper, keep_parsed_posting
+from geo import is_us_location
+from scraper_framework import ListingCacheScraper
 
 JOBS_PATH = "/jobs"
 ORIGIN = "https://careers.stryker.com"
 PRELOAD_MARKER = "window.__PRELOAD_STATE__ = "
 
 
-class StrykerScraper(InternshipScraper):
+class StrykerScraper(ListingCacheScraper):
     """Parse intern jobs from careers.stryker.com/jobs?keyword=intern preload JSON."""
 
     company = "Stryker"
@@ -25,34 +25,22 @@ class StrykerScraper(InternshipScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{ORIGIN}/students-and-graduates",
         }
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         query = urlencode({"keyword": "intern"})
         html = self.fetch_text(f"{ORIGIN}{JOBS_PATH}?{query}")
         if html is None:
-            return []
+            return
         jobs = _jobs_from_html(html)
         if jobs is None:
             self._mark_blocked("unexpected Stryker preload payload")
-            return []
+            return
         for job in jobs:
             if not isinstance(job, dict):
                 continue
             parsed = _job_to_parsed(job)
             if parsed is None:
                 continue
-            self._positions_by_url[parsed["apply_url"]] = parsed
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
+            cache[parsed["apply_url"]] = parsed
 
 
 def _jobs_from_html(html: str) -> list | None:
@@ -113,7 +101,7 @@ def _stryker_location(job: dict) -> str:
             other_parts.append(text)
     if us_parts:
         joined = "; ".join(us_parts)
-        if include_posting("Software Engineer Intern", joined):
+        if is_us_location(joined):
             return joined
         return f"{joined}, United States"
     return "; ".join(other_parts)

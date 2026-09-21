@@ -4,38 +4,29 @@ from __future__ import annotations
 
 from urllib.parse import urlencode
 
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-    posted_at_from_unix,
-)
+from scraper_framework import ListingCacheScraper, posted_at_from_unix
 
 PAGE_SIZE = 10
 MAX_PAGES = 20
 SEARCH_PATH = "/api/pcsx/search"
 
 
-class EightfoldInternshipScraper(InternshipScraper):
+class EightfoldInternshipScraper(ListingCacheScraper):
     """GET {careers_origin}/api/pcsx/search?domain=&query=intern."""
 
     careers_origin: str
     domain: str
     keywords: str = "intern"
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         start = 0
         for _page in range(MAX_PAGES):
             payload = self.fetch_json(self._search_url(start=start))
             if payload is None:
-                return []
+                return
             data = payload.get("data") if isinstance(payload, dict) else None
             if not isinstance(data, dict):
-                return list(self._positions_by_url)
+                return
             positions = data.get("positions") or []
             if not isinstance(positions, list) or not positions:
                 break
@@ -45,22 +36,13 @@ class EightfoldInternshipScraper(InternshipScraper):
                 parsed = self._position_to_parsed(position)
                 if parsed is None:
                     continue
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             start += len(positions)
             count = data.get("count")
             if isinstance(count, int) and start >= count:
                 break
             if len(positions) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self, start: int) -> str:
         query = urlencode(

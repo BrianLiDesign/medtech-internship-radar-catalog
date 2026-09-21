@@ -4,37 +4,28 @@ from __future__ import annotations
 
 from urllib.parse import urlencode
 
-from inclusion import include_posting
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-    posted_at_from_iso,
-)
+from geo import is_us_location
+from scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 100
 MAX_PAGES = 20
 
 
-class SmartRecruitersInternshipScraper(InternshipScraper):
+class SmartRecruitersInternshipScraper(ListingCacheScraper):
     """GET api.smartrecruiters.com/v1/companies/{identifier}/postings."""
 
     company_identifier: str
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         offset = 0
         for _page in range(MAX_PAGES):
             payload = self.fetch_json(self._postings_url(offset))
             if payload is None:
-                return []
+                return
             jobs = _jobs_from_payload(payload)
             if jobs is None:
                 self._mark_blocked("unexpected SmartRecruiters payload")
-                return []
+                return
             if not jobs:
                 break
             for job in jobs:
@@ -43,22 +34,13 @@ class SmartRecruitersInternshipScraper(InternshipScraper):
                 parsed = self._job_to_parsed(job)
                 if parsed is None:
                     continue
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             offset += len(jobs)
             total = payload.get("totalFound")
             if isinstance(total, int) and offset >= total:
                 break
             if len(jobs) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _postings_url(self, offset: int) -> str:
         query = urlencode({"limit": PAGE_SIZE, "offset": offset})
@@ -120,6 +102,6 @@ def _smartrecruiters_location(job: dict) -> str:
         return "Remote (US)"
     if not location:
         return "United States"
-    if include_posting("Software Engineer Intern", location):
+    if is_us_location(location):
         return location
     return f"{location}, United States"

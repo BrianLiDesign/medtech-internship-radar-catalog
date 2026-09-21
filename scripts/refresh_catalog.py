@@ -73,6 +73,7 @@ def refresh_catalog(
     catalog_path: Path = DEFAULT_CATALOG,
     archived_path: Path = DEFAULT_ARCHIVED,
     fixture_path: Path | None = None,
+    fixture_map_path: Path | None = None,
     today: str | None = None,
     readme_path: Path = DEFAULT_README,
     inactive_path: Path = DEFAULT_INACTIVE,
@@ -83,18 +84,20 @@ def refresh_catalog(
 ) -> int:
     """Run scrape → validate → archive → generate README. Return 0 on success."""
     sweep_day = today or date.today().isoformat()
+    use_fixtures = fixture_path is not None or fixture_map_path is not None
     scrape_and_merge(
         catalog_path=catalog_path,
         fixture_path=fixture_path,
+        fixture_map_path=fixture_map_path,
         seen_on=sweep_day,
-        rate_limit_delay=0 if fixture_path is not None else 1.0,
+        rate_limit_delay=0 if use_fixtures else 1.0,
         artifact_path=artifact_path,
     )
     failed_scrapers = load_failed_scrapers(artifact_path)
     if run_validation(catalog_path, archived_path, schema_path) != 0:
         return 1
     probe_session = None
-    if fixture_path is None:
+    if not use_fixtures:
         import requests
 
         probe_session = requests.Session()
@@ -140,7 +143,13 @@ def main(argv: list[str] | None = None) -> int:
         "--fixture",
         type=Path,
         default=None,
-        help="Local ATS JSON fixture (no live HTTP). Omit for a live sweep.",
+        help="Local single-company JSON fixture (Boston Scientific). Omit for a live sweep.",
+    )
+    parser.add_argument(
+        "--fixture-map",
+        type=Path,
+        default=None,
+        help="JSON map of company → fixture path for multi-company dry-runs",
     )
     parser.add_argument("--today", default=None)
     parser.add_argument("--readme", type=Path, default=DEFAULT_README)
@@ -152,6 +161,7 @@ def main(argv: list[str] | None = None) -> int:
         catalog_path=args.catalog,
         archived_path=args.archived,
         fixture_path=args.fixture,
+        fixture_map_path=args.fixture_map,
         today=args.today,
         readme_path=args.readme,
         inactive_path=args.inactive,

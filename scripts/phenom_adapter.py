@@ -2,17 +2,13 @@
 
 from __future__ import annotations
 
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-    posted_at_from_iso,
-)
+from scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 50
 MAX_PAGES = 20
 
 
-class PhenomInternshipScraper(InternshipScraper):
+class PhenomInternshipScraper(ListingCacheScraper):
     """POST {origin}/widgets refineSearch for intern-keyword jobs."""
 
     origin: str
@@ -26,19 +22,16 @@ class PhenomInternshipScraper(InternshipScraper):
             "Origin": origin,
             "Referer": f"{origin}/",
         }
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         start = 0
         for _page in range(MAX_PAGES):
             payload = self.fetch_json(self._widgets_url(), json_body=self._search_body(start))
             if payload is None:
-                return []
+                return
             jobs = _jobs_from_payload(payload)
             if jobs is None:
                 self._mark_blocked("unexpected Phenom payload")
-                return []
+                return
             if not jobs:
                 break
             for job in jobs:
@@ -47,19 +40,10 @@ class PhenomInternshipScraper(InternshipScraper):
                 parsed = self._job_to_parsed(job)
                 if parsed is None:
                     continue
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             if len(jobs) < PAGE_SIZE:
                 break
             start += len(jobs)
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _widgets_url(self) -> str:
         return f"{self.origin.rstrip('/')}/widgets"
