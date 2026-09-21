@@ -10,7 +10,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 
-from scraper_framework import InternshipScraper, keep_parsed_posting
+from scraper_framework import ListingCacheScraper
 
 _INTERN_RE = re.compile(r"\bintern(?:ship)?s?\b|\bco-?ops?\b", re.IGNORECASE)
 _WAF_MARKERS = ("incorrect browser", "access denied")
@@ -20,7 +20,7 @@ _JSON_LD_RE = re.compile(
 )
 
 
-class HubLandingInternshipScraper(InternshipScraper):
+class HubLandingInternshipScraper(ListingCacheScraper):
     """GET the public intern hub and keep intern-titled job cards / JobPosting JSON-LD."""
 
     hub_url: str
@@ -33,28 +33,17 @@ class HubLandingInternshipScraper(InternshipScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": self.hub_url,
         }
-        self._positions_by_url: dict[str, dict] = {}
 
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         html = self.fetch_text(self.hub_url)
         if html is None:
-            return []
+            return
         if _looks_blocked_html(html):
             self._mark_blocked("browser wall")
-            return []
+            return
         origin = _origin_from_url(self.hub_url)
         for parsed in _jobs_from_html(html, origin=origin, ats=self.ats, hub_url=self.hub_url):
-            self._positions_by_url[parsed["apply_url"]] = parsed
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
+            cache[parsed["apply_url"]] = parsed
 
 
 def _jobs_from_html(html: str, *, origin: str, ats: str, hub_url: str) -> list[dict]:

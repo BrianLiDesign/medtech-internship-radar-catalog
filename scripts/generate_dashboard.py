@@ -9,22 +9,15 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
+from catalog.io import current_season, load_json_list
+from catalog.schema_constants import ROLE_FAMILIES
+
 DEGREE_LABELS = {
     "bs": "BS",
     "ms": "MS",
     "bs_ms": "BS/MS",
     "unspecified": "BS/MS",
 }
-
-ROLE_FAMILIES = (
-    "Software",
-    "BME/R&D",
-    "Electrical/firmware",
-    "Mechanical/robotics",
-    "Data/ML",
-    "Quality/manufacturing",
-    "Other STEM",
-)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE = REPO_ROOT / "data" / "active" / "internships.json"
@@ -63,16 +56,8 @@ def age_for_row(row: dict, now: date) -> str:
     return format_age(parse_iso_date(raw), now)
 
 
-def load_current_season(path: Path) -> str:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    return payload["season"]
-
-
 def load_internships(path: Path) -> list[dict]:
-    payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(payload, list):
-        return []
-    return payload
+    return load_json_list(path)
 
 
 def visible_rows(internships: list[dict], season: str) -> list[dict]:
@@ -311,7 +296,7 @@ def write_readme(
     clock = date.today() if now is None else now
     internships = load_internships(internships_path)
     archived = load_internships(archived_path) if archived_path.exists() else []
-    season = load_current_season(season_path)
+    season = current_season(season_path)
     health = load_health(health_path)
     if health:
         health = dict(health)

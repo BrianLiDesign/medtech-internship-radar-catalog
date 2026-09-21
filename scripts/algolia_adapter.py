@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from scraper_framework import InternshipScraper, keep_parsed_posting
+from scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 50
 MAX_PAGES = 20
 
 
-class AlgoliaInternshipScraper(InternshipScraper):
+class AlgoliaInternshipScraper(ListingCacheScraper):
     """POST {appId}-dsn.algolia.net/1/indexes/*/queries for intern-keyword jobs."""
 
     application_id: str
@@ -28,31 +28,29 @@ class AlgoliaInternshipScraper(InternshipScraper):
         }
         if self.referer:
             self.headers["Referer"] = self.referer
-        self._positions_by_url: dict[str, dict] = {}
 
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(MAX_PAGES):
             payload = self.fetch_json(self._search_url(), json_body=self._search_body(page))
             if payload is None:
-                return []
+                return
             page_result = _first_result(payload)
             if page_result is None:
                 self._mark_blocked("unexpected Algolia payload")
-                return []
+                return
             hits = page_result.get("hits")
             if hits is None:
                 hits = []
             if not isinstance(hits, list):
                 self._mark_blocked("unexpected Algolia payload")
-                return []
+                return
             for hit in hits:
                 if not isinstance(hit, dict):
                     continue
                 parsed = self._job_to_parsed(hit)
                 if parsed is None:
                     continue
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             nb_pages = page_result.get("nbPages")
             try:
                 total_pages = int(nb_pages) if nb_pages is not None else 0
@@ -60,15 +58,6 @@ class AlgoliaInternshipScraper(InternshipScraper):
                 total_pages = 0
             if page + 1 >= total_pages or len(hits) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self) -> str:
         app_id = self.application_id.lower()

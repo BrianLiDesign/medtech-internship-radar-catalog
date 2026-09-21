@@ -6,7 +6,9 @@ import json
 from datetime import date
 from pathlib import Path
 
-from generate_dashboard import generate_readme, load_current_season
+from catalog.io import current_season
+
+from generate_dashboard import generate_readme
 
 
 def internship(**overrides):
@@ -117,7 +119,7 @@ def test_row_without_apply_url_is_omitted():
 def test_empty_role_families_omitted_and_season_comes_from_config(tmp_path):
     season_path = tmp_path / "current_season.json"
     season_path.write_text('{"season": "summer-2027"}\n', encoding="utf-8")
-    season = load_current_season(season_path)
+    season = current_season(season_path)
     assert season == "summer-2027"
     rows = [
         internship(role_family="Software", season="summer-2027"),

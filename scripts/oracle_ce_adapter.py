@@ -4,39 +4,30 @@ from __future__ import annotations
 
 from urllib.parse import urlencode
 
-from inclusion import include_posting
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-    posted_at_from_iso,
-)
+from geo import is_us_location
+from scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 25
 MAX_PAGES = 20
 
 
-class OracleCEInternshipScraper(InternshipScraper):
+class OracleCEInternshipScraper(ListingCacheScraper):
     """GET {origin}/hcmRestApi/.../recruitingCEJobRequisitions (public CE JSON)."""
 
     origin: str
     site_number: str
     keywords: str = "intern"
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self._positions_by_url: dict[str, dict] = {}
-
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         start = 0
         for _page in range(MAX_PAGES):
             payload = self.fetch_json(self._search_url(start))
             if payload is None:
-                return []
+                return
             jobs, total = _jobs_from_payload(payload)
             if jobs is None:
                 self._mark_blocked("unexpected Oracle CE payload")
-                return []
+                return
             if not jobs:
                 break
             for job in jobs:
@@ -45,21 +36,12 @@ class OracleCEInternshipScraper(InternshipScraper):
                 parsed = self._job_to_parsed(job)
                 if parsed is None:
                     continue
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             start += len(jobs)
             if isinstance(total, int) and start >= total:
                 break
             if len(jobs) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self, start: int) -> str:
         finder = (
@@ -127,7 +109,7 @@ def _oracle_location(job: dict) -> str:
     location = str(job.get("PrimaryLocation") or "").strip()
     country = str(job.get("PrimaryLocationCountry") or "").strip()
     if country.upper() == "US":
-        if include_posting("Software Engineer Intern", location):
+        if is_us_location(location):
             return location or "United States"
         return f"{location}, United States" if location else "United States"
     if country and country.lower() not in location.lower():

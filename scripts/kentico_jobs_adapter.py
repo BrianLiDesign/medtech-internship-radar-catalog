@@ -5,13 +5,13 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urljoin
 
-from scraper_framework import InternshipScraper, keep_parsed_posting
+from scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 10
 MAX_PAGES = 20
 
 
-class KenticoJobsInternshipScraper(InternshipScraper):
+class KenticoJobsInternshipScraper(ListingCacheScraper):
     """GET {origin}/api/jobs/search?keyword=intern listing HTML."""
 
     origin: str
@@ -26,38 +26,27 @@ class KenticoJobsInternshipScraper(InternshipScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{origin}{self.page_url}",
         }
-        self._positions_by_url: dict[str, dict] = {}
 
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(1, MAX_PAGES + 1):
             html = self.fetch_text(self._search_url(page))
             if html is None:
-                return []
+                return
             if not _looks_like_jobs_partial(html):
                 self._mark_blocked("unexpected Kentico jobs payload")
-                return []
+                return
             jobs = _jobs_from_html(html, origin=self.origin.rstrip("/"))
             if not jobs:
                 break
             new_on_page = 0
             for parsed in jobs:
                 url = parsed["apply_url"]
-                if url in self._positions_by_url:
+                if url in cache:
                     continue
-                self._positions_by_url[url] = parsed
+                cache[url] = parsed
                 new_on_page += 1
             if new_on_page == 0 or len(jobs) < PAGE_SIZE:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self, page: int) -> str:
         query = urlencode(

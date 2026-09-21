@@ -14,6 +14,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from catalog.io import current_season
+
 from internship_ids import canonical_apply_url, internship_id
 from validate_data import run_validation
 
@@ -33,11 +35,6 @@ def load_seed_document(path: Path) -> dict:
     if not isinstance(payload, dict) or not isinstance(payload.get("seeds"), list):
         raise ValueError(f"{path}: seed file must be an object with a seeds array")
     return payload
-
-
-def _current_season(season_path: Path) -> str:
-    payload = json.loads(season_path.read_text(encoding="utf-8"))
-    return payload["season"]
 
 
 def row_from_seed(seed: dict, *, season: str, seen_on: str) -> dict:
@@ -119,7 +116,7 @@ def restore_missing_fallbacks(
 ) -> list[dict]:
     """Write seed fallbacks for companies that dropped to zero active rows."""
     document = load_seed_document(seed_path)
-    season = document.get("season") or _current_season(season_path)
+    season = document.get("season") or current_season(season_path)
     seen = seen_on or document.get("first_seen") or date.today().isoformat()
     seed_rows = [row_from_seed(seed, season=season, seen_on=seen) for seed in document["seeds"]]
     output = Path(catalog_path)
@@ -138,7 +135,7 @@ def apply_seeds(
 ) -> list[dict]:
     """Merge program_fallback rows from seed input. Return the written rows."""
     document = load_seed_document(seed_path)
-    season = document.get("season") or _current_season(season_path)
+    season = document.get("season") or current_season(season_path)
     seen = seen_on or document.get("first_seen") or date.today().isoformat()
     seed_rows = [row_from_seed(seed, season=season, seen_on=seen) for seed in document["seeds"]]
     output = Path(output_path)

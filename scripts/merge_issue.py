@@ -13,6 +13,9 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from catalog.io import current_season
+from catalog.schema_constants import ROLE_FAMILIES
+
 from internship_ids import canonical_apply_url, internship_id
 from scraper_framework import role_family_for_title
 from validate_data import run_validation
@@ -39,16 +42,6 @@ DEGREE_ALIASES = {
     "unspecified": "unspecified",
 }
 
-ROLE_FAMILIES = (
-    "Software",
-    "BME/R&D",
-    "Electrical/firmware",
-    "Mechanical/robotics",
-    "Data/ML",
-    "Quality/manufacturing",
-    "Other STEM",
-)
-
 
 class MergeIssueError(ValueError):
     """Invalid issue fields or a company that is not on the v1 allowlist."""
@@ -73,10 +66,6 @@ def normalize_degree(value: str) -> str:
     if key not in DEGREE_ALIASES:
         raise MergeIssueError(f"unknown degree {value!r}; use Unspecified, BS, MS, or BS/MS")
     return DEGREE_ALIASES[key]
-
-
-def _current_season(season_path: Path) -> str:
-    return load_json(season_path)["season"]
 
 
 def row_from_issue(
@@ -169,7 +158,7 @@ def merge_issue(
         candidate_names = candidate_company_names(candidates_path)
     payload = dict(fields)
     if not str(payload.get("season") or "").strip():
-        payload["season"] = _current_season(season_path)
+        payload["season"] = current_season(season_path)
     seen = seen_on or date.today().isoformat()
     row = row_from_issue(
         payload,

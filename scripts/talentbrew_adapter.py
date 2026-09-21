@@ -6,17 +6,13 @@ from datetime import datetime
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urljoin
 
-from scraper_framework import (
-    InternshipScraper,
-    keep_parsed_posting,
-    posted_at_from_iso,
-)
+from scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 15
 MAX_PAGES = 20
 
 
-class TalentBrewInternshipScraper(InternshipScraper):
+class TalentBrewInternshipScraper(ListingCacheScraper):
     """GET {origin}/en/search-jobs/results?Keywords=intern (TalentBrew AJAX)."""
 
     origin: str
@@ -32,38 +28,27 @@ class TalentBrewInternshipScraper(InternshipScraper):
             "X-Requested-With": "XMLHttpRequest",
             "Referer": f"{self.origin.rstrip('/')}{self.results_path}",
         }
-        self._positions_by_url: dict[str, dict] = {}
 
-    def find_posting_urls(self) -> list[str]:
-        self._positions_by_url = {}
+    def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         total_pages = 1
         for page in range(1, MAX_PAGES + 1):
             if page > total_pages:
                 break
             payload = self.fetch_json(self._search_url(page))
             if payload is None:
-                return []
+                return
             jobs, pages = _jobs_from_payload(payload, origin=self.origin.rstrip("/"))
             if jobs is None:
                 self._mark_blocked("unexpected TalentBrew payload")
-                return []
+                return
             if pages:
                 total_pages = min(pages, MAX_PAGES)
             if not jobs:
                 break
             for parsed in jobs:
-                self._positions_by_url[parsed["apply_url"]] = parsed
+                cache[parsed["apply_url"]] = parsed
             if page >= total_pages:
                 break
-        return list(self._positions_by_url)
-
-    def parse_posting(self, url: str) -> dict | None:
-        parsed = self._positions_by_url.get(url)
-        if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
-            return None
-        return parsed
 
     def _search_url(self, page: int) -> str:
         query = urlencode(
