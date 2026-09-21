@@ -8,7 +8,7 @@ from pathlib import Path
 
 from catalog.io import current_season
 
-from generate_dashboard import generate_readme
+from generate_dashboard import generate_newest_readme, generate_readme, write_readme
 
 
 def internship(**overrides):
@@ -31,6 +31,122 @@ def internship(**overrides):
 
 
 NOW = date(2026, 8, 14)
+
+
+def _table_data_rows(readme: str) -> list[str]:
+    return [
+        line
+        for line in readme.splitlines()
+        if line.startswith("| ") and not line.startswith("| ---") and "Company" not in line
+    ]
+
+
+def test_newest_readme_orders_rows_newest_to_oldest():
+    older = internship(
+        company="Abbott",
+        title="Older Intern",
+        posted_at="2026-07-01",
+        first_seen="2026-07-01",
+    )
+    newer = internship(
+        id="22222222-2222-4222-8222-222222222222",
+        company="Medtronic",
+        title="Newer Intern",
+        posted_at="2026-08-10",
+        first_seen="2026-08-10",
+    )
+    readme = generate_newest_readme([older, newer], season="summer-2027", now=NOW)
+    rows = _table_data_rows(readme)
+    assert "Medtronic" in rows[0]
+    assert "Abbott" in rows[1]
+
+
+def test_newest_readme_sinks_undated_program_fallbacks():
+    hub = internship(
+        company="Abbott",
+        title="University internships",
+        row_kind="program_fallback",
+        role_family="Other STEM",
+        first_seen="2026-08-14",
+        last_seen="2026-08-14",
+    )
+    older_posting = internship(
+        id="22222222-2222-4222-8222-222222222222",
+        company="Medtronic",
+        title="Older Intern",
+        posted_at="2026-07-01",
+        first_seen="2026-07-01",
+    )
+    readme = generate_newest_readme([hub, older_posting], season="summer-2027", now=NOW)
+    rows = _table_data_rows(readme)
+    assert "Medtronic" in rows[0]
+    assert "Abbott" in rows[1]
+
+
+def test_newest_readme_is_one_flat_table_with_role_family_column():
+    software = internship(role_family="Software", company="Medtronic", title="Software Intern")
+    bme = internship(
+        id="22222222-2222-4222-8222-222222222222",
+        company="Abbott",
+        title="BME Intern",
+        role_family="BME/R&D",
+    )
+    readme = generate_newest_readme([software, bme], season="summer-2027", now=NOW)
+    assert "## Software" not in readme
+    assert "## BME/R&D" not in readme
+    assert "| Company | Role | Role family | Location | Degree | Apply | Age |" in readme
+    rows = _table_data_rows(readme)
+    assert any("| Software |" in line for line in rows)
+    assert any("| BME/R&D |" in line for line in rows)
+
+
+def test_newest_readme_uses_same_visible_rows_as_main():
+    listed = internship(company="Medtronic", title="Has Apply")
+    omitted = internship(
+        id="33333333-3333-4333-8333-333333333333",
+        company="Intuitive",
+        title="No Apply",
+        apply_url="",
+    )
+    other_season = internship(
+        id="55555555-5555-4555-8555-555555555555",
+        company="GE HealthCare",
+        title="Next season intern",
+        season="summer-2028",
+    )
+    readme = generate_newest_readme(
+        [listed, omitted, other_season],
+        season="summer-2027",
+        now=NOW,
+    )
+    assert "Has Apply" in readme
+    assert "No Apply" not in readme
+    assert "Intuitive" not in readme
+    assert "Next season intern" not in readme
+    assert "GE HealthCare" not in readme
+
+
+def test_newest_readme_has_header_and_back_link():
+    readme = generate_newest_readme([internship()], season="summer-2027", now=NOW)
+    assert readme.startswith("# Newest internships")
+    assert "newest first" in readme
+    assert "[README.md](README.md)" in readme
+
+
+def test_newest_readme_empty_catalog_keeps_header():
+    readme = generate_newest_readme([], season="summer-2027", now=NOW)
+    assert readme.startswith("# Newest internships")
+    assert "No listings yet" in readme
+    assert "| Company |" not in readme
+
+
+def test_main_readme_links_to_newest_readme():
+    readme = generate_readme([internship()], season="summer-2027", now=NOW)
+    preamble = readme[: readme.index("## Software")]
+    assert "[README-Newest.md](README-Newest.md)" in preamble
+    assert "## Software" in readme
+    assert "| Company | Role | Location | Degree | Apply | Age |" in readme
+    assert "| Role family |" not in readme
 
 
 def test_unspecified_degree_renders_as_bs_ms():
@@ -215,3 +331,27 @@ def test_empty_catalog_keeps_discover_first_structure():
     assert "[MIT](LICENSE.md)" in readme
     assert "[CONTRIBUTING.md](CONTRIBUTING.md)" in readme
     assert "[SECURITY.md](SECURITY.md)" in readme
+    assert "[README-Newest.md](README-Newest.md)" in readme
+
+
+def test_write_readme_writes_newest_file(tmp_path):
+    catalog = tmp_path / "active.json"
+    archived = tmp_path / "archived.json"
+    season = tmp_path / "season.json"
+    catalog.write_text(json.dumps([internship()]), encoding="utf-8")
+    archived.write_text("[]\n", encoding="utf-8")
+    season.write_text('{"season": "summer-2027"}\n', encoding="utf-8")
+    newest_path = tmp_path / "README-Newest.md"
+    write_readme(
+        internships_path=catalog,
+        archived_path=archived,
+        season_path=season,
+        readme_path=tmp_path / "README.md",
+        inactive_path=tmp_path / "README-Inactive.md",
+        newest_path=newest_path,
+        now=NOW,
+    )
+    newest = newest_path.read_text(encoding="utf-8")
+    assert newest.startswith("# Newest internships")
+    assert "Software Intern" in newest
+    assert "| Role family |" in newest

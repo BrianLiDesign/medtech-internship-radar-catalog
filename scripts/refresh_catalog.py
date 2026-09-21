@@ -26,6 +26,7 @@ DEFAULT_SCHEMA = REPO_ROOT / "data" / "schema.json"
 DEFAULT_SEASON = REPO_ROOT / "config" / "current_season.json"
 DEFAULT_README = REPO_ROOT / "README.md"
 DEFAULT_INACTIVE = REPO_ROOT / "README-Inactive.md"
+DEFAULT_NEWEST = REPO_ROOT / "README-Newest.md"
 DEFAULT_HEALTH = REPO_ROOT / "data" / "health.json"
 DEFAULT_ARTIFACT = REPO_ROOT / "logs" / "scrape_failures.json"
 DEFAULT_SEEDS = REPO_ROOT / "config" / "seeds" / "program_fallbacks.json"
@@ -77,6 +78,7 @@ def refresh_catalog(
     today: str | None = None,
     readme_path: Path = DEFAULT_README,
     inactive_path: Path = DEFAULT_INACTIVE,
+    newest_path: Path = DEFAULT_NEWEST,
     health_path: Path = DEFAULT_HEALTH,
     season_path: Path = DEFAULT_SEASON,
     artifact_path: Path = DEFAULT_ARTIFACT,
@@ -129,6 +131,7 @@ def refresh_catalog(
         season_path=season_path,
         readme_path=readme_path,
         inactive_path=inactive_path,
+        newest_path=newest_path,
         health_path=health_path,
         now=date.fromisoformat(sweep_day),
     )
@@ -154,6 +157,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--today", default=None)
     parser.add_argument("--readme", type=Path, default=DEFAULT_README)
     parser.add_argument("--inactive", type=Path, default=DEFAULT_INACTIVE)
+    parser.add_argument("--newest", type=Path, default=DEFAULT_NEWEST)
     parser.add_argument("--health", type=Path, default=DEFAULT_HEALTH)
     parser.add_argument("--artifact", type=Path, default=DEFAULT_ARTIFACT)
     args = parser.parse_args(argv)
@@ -165,6 +169,7 @@ def main(argv: list[str] | None = None) -> int:
         today=args.today,
         readme_path=args.readme,
         inactive_path=args.inactive,
+        newest_path=args.newest,
         health_path=args.health,
         artifact_path=args.artifact,
     )
