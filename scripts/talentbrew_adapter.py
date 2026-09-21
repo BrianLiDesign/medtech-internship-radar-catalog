@@ -28,6 +28,7 @@ class TalentBrewInternshipScraper(ListingCacheScraper):
             "X-Requested-With": "XMLHttpRequest",
             "Referer": f"{self.origin.rstrip('/')}{self.results_path}",
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         total_pages = 1
         for page in range(1, MAX_PAGES + 1):

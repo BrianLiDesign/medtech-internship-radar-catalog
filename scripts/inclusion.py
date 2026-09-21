@@ -17,6 +17,8 @@ _PHD_RE = re.compile(r"\bph\.?d\.?\b", re.IGNORECASE)
 _INTERN_RE = re.compile(r"\bintern(?:ship)?s?\b", re.IGNORECASE)
 _COOP_RE = re.compile(r"\bco-?ops?\b", re.IGNORECASE)
 _SUMMER_RE = re.compile(r"\bsummer\b", re.IGNORECASE)
+
+
 def include_posting(title: str, location: str, **_optional: object) -> bool:
     """Return True if scrapers should keep this req. Extra kwargs are ignored."""
     if _NON_STEM_RE.search(title):

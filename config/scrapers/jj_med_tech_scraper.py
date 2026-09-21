@@ -23,6 +23,7 @@ class JJMedTechScraper(ListingCacheScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": HUB_URL,
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         html = self.fetch_text(HUB_URL)
         if html is None:

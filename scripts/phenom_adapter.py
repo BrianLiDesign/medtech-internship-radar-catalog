@@ -22,6 +22,7 @@ class PhenomInternshipScraper(ListingCacheScraper):
             "Origin": origin,
             "Referer": f"{origin}/",
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         start = 0
         for _page in range(MAX_PAGES):

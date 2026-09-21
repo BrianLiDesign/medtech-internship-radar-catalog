@@ -28,6 +28,7 @@ class AlgoliaInternshipScraper(ListingCacheScraper):
         }
         if self.referer:
             self.headers["Referer"] = self.referer
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(MAX_PAGES):
             payload = self.fetch_json(self._search_url(), json_body=self._search_body(page))

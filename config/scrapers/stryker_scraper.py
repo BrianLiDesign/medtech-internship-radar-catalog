@@ -25,6 +25,7 @@ class StrykerScraper(ListingCacheScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{ORIGIN}/students-and-graduates",
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         query = urlencode({"keyword": "intern"})
         html = self.fetch_text(f"{ORIGIN}{JOBS_PATH}?{query}")

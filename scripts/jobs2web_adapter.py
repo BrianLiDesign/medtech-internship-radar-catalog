@@ -26,6 +26,7 @@ class Jobs2webInternshipScraper(ListingCacheScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{origin}{self.search_path}",
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(MAX_PAGES):
             html = self.fetch_text(self._search_url(page * PAGE_SIZE))

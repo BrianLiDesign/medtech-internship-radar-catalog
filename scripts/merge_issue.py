@@ -42,6 +42,7 @@ DEGREE_ALIASES = {
     "unspecified": "unspecified",
 }
 
+
 class MergeIssueError(ValueError):
     """Invalid issue fields or a company that is not on the v1 allowlist."""
 

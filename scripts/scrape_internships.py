@@ -111,9 +111,9 @@ def scrape_and_merge(
     candidates_path: Path = DEFAULT_CANDIDATES,
 ) -> list[dict]:
     """Discover allowlisted scrapers, scrape, upsert by internship ID, and save."""
-    if (
-        fixture_path is not None or fixture_map_path is not None
-    ) and Path(catalog_path).resolve() == DEFAULT_CATALOG.resolve():
+    if (fixture_path is not None or fixture_map_path is not None) and Path(
+        catalog_path
+    ).resolve() == DEFAULT_CATALOG.resolve():
         raise ValueError(
             "refusing to merge fixtures into the production catalog "
             "(data/active/internships.json); pass --catalog to a temp file"

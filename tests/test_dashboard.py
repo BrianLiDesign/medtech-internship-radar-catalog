@@ -7,6 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from catalog.io import current_season
+
 from generate_dashboard import generate_readme
 
 

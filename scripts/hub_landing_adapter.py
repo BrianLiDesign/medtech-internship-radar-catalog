@@ -33,6 +33,7 @@ class HubLandingInternshipScraper(ListingCacheScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": self.hub_url,
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         html = self.fetch_text(self.hub_url)
         if html is None:

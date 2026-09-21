@@ -26,6 +26,7 @@ class KenticoJobsInternshipScraper(ListingCacheScraper):
             "Accept": "text/html,application/xhtml+xml;q=0.9",
             "Referer": f"{origin}{self.page_url}",
         }
+
     def populate_listing_cache(self, cache: dict[str, dict]) -> None:
         for page in range(1, MAX_PAGES + 1):
             html = self.fetch_text(self._search_url(page))
