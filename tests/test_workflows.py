@@ -28,6 +28,7 @@ def test_daily_workflow_opens_pr_and_never_pushes_listings_to_main():
     assert "git push origin main" not in text
     assert "HEAD:main" not in text
     assert "HEAD:master" not in text
+    assert "README-Newest.md" in text
 
 
 def test_ci_runs_pytest_and_validate_without_live_scrape():

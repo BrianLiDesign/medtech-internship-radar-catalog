@@ -30,6 +30,7 @@ def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path
     archived_path.write_text("[]\n", encoding="utf-8")
     readme_path = tmp_path / "README.md"
     inactive_path = tmp_path / "README-Inactive.md"
+    newest_path = tmp_path / "README-Newest.md"
     health_path = tmp_path / "health.json"
 
     result = refresh_catalog(
@@ -39,6 +40,7 @@ def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path
         today="2026-08-14",
         readme_path=readme_path,
         inactive_path=inactive_path,
+        newest_path=newest_path,
         health_path=health_path,
         season_path=REPO_ROOT / "config" / "current_season.json",
     )
@@ -49,6 +51,10 @@ def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path
     assert "Student Program Radar" not in readme
     assert readme_path.exists()
     assert inactive_path.exists()
+    assert newest_path.exists()
+    newest = newest_path.read_text(encoding="utf-8")
+    assert newest.startswith("# Newest internships")
+    assert "[README-Newest.md](README-Newest.md)" in readme
     health = json.loads(health_path.read_text(encoding="utf-8"))
     assert health["last_sweep"] == "2026-08-14"
     assert "archived_count" in health
@@ -83,6 +89,7 @@ def test_fixture_map_dry_run_scrapes_mapped_adapter_families(tmp_path, monkeypat
         today="2026-08-14",
         readme_path=tmp_path / "README.md",
         inactive_path=tmp_path / "README-Inactive.md",
+        newest_path=tmp_path / "README-Newest.md",
         health_path=tmp_path / "health.json",
         season_path=REPO_ROOT / "config" / "current_season.json",
     )

@@ -43,6 +43,11 @@ A co-op whose term is Summer 2027 / summer-shaped. In v1. Multi-term rotating co
 
 README recency for **postings**: `posted_at` if known, else `first_seen`. Program-fallback hubs have no posting date, so Age is `—` unless `posted_at` is set. Not `last_seen` / last-verified.
 
+## Newest README
+
+Generated `README-Newest.md`: the same visible internship rows as the landing README, as one flat table sorted newest-first by Age. Undated program-fallback hubs sink to the bottom. Role family is a column, not a section.
+_Avoid_: chronological README, by-age README, sorted README
+
 ## Verification / liveness
 
 `last_seen` and `miss_count`. Archive after ATS-closed **or** two consecutive daily misses. Program-fallback rows need a higher bar than a single failed fetch.

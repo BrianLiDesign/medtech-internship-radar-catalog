@@ -24,7 +24,7 @@ If `make` is unavailable (typical on Windows PowerShell):
 python -m pytest tests/test_refresh_catalog.py -q
 ```
 
-`--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--health`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:
+`--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--newest` / `--health`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:
 
 ```bash
 python scripts/refresh_catalog.py
@@ -36,7 +36,7 @@ That live command:
 2. Validates active + archived catalogs
 3. Probes apply URLs and archives ATS-closed / two-miss / dead program-URL rows
 4. Restores a program-fallback seed if a company has zero active rows
-5. Writes `data/health.json`, `README.md`, and `README-Inactive.md`
+5. Writes `data/health.json`, `README.md`, `README-Inactive.md`, and `README-Newest.md`
 
 ## Merge an issue into the catalog
 

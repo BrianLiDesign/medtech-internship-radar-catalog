@@ -131,6 +131,7 @@ medtech-internship-radar-catalog/
 ├── AGENTS.md
 ├── CONTEXT.md
 ├── README.md                 # generated; do not hand-edit tables
+├── README-Newest.md          # generated; same rows, newest first
 ├── README-Inactive.md        # optional; archived rows for the current season
 ├── LICENSE.md                # MIT (code)
 ├── LICENSE-DATA.md           # CC-BY 4.0 (data/)

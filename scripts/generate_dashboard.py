@@ -25,6 +25,7 @@ DEFAULT_ARCHIVED = REPO_ROOT / "data" / "archived" / "internships.json"
 DEFAULT_SEASON = REPO_ROOT / "config" / "current_season.json"
 DEFAULT_README = REPO_ROOT / "README.md"
 DEFAULT_INACTIVE = REPO_ROOT / "README-Inactive.md"
+DEFAULT_NEWEST = REPO_ROOT / "README-Newest.md"
 DEFAULT_HEALTH = REPO_ROOT / "data" / "health.json"
 
 
@@ -46,14 +47,22 @@ def format_age(when: date, now: date) -> str:
     return f"{days // 365}yr"
 
 
-def age_for_row(row: dict, now: date) -> str:
-    """Posting recency: posted_at else first_seen. Program hubs without posted_at are —."""
+def age_date(row: dict) -> date | None:
+    """Date used for Age. None when Age would render as —."""
     if row.get("row_kind") == "program_fallback" and not row.get("posted_at"):
-        return "—"
+        return None
     raw = row.get("posted_at") or row.get("first_seen")
     if not raw:
+        return None
+    return parse_iso_date(raw)
+
+
+def age_for_row(row: dict, now: date) -> str:
+    """Posting recency: posted_at else first_seen. Program hubs without posted_at are —."""
+    when = age_date(row)
+    if when is None:
         return "—"
-    return format_age(parse_iso_date(raw), now)
+    return format_age(when, now)
 
 
 def load_internships(path: Path) -> list[dict]:
@@ -81,11 +90,18 @@ def cell(value: str) -> str:
     return str(value).replace("|", "\\|")
 
 
+def company_title_key(row: dict) -> tuple[str, str]:
+    return (row.get("company", ""), row.get("title", ""))
+
+
+def newest_row_key(row: dict) -> tuple:
+    when = age_date(row)
+    ordinal = -(when.toordinal()) if when is not None else 0
+    return (when is None, ordinal, *company_title_key(row))
+
+
 def render_table(rows: list[dict], now: date) -> list[str]:
-    ordered = sorted(
-        rows,
-        key=lambda row: (row.get("company", ""), row.get("title", "")),
-    )
+    ordered = sorted(rows, key=company_title_key)
     lines = [
         "| Company | Role | Location | Degree | Apply | Age |",
         "| --- | --- | --- | --- | --- | --- |",
@@ -95,6 +111,27 @@ def render_table(rows: list[dict], now: date) -> list[str]:
             "| {company} | {title} | {location} | {degree} | {apply} | {age} |".format(
                 company=cell(row.get("company", "")),
                 title=cell(row.get("title", "")),
+                location=cell(row.get("location", "")),
+                degree=format_degree(row.get("degree", "unspecified")),
+                apply=f"[![Apply](assets/apply.svg)]({row['apply_url']})",
+                age=age_for_row(row, now),
+            )
+        )
+    return lines
+
+
+def render_newest_table(rows: list[dict], now: date) -> list[str]:
+    ordered = sorted(rows, key=newest_row_key)
+    lines = [
+        "| Company | Role | Role family | Location | Degree | Apply | Age |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in ordered:
+        lines.append(
+            "| {company} | {title} | {family} | {location} | {degree} | {apply} | {age} |".format(
+                company=cell(row.get("company", "")),
+                title=cell(row.get("title", "")),
+                family=cell(row.get("role_family", "")),
                 location=cell(row.get("location", "")),
                 degree=format_degree(row.get("degree", "unspecified")),
                 apply=f"[![Apply](assets/apply.svg)]({row['apply_url']})",
@@ -169,6 +206,12 @@ def generate_readme(
         "",
     ]
     lines.extend(render_jump_links(groups, season))
+    lines.extend(
+        [
+            "",
+            "All listings newest first: [README-Newest.md](README-Newest.md).",
+        ]
+    )
     for family, family_rows in groups:
         lines.extend(["", f"## {family}", ""])
         lines.extend(render_table(family_rows, now))
@@ -234,10 +277,7 @@ def generate_readme(
 
 
 def render_inactive_table(rows: list[dict], now: date) -> list[str]:
-    ordered = sorted(
-        rows,
-        key=lambda row: (row.get("company", ""), row.get("title", "")),
-    )
+    ordered = sorted(rows, key=company_title_key)
     lines = [
         "| Company | Role | Location | Degree | Apply | Age | Closed | Reason |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -256,6 +296,33 @@ def render_inactive_table(rows: list[dict], now: date) -> list[str]:
             )
         )
     return lines
+
+
+def generate_newest_readme(
+    internships: list[dict],
+    *,
+    season: str,
+    now: date,
+) -> str:
+    """Return README-Newest.md for active internships in ``season``."""
+    rows = visible_rows(internships, season)
+    label = season_label(season)
+    lines = [
+        "# Newest internships",
+        "",
+        (
+            f"All active listings for **{label}**, newest first. "
+            "Role-family view: [README.md](README.md)."
+        ),
+        "",
+    ]
+    if not rows:
+        lines.append(f"No listings yet for **{label}**.")
+        lines.append("")
+        return "\n".join(lines)
+    lines.extend(render_newest_table(rows, now))
+    lines.append("")
+    return "\n".join(lines)
 
 
 def generate_inactive_readme(
@@ -289,10 +356,11 @@ def write_readme(
     season_path: Path = DEFAULT_SEASON,
     readme_path: Path = DEFAULT_README,
     inactive_path: Path = DEFAULT_INACTIVE,
+    newest_path: Path = DEFAULT_NEWEST,
     health_path: Path = DEFAULT_HEALTH,
     now: date | None = None,
 ) -> str:
-    """Load catalog files and write README.md plus README-Inactive.md."""
+    """Load catalog files and write README.md, README-Inactive.md, and README-Newest.md."""
     clock = date.today() if now is None else now
     internships = load_internships(internships_path)
     archived = load_internships(archived_path) if archived_path.exists() else []
@@ -311,6 +379,10 @@ def write_readme(
     readme_path.write_text(text, encoding="utf-8")
     inactive_path.write_text(
         generate_inactive_readme(archived, season=season, now=clock),
+        encoding="utf-8",
+    )
+    newest_path.write_text(
+        generate_newest_readme(internships, season=season, now=clock),
         encoding="utf-8",
     )
     return text
