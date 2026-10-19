@@ -1,6 +1,6 @@
 """Dexcom internship scraper (Eightfold PCSX public JSON)."""
 
-from eightfold_adapter import EightfoldInternshipScraper
+from scripts.eightfold_adapter import EightfoldInternshipScraper
 
 
 class DexcomScraper(EightfoldInternshipScraper):

@@ -5,7 +5,7 @@ Internship-native JSON Schema for one catalog row. Catalog files
 **arrays** of these objects. Empty arrays are valid.
 
 Schema file: [`data/schema.json`](../data/schema.json) (JSON Schema draft-07).
-Validate with `python scripts/validate_data.py` (or `make validate`).
+Validate with `python -m scripts.validate_data` (or `make validate`).
 
 Example rows (one `posting` and one `program_fallback`):
 [`tests/fixtures/example_internships.json`](../tests/fixtures/example_internships.json).

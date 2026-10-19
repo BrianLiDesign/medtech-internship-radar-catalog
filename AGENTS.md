@@ -34,7 +34,7 @@ python -m ruff check scripts tests config/scrapers
 python -m ruff format --check scripts tests config/scrapers
 python -m compileall -q scripts config/scrapers
 python -m pytest -q
-python scripts/validate_data.py
+python -m scripts.validate_data
 ```
 
 ## Code style

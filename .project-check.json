@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "requiredCategories": [
+    "lint",
+    "build",
+    "test",
+    "acceptance"
+  ],
+  "checks": [
+    {
+      "id": "ruff",
+      "category": "lint",
+      "argv": [
+        "{python}",
+        "-m",
+        "ruff",
+        "check",
+        "scripts",
+        "tests",
+        "config/scrapers"
+      ],
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "format",
+      "category": "lint",
+      "argv": [
+        "{python}",
+        "-m",
+        "ruff",
+        "format",
+        "--check",
+        "scripts",
+        "tests",
+        "config/scrapers"
+      ],
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "compile",
+      "category": "build",
+      "argv": [
+        "{python}",
+        "-m",
+        "compileall",
+        "-q",
+        "scripts",
+        "config/scrapers"
+      ],
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "pytest",
+      "category": "test",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "validate",
+      "category": "acceptance",
+      "argv": [
+        "{python}",
+        "-m",
+        "scripts.validate_data"
+      ],
+      "timeoutSeconds": 120
+    },
+    {
+      "id": "fixture",
+      "category": "acceptance",
+      "argv": [
+        "{python}",
+        "-m",
+        "pytest",
+        "tests/test_refresh_catalog.py",
+        "tests/test_cli.py",
+        "-q"
+      ],
+      "timeoutSeconds": 120
+    }
+  ]
+}

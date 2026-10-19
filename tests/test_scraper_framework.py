@@ -7,9 +7,8 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from jsonschema import Draft7Validator
-
-from internship_ids import internship_id
-from scraper_framework import discover_scrapers, upsert_catalog
+from scripts.internship_ids import internship_id
+from scripts.scraper_framework import discover_scrapers, upsert_catalog
 
 PCSX_ONE_INTERN = {
     "status": 200,
@@ -216,7 +215,7 @@ def _fallback_row(company: str, apply_url: str) -> dict:
 
 
 def test_scrape_cli_merges_fixture_postings_and_keeps_other_fallbacks(tmp_path):
-    from scrape_internships import scrape_and_merge
+    from scripts.scrape_internships import scrape_and_merge
 
     catalog_path = tmp_path / "internships.json"
     catalog_path.write_text(
@@ -258,8 +257,7 @@ def test_scrape_cli_merges_fixture_postings_and_keeps_other_fallbacks(tmp_path):
 
 def test_fixture_merge_refuses_production_catalog():
     import pytest
-
-    from scrape_internships import DEFAULT_CATALOG, scrape_and_merge
+    from scripts.scrape_internships import DEFAULT_CATALOG, scrape_and_merge
 
     with pytest.raises(ValueError, match="production catalog"):
         scrape_and_merge(catalog_path=DEFAULT_CATALOG, fixture_path=BSC_FIXTURE)
@@ -268,8 +266,8 @@ def test_fixture_merge_refuses_production_catalog():
 def test_scrape_runner_accumulates_failures_continues_and_clears_stale_artifact(
     tmp_path, monkeypatch
 ):
-    import scrape_internships
-    from scraper_framework import ScrapeResult
+    from scripts import scrape_internships
+    from scripts.scraper_framework import ScrapeResult
 
     calls: list[str] = []
 
@@ -423,7 +421,7 @@ def test_registered_scrapers_are_allowlisted_and_not_candidates():
 
 
 def test_posted_at_helpers_accept_seconds_millis_and_iso_prefix():
-    from scraper_framework import posted_at_from_iso, posted_at_from_unix
+    from scripts.scraper_framework import posted_at_from_iso, posted_at_from_unix
 
     assert posted_at_from_unix(1750000000) == "2025-06-15"
     assert posted_at_from_unix(1750000000000) == "2025-06-15"

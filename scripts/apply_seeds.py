@@ -16,8 +16,8 @@ from pathlib import Path
 
 from catalog.io import current_season
 
-from internship_ids import canonical_apply_url, internship_id
-from validate_data import run_validation
+from scripts.internship_ids import canonical_apply_url, internship_id
+from scripts.validate_data import run_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SEEDS = REPO_ROOT / "config" / "seeds" / "program_fallbacks.json"

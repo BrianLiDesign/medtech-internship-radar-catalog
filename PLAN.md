@@ -64,7 +64,7 @@ Copy **habits** from the sibling catalog (schema gate, allowlist, generated READ
 
 **Hub URL research (needed for seeds):** For each of the 12, find the public university/intern careers page. If a URL is wrong, the Apply button is a lie. Record suspected ATS on the allowlist notes, but do not block Slice 2 on Workday.
 
-**Done when:** `python scripts/generate_dashboard.py` writes a discover-first README; all 12 names appear; `make test validate` still green. This is the first commit that looks like a radar.
+**Done when:** `python -m scripts.generate_dashboard` writes a discover-first README; all 12 names appear; `make test validate` still green. This is the first commit that looks like a radar.
 
 **HANDOFF tickets:** T2.1–T2.2, T3.1–T3.2 (seeds + allowlist URLs).
 

@@ -91,7 +91,7 @@ def test_contributing_says_listings_json_is_maintainer_owned():
     assert "must not" in text.lower() or "do not" in text.lower()
     assert "candidates" in text.lower()
     assert "allowlist" in text.lower()
-    assert "merge_issue.py" in text
+    assert "scripts.merge_issue" in text
     assert "source: issue" in text
 
 

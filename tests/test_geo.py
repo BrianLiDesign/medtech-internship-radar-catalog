@@ -1,6 +1,6 @@
 """US location classifier for scraped posting location strings."""
 
-from geo import is_us_location
+from scripts.geo import is_us_location
 
 
 def test_state_abbreviation_is_us():

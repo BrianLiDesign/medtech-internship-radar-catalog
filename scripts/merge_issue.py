@@ -16,9 +16,9 @@ from pathlib import Path
 from catalog.io import current_season
 from catalog.schema_constants import ROLE_FAMILIES
 
-from internship_ids import canonical_apply_url, internship_id
-from scraper_framework import role_family_for_title
-from validate_data import run_validation
+from scripts.internship_ids import canonical_apply_url, internship_id
+from scripts.scraper_framework import role_family_for_title
+from scripts.validate_data import run_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_ACTIVE = REPO_ROOT / "data" / "active" / "internships.json"

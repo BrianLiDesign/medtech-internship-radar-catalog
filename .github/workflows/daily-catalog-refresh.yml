@@ -36,7 +36,7 @@ jobs:
           python -m pip install -r requirements.txt
 
       - name: Scrape, validate, archive, and generate README
-        run: python scripts/refresh_catalog.py
+        run: python -m scripts.refresh_catalog
 
       - name: Commit refresh branch
         id: commit

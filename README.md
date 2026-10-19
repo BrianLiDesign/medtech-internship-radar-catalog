@@ -122,8 +122,8 @@ Closed listings for this season: [README-Inactive.md](README-Inactive.md).
 Listings live in [`data/active/internships.json`](data/active/internships.json). This README is generated — do not hand-edit the tables.
 
 ```bash
-python scripts/generate_dashboard.py
-python scripts/validate_data.py
+python -m scripts.generate_dashboard
+python -m scripts.validate_data
 ```
 
 - Contribute: [CONTRIBUTING.md](CONTRIBUTING.md)

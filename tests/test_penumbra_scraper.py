@@ -7,8 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from jsonschema import Draft7Validator
-
-from scraper_framework import discover_scrapers
+from scripts.scraper_framework import discover_scrapers
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "penumbra_lever.json"
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "data" / "schema.json"
@@ -85,7 +84,7 @@ def test_penumbra_soft_fail_on_forbidden(tmp_path):
 
 
 def test_penumbra_empty_board_keeps_existing_program_fallback():
-    from scraper_framework import upsert_catalog
+    from scripts.scraper_framework import upsert_catalog
 
     hub = {
         "id": "penumbra-hub",

@@ -1,6 +1,6 @@
 """Align internship scraper (Pinpoint public jobs.json)."""
 
-from pinpoint_adapter import PinpointInternshipScraper
+from scripts.pinpoint_adapter import PinpointInternshipScraper
 
 
 class AlignScraper(PinpointInternshipScraper):

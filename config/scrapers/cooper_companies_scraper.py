@@ -1,6 +1,6 @@
 """CooperCompanies internship scraper (Oracle Recruiting CE JSON)."""
 
-from oracle_ce_adapter import OracleCEInternshipScraper
+from scripts.oracle_ce_adapter import OracleCEInternshipScraper
 
 
 class CooperCompaniesScraper(OracleCEInternshipScraper):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local/CI catalog refresh: scrape → validate → archive → generate README.
+"""Local/CI catalog refresh: scrape -> validate -> archive -> generate README.
 
 Pass --fixture for a mocked-HTTP dry-run. Do not push listings to main; the
 daily GitHub Action opens a pull request instead.
@@ -13,11 +13,11 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from apply_seeds import restore_missing_fallbacks
-from archive_closed import archive_catalog_files
-from generate_dashboard import write_readme
-from scrape_internships import scrape_and_merge
-from validate_data import run_validation
+from scripts.apply_seeds import restore_missing_fallbacks
+from scripts.archive_closed import archive_catalog_files
+from scripts.generate_dashboard import write_readme
+from scripts.scrape_internships import scrape_and_merge
+from scripts.validate_data import run_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = REPO_ROOT / "data" / "active" / "internships.json"
@@ -84,7 +84,7 @@ def refresh_catalog(
     artifact_path: Path = DEFAULT_ARTIFACT,
     schema_path: Path = DEFAULT_SCHEMA,
 ) -> int:
-    """Run scrape → validate → archive → generate README. Return 0 on success."""
+    """Run scrape -> validate -> archive -> generate README. Return 0 on success."""
     sweep_day = today or date.today().isoformat()
     use_fixtures = fixture_path is not None or fixture_map_path is not None
     scrape_and_merge(
@@ -152,7 +152,7 @@ def main(argv: list[str] | None = None) -> int:
         "--fixture-map",
         type=Path,
         default=None,
-        help="JSON map of company → fixture path for multi-company dry-runs",
+        help="JSON map of company -> fixture path for multi-company dry-runs",
     )
     parser.add_argument("--today", default=None)
     parser.add_argument("--readme", type=Path, default=DEFAULT_README)

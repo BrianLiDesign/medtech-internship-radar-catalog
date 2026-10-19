@@ -1,6 +1,6 @@
 """Medtronic internship scraper (public Early Careers hub HTML / JSON-LD)."""
 
-from hub_landing_adapter import HubLandingInternshipScraper
+from scripts.hub_landing_adapter import HubLandingInternshipScraper
 
 
 class MedtronicScraper(HubLandingInternshipScraper):

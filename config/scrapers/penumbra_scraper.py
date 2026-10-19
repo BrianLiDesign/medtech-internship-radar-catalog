@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from lever_adapter import LeverInternshipScraper
+from scripts.lever_adapter import LeverInternshipScraper
 
 
 class PenumbraScraper(LeverInternshipScraper):

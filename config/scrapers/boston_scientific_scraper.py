@@ -1,6 +1,6 @@
 """Boston Scientific internship scraper (Eightfold PCSX public JSON)."""
 
-from eightfold_adapter import EightfoldInternshipScraper
+from scripts.eightfold_adapter import EightfoldInternshipScraper
 
 
 class BostonScientificScraper(EightfoldInternshipScraper):

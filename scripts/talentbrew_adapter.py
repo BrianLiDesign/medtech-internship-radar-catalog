@@ -6,7 +6,7 @@ from datetime import datetime
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urljoin
 
-from scraper_framework import ListingCacheScraper, posted_at_from_iso
+from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 15
 MAX_PAGES = 20

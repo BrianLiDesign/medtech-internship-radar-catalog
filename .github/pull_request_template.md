@@ -11,7 +11,7 @@
 ## Verification
 
 - [ ] `python -m pytest -q`
-- [ ] `python scripts/validate_data.py`
+- [ ] `python -m scripts.validate_data`
 - [ ] HTTP is mocked in tests (no live ATS calls in CI)
 - [ ] No secrets, cookies, API keys, or `.env` files
 

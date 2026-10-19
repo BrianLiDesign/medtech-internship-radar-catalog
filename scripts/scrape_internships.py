@@ -17,8 +17,8 @@ from pathlib import Path
 
 from catalog.io import load_json_list, write_json_list
 
-from scraper_framework import discover_scrapers, upsert_catalog
-from validate_data import run_validation
+from scripts.scraper_framework import discover_scrapers, upsert_catalog
+from scripts.validate_data import run_validation
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CATALOG = REPO_ROOT / "data" / "active" / "internships.json"
@@ -77,7 +77,7 @@ class FixtureSession:
 
 
 def load_fixture_map(path: Path) -> dict[str, Path]:
-    """Load company → fixture path entries relative to the repo root."""
+    """Load company -> fixture path entries relative to the repo root."""
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise ValueError(f"{path}: fixture map must be a JSON object")
@@ -192,7 +192,7 @@ def main(argv: list[str] | None = None) -> int:
         "--fixture-map",
         type=Path,
         default=None,
-        help="JSON map of company name → fixture path for multi-company dry-runs",
+        help="JSON map of company name -> fixture path for multi-company dry-runs",
     )
     parser.add_argument("--seen-on", default=None)
     parser.add_argument("--artifact", type=Path, default=DEFAULT_ARTIFACT)

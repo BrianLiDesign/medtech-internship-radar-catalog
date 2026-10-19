@@ -42,8 +42,8 @@ python -m ruff check scripts tests config/scrapers
 python -m ruff format --check scripts tests config/scrapers
 python -m compileall -q scripts config/scrapers
 python -m pytest -q
-python scripts/validate_data.py
-python -m pytest tests/test_refresh_catalog.py -q
+python -m scripts.validate_data
+python -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q
 ```
 
 ## Project layout
@@ -88,18 +88,19 @@ stable JSON is enough; Workday companies can remain on a program-fallback row.
 Maintainers only. Documented in [CONTRIBUTING.md](../CONTRIBUTING.md):
 
 ```bash
-python scripts/merge_issue.py --dry-run --company "..." --title "..." \
+python -m scripts.merge_issue --dry-run --company "..." --title "..." \
   --location "..." --apply-url "https://..." --degree Unspecified --season summer-2027
-python scripts/validate_data.py
-python scripts/generate_dashboard.py
+python -m scripts.validate_data
+python -m scripts.generate_dashboard
 ```
 
 ## Troubleshooting
 
 - **Import errors from `scripts/`:** run commands from the repository root.
-  `python scripts/*.py` puts `scripts/` on `sys.path`.
-- **Stale README:** regenerate with `python scripts/generate_dashboard.py`.
-- **Fixture dry-run:** `python -m pytest tests/test_refresh_catalog.py -q` (`--fixture` must not write `data/active/internships.json`)
+  Use `python -m scripts.<command>` so both `scripts` and `catalog` resolve from
+  the checkout. No editable install or `PYTHONPATH` override is needed.
+- **Stale README:** regenerate with `python -m scripts.generate_dashboard`.
+- **Fixture dry-run:** `python -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q` (`--fixture` must not write `data/active/internships.json`)
 
 ## Related docs
 

@@ -414,7 +414,7 @@ Suggested lanes if split:
   - [x] No hand-edited README tables
   - [x] No brand cross-links
 
-PM sign-off 2026-08-14. Waivers: no GitHub remote yet — T5.2 is the documented local fixture dry-run (`python scripts/refresh_catalog.py --fixture tests/fixtures/boston_scientific_pcsx.json`) plus workflow YAML; live Actions after `origin` exists. URL quality flags (not blockers): Dexcom Phenom intern listing; Zimmer Biomet Grow With Us mixes internships with leadership programs. Eleven companies remain program-fallback (Workday/unknown); Boston Scientific has posting rows. 20 extra device employers stay in `config/candidates.json` (not v1 allowlist).
+PM sign-off 2026-08-14. Waivers: no GitHub remote yet — T5.2 is the documented local fixture dry-run (`python -m scripts.refresh_catalog --fixture tests/fixtures/boston_scientific_pcsx.json`) plus workflow YAML; live Actions after `origin` exists. URL quality flags (not blockers): Dexcom Phenom intern listing; Zimmer Biomet Grow With Us mixes internships with leadership programs. Eleven companies remain program-fallback (Workday/unknown); Boston Scientific has posting rows. 20 extra device employers stay in `config/candidates.json` (not v1 allowlist).
 
 ---
 

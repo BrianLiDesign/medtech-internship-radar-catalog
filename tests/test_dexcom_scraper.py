@@ -7,8 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from jsonschema import Draft7Validator
-
-from scraper_framework import discover_scrapers
+from scripts.scraper_framework import discover_scrapers
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "boston_scientific_pcsx.json"
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "data" / "schema.json"

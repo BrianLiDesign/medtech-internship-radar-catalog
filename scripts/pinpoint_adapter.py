@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from scraper_framework import ListingCacheScraper, posted_at_from_iso
+from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 
 class PinpointInternshipScraper(ListingCacheScraper):

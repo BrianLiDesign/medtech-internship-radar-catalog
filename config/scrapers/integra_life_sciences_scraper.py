@@ -1,6 +1,6 @@
 """Integra LifeSciences internship scraper (Kentico job-search HTML partials)."""
 
-from kentico_jobs_adapter import KenticoJobsInternshipScraper
+from scripts.kentico_jobs_adapter import KenticoJobsInternshipScraper
 
 
 class IntegraLifeSciencesScraper(KenticoJobsInternshipScraper):

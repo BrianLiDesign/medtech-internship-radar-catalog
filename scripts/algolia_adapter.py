@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from scraper_framework import ListingCacheScraper
+from scripts.scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 50
 MAX_PAGES = 20

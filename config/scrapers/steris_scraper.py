@@ -1,6 +1,6 @@
 """STERIS internship scraper (Phenom widgets JSON)."""
 
-from phenom_adapter import PhenomInternshipScraper
+from scripts.phenom_adapter import PhenomInternshipScraper
 
 
 class SterisScraper(PhenomInternshipScraper):

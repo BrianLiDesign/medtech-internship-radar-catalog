@@ -10,7 +10,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 
-from scraper_framework import ListingCacheScraper
+from scripts.scraper_framework import ListingCacheScraper
 
 _INTERN_RE = re.compile(r"\bintern(?:ship)?s?\b|\bco-?ops?\b", re.IGNORECASE)
 _WAF_MARKERS = ("incorrect browser", "access denied")

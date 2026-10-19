@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from geo import is_us_location
-from scraper_framework import ListingCacheScraper, posted_at_from_unix
+from scripts.geo import is_us_location
+from scripts.scraper_framework import ListingCacheScraper, posted_at_from_unix
 
 
 class LeverInternshipScraper(ListingCacheScraper):

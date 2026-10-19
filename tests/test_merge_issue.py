@@ -6,10 +6,9 @@ import json
 from pathlib import Path
 
 from jsonschema import Draft7Validator
-
-from internship_ids import internship_id
-from merge_issue import MergeIssueError, merge_issue, merge_issue_row, row_from_issue
-from validate_data import validate_catalog_file
+from scripts.internship_ids import internship_id
+from scripts.merge_issue import MergeIssueError, merge_issue, merge_issue_row, row_from_issue
+from scripts.validate_data import validate_catalog_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = json.loads((REPO_ROOT / "data" / "schema.json").read_text(encoding="utf-8"))

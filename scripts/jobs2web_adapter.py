@@ -5,7 +5,7 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urljoin, urlparse
 
-from scraper_framework import ListingCacheScraper
+from scripts.scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 25
 MAX_PAGES = 20

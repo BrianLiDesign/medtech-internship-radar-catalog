@@ -49,4 +49,4 @@ jobs:
         run: python -m pytest -q
 
       - name: Validate catalog data
-        run: python scripts/validate_data.py
+        run: python -m scripts.validate_data
