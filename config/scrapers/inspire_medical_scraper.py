@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from greenhouse_adapter import GreenhouseInternshipScraper
+from scripts.greenhouse_adapter import GreenhouseInternshipScraper
 
 
 class InspireMedicalScraper(GreenhouseInternshipScraper):

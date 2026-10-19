@@ -7,8 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from jsonschema import Draft7Validator
-
-from scraper_framework import discover_scrapers
+from scripts.scraper_framework import discover_scrapers
 
 FIXTURE = Path(__file__).resolve().parent / "fixtures" / "inspire_greenhouse.json"
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "data" / "schema.json"
@@ -110,7 +109,7 @@ def test_inspire_updated_at_used_when_first_published_missing():
 
 
 def test_inspire_intern_less_board_keeps_existing_program_fallback():
-    from scraper_framework import upsert_catalog
+    from scripts.scraper_framework import upsert_catalog
 
     hub = {
         "id": "inspire-hub",

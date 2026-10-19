@@ -5,7 +5,7 @@ from __future__ import annotations
 from html.parser import HTMLParser
 from urllib.parse import urljoin
 
-from scraper_framework import ListingCacheScraper
+from scripts.scraper_framework import ListingCacheScraper
 
 HUB_URL = "https://www.careers.jnj.com/en/early-career-programs/internships/"
 ORIGIN = "https://www.careers.jnj.com"

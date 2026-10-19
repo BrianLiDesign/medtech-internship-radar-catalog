@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from urllib.parse import urlencode
 
-from scraper_framework import ListingCacheScraper, posted_at_from_unix
+from scripts.scraper_framework import ListingCacheScraper, posted_at_from_unix
 
 PAGE_SIZE = 10
 MAX_PAGES = 20

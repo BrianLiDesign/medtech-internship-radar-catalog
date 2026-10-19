@@ -41,7 +41,7 @@ Posting rows from scrapers use `row_kind: posting` and `source: scrape`.
 
 - [ ] Add tests with **mocked HTTP** (no live network in CI)
 - [ ] Run `make lint test validate` before opening a PR (`make e2e` if refresh behavior changes)
-- [ ] Output passes `python scripts/validate_data.py`
+- [ ] Output passes `python -m scripts.validate_data`
 - [ ] Upsert keeps `first_seen` stable and updates `last_seen`
 
 ## Pull request

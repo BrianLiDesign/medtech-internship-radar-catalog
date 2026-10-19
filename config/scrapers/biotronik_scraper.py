@@ -1,6 +1,6 @@
 """Biotronik internship scraper (public North America students hub HTML / JSON-LD)."""
 
-from hub_landing_adapter import HubLandingInternshipScraper
+from scripts.hub_landing_adapter import HubLandingInternshipScraper
 
 
 class BiotronikScraper(HubLandingInternshipScraper):

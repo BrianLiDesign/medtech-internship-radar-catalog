@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import date
 from pathlib import Path
 
-from archive_closed import Observation, apply_archive_rules
-from generate_dashboard import generate_inactive_readme, generate_readme
+from scripts.archive_closed import Observation, apply_archive_rules
+from scripts.generate_dashboard import generate_inactive_readme, generate_readme
 
 
 def posting(**overrides):
@@ -287,7 +287,7 @@ def test_archived_row_leaves_main_readme_and_appears_in_inactive():
 def test_duplicate_ids_still_fail_validate_after_archive(tmp_path):
     import json
 
-    from validate_data import validate_catalogs
+    from scripts.validate_data import validate_catalogs
 
     schema = json.loads(
         (Path(__file__).resolve().parents[1] / "data" / "schema.json").read_text(encoding="utf-8")
@@ -336,7 +336,7 @@ def test_readme_health_strip_shows_archived_count_after_close():
 def test_force_close_cli_moves_row_to_archived_file(tmp_path):
     import json
 
-    from archive_closed import main
+    from scripts.archive_closed import main
 
     row = posting()
     active_path = tmp_path / "active.json"

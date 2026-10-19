@@ -9,7 +9,7 @@ Pipeline: **scrape → validate → archive → generate README**.
 Uses the Boston Scientific Eightfold fixture against **temp copies** of the catalog. Never merge `--fixture` into `data/active/internships.json` — that writes synthetic job IDs as if they were live postings.
 
 ```bash
-python -m pytest tests/test_refresh_catalog.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q
 ```
 
 Or the Makefile target:
@@ -21,13 +21,13 @@ make e2e
 If `make` is unavailable (typical on Windows PowerShell):
 
 ```bash
-python -m pytest tests/test_refresh_catalog.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q
 ```
 
-`--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--newest` / `--health`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:
+`--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--newest` / `--health` / `--artifact`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:
 
 ```bash
-python scripts/refresh_catalog.py
+python -m scripts.refresh_catalog
 ```
 
 That live command:
@@ -45,7 +45,7 @@ Community reqs arrive as structured issues. Maintainers merge them locally
 See [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ```bash
-python scripts/merge_issue.py \
+python -m scripts.merge_issue \
   --company "Medtronic" \
   --title "Software Engineer Intern" \
   --location "Minneapolis, MN" \
@@ -53,7 +53,7 @@ python scripts/merge_issue.py \
   --degree Unspecified \
   --season summer-2027 \
   --req-id R-12345
-python scripts/generate_dashboard.py
+python -m scripts.generate_dashboard
 ```
 
 Use `--dry-run` to print the row without writing. Do not accept raw listings-JSON PRs from the community.
@@ -61,8 +61,8 @@ Use `--dry-run` to print the row without writing. Do not accept raw listings-JSO
 Force-close a row (maintainer / issue):
 
 ```bash
-python scripts/archive_closed.py --force-close <internship-id>
-python scripts/generate_dashboard.py
+python -m scripts.archive_closed --force-close <internship-id>
+python -m scripts.generate_dashboard
 ```
 
 Do **not** push the dry-run listing changes to `main`. Open a refresh PR (below) or discard the local diff.
@@ -71,7 +71,7 @@ Do **not** push the dry-run listing changes to `main`. Open a refresh PR (below)
 
 Workflow: [`.github/workflows/daily-catalog-refresh.yml`](../.github/workflows/daily-catalog-refresh.yml)
 
-On a schedule (and `workflow_dispatch`) it runs a live `python scripts/refresh_catalog.py`, commits to `automation/daily-catalog-refresh`, and opens or updates an **open** PR against `main`. It explicitly dispatches CI for the generated commit, waits for the checks to pass, then squash-merges the PR and deletes the refresh branch. A failed CI run leaves the PR open for inspection. It never `git push`es listings to `main`.
+On a schedule (and `workflow_dispatch`) it runs a live `python -m scripts.refresh_catalog`, commits to `automation/daily-catalog-refresh`, and opens or updates an **open** PR against `main`. It explicitly dispatches CI for the generated commit, waits for the checks to pass, then squash-merges the PR and deletes the refresh branch. A failed CI run leaves the PR open for inspection. It never `git push`es listings to `main`.
 
 If this repository has no GitHub remote yet, add the YAML anyway; enable the workflow after `origin` exists.
 
@@ -79,9 +79,9 @@ If this repository has no GitHub remote yet, add the YAML anyway; enable the wor
 
 Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 
-Pull requests to `main` (including the daily refresh PR) run `pytest` and `python scripts/validate_data.py`. Tests use mocked HTTP only. CI does not scrape live ATS endpoints.
+Pull requests to `main` (including the daily refresh PR) run `pytest` and `python -m scripts.validate_data`. Tests use mocked HTTP only. CI does not scrape live ATS endpoints.
 
 ```bash
 python -m pytest -q
-python scripts/validate_data.py
+python -m scripts.validate_data
 ```

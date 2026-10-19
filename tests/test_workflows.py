@@ -9,10 +9,10 @@ CI = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 
 def test_daily_workflow_opens_pr_and_never_pushes_listings_to_main():
     text = DAILY.read_text(encoding="utf-8")
-    assert "scrape_internships.py" in text or "refresh_catalog.py" in text
-    assert "validate_data.py" in text or "refresh_catalog.py" in text
-    assert "archive_closed.py" in text or "refresh_catalog.py" in text
-    assert "generate_dashboard.py" in text or "refresh_catalog.py" in text
+    assert "scripts.scrape_internships" in text or "scripts.refresh_catalog" in text
+    assert "scripts.validate_data" in text or "scripts.refresh_catalog" in text
+    assert "scripts.archive_closed" in text or "scripts.refresh_catalog" in text
+    assert "scripts.generate_dashboard" in text or "scripts.refresh_catalog" in text
     assert "automation/daily-catalog-refresh" in text
     assert "gh pr create" in text
     assert "--state open" in text
@@ -34,14 +34,14 @@ def test_daily_workflow_opens_pr_and_never_pushes_listings_to_main():
 def test_ci_runs_pytest_and_validate_without_live_scrape():
     text = CI.read_text(encoding="utf-8")
     assert "pytest" in text
-    assert "validate_data.py" in text
-    assert "scrape_internships.py" not in text
-    assert "refresh_catalog.py" not in text or "--fixture" in text
+    assert "scripts.validate_data" in text
+    assert "scripts.scrape_internships" not in text
+    assert "scripts.refresh_catalog" not in text or "--fixture" in text
 
 
 def test_automation_doc_describes_local_dry_run_and_refresh_via_pr():
     text = (REPO_ROOT / "docs" / "AUTOMATION.md").read_text(encoding="utf-8")
-    assert "refresh_catalog.py" in text
+    assert "scripts.refresh_catalog" in text
     assert "--fixture" in text
     assert "automation/daily-catalog-refresh" in text
     assert "main" in text.lower()

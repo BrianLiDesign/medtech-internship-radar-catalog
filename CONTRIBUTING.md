@@ -17,7 +17,7 @@ Use the **Add internship** issue template for a posting at an allowlisted
 company. Required fields: company, title, location, apply URL, degree, season.
 Optional: requisition ID.
 
-Maintainers merge accepted issues with `python scripts/merge_issue.py`, which
+Maintainers merge accepted issues with `python -m scripts.merge_issue`, which
 assigns a stable internship ID and sets `source: issue`. Duplicate IDs are skipped.
 
 Do not open a listings-JSON pull request for a new req.
@@ -64,7 +64,7 @@ Community members stop at the issue. Maintainers then:
 3. Merge with identity + schema:
 
    ```bash
-   python scripts/merge_issue.py \
+   python -m scripts.merge_issue \
      --company "Medtronic" \
      --title "Software Engineer Intern" \
      --location "Minneapolis, MN" \
@@ -77,11 +77,11 @@ Community members stop at the issue. Maintainers then:
    Use `--dry-run` to print the row without writing. The script sets
    `source: issue`, computes the UUID v5 internship ID, refuses companies off
    the allowlist, and skips IDs already in active or archived catalogs.
-4. `python scripts/validate_data.py`
-5. `python scripts/generate_dashboard.py` so the README picks up the row.
+4. `python -m scripts.validate_data`
+5. `python -m scripts.generate_dashboard` so the README picks up the row.
 6. Open a maintainer PR (do not push listings straight to `main`).
 
-Force-close a listing via `python scripts/archive_closed.py --force-close <id>`
+Force-close a listing via `python -m scripts.archive_closed --force-close <id>`
 (see [docs/AUTOMATION.md](docs/AUTOMATION.md)).
 
 ## What we do not accept

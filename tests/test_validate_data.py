@@ -5,7 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from validate_data import run_validation, validate_catalog_file, validate_catalogs
+from scripts.validate_data import run_validation, validate_catalog_file, validate_catalogs
 
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / "data" / "schema.json"
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -99,7 +99,7 @@ def test_example_posting_and_program_fallback_fixture_is_valid():
 
 def test_validate_script_exits_zero_on_empty_repo_catalogs():
     result = subprocess.run(
-        [sys.executable, str(REPO_ROOT / "scripts" / "validate_data.py")],
+        [sys.executable, "-m", "scripts.validate_data"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,

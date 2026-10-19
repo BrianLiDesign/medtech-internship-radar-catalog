@@ -25,7 +25,7 @@ test:
 	$(PYTHON) -m pytest -q
 
 validate:
-	$(PYTHON) scripts/validate_data.py
+	$(PYTHON) -m scripts.validate_data
 
 e2e:
-	$(PYTHON) -m pytest tests/test_refresh_catalog.py -q
+	$(PYTHON) -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q

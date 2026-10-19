@@ -12,8 +12,7 @@ FIXTURE_MAP = REPO_ROOT / "config" / "fixtures" / "scrape_map.json"
 
 def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path, monkeypatch):
     import requests
-
-    from refresh_catalog import refresh_catalog
+    from scripts.refresh_catalog import refresh_catalog
 
     def _no_live_http(*args, **kwargs):
         raise AssertionError("live network is not allowed in the dry-run")
@@ -43,6 +42,7 @@ def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path
         newest_path=newest_path,
         health_path=health_path,
         season_path=REPO_ROOT / "config" / "current_season.json",
+        artifact_path=tmp_path / "scrape_failures.json",
     )
 
     assert result == 0
@@ -68,8 +68,7 @@ def test_local_dry_run_scrape_validate_archive_generate_without_network(tmp_path
 
 def test_fixture_map_dry_run_scrapes_mapped_adapter_families(tmp_path, monkeypatch):
     import requests
-
-    from refresh_catalog import refresh_catalog
+    from scripts.refresh_catalog import refresh_catalog
 
     def _no_live_http(*args, **kwargs):
         raise AssertionError("live network is not allowed in the dry-run")
@@ -92,6 +91,7 @@ def test_fixture_map_dry_run_scrapes_mapped_adapter_families(tmp_path, monkeypat
         newest_path=tmp_path / "README-Newest.md",
         health_path=tmp_path / "health.json",
         season_path=REPO_ROOT / "config" / "current_season.json",
+        artifact_path=tmp_path / "scrape_failures.json",
     )
 
     assert result == 0

@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from urllib.parse import urlencode
 
-from geo import is_us_location
-from scraper_framework import ListingCacheScraper
+from scripts.geo import is_us_location
+from scripts.scraper_framework import ListingCacheScraper
 
 JOBS_PATH = "/jobs"
 ORIGIN = "https://careers.stryker.com"

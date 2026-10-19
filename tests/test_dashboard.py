@@ -7,8 +7,7 @@ from datetime import date
 from pathlib import Path
 
 from catalog.io import current_season
-
-from generate_dashboard import generate_newest_readme, generate_readme, write_readme
+from scripts.generate_dashboard import generate_newest_readme, generate_readme, write_readme
 
 
 def internship(**overrides):

@@ -1,6 +1,6 @@
 """Baxter internship scraper (TalentBrew search-jobs JSON)."""
 
-from talentbrew_adapter import TalentBrewInternshipScraper
+from scripts.talentbrew_adapter import TalentBrewInternshipScraper
 
 
 class BaxterScraper(TalentBrewInternshipScraper):

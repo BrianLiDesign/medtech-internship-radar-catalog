@@ -1,6 +1,6 @@
 """Shared inclusion classifier — keep or drop a req from title and location."""
 
-from inclusion import include_posting
+from scripts.inclusion import include_posting
 
 
 def test_regulatory_affairs_intern_in_the_us_is_kept():

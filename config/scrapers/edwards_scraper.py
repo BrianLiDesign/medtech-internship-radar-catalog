@@ -1,6 +1,6 @@
 """Edwards internship scraper (Algolia InstantSearch public JSON)."""
 
-from algolia_adapter import AlgoliaInternshipScraper
+from scripts.algolia_adapter import AlgoliaInternshipScraper
 
 
 class EdwardsScraper(AlgoliaInternshipScraper):

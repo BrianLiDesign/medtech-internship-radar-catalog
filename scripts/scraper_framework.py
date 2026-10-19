@@ -13,8 +13,8 @@ from pathlib import Path
 import requests
 from catalog.io import current_season
 
-from inclusion import include_posting
-from internship_ids import canonical_apply_url, internship_id
+from scripts.inclusion import include_posting
+from scripts.internship_ids import canonical_apply_url, internship_id
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_SCRAPERS_DIR = REPO_ROOT / "config" / "scrapers"

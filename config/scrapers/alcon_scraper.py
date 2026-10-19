@@ -1,6 +1,6 @@
 """Alcon internship scraper (public early-careers hub HTML / JSON-LD)."""
 
-from hub_landing_adapter import HubLandingInternshipScraper
+from scripts.hub_landing_adapter import HubLandingInternshipScraper
 
 
 class AlconScraper(HubLandingInternshipScraper):

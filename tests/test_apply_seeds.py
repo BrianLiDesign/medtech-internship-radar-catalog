@@ -4,16 +4,15 @@ import json
 from pathlib import Path
 
 from jsonschema import Draft7Validator
-
-from apply_seeds import (
+from scripts.apply_seeds import (
     apply_seeds,
     ensure_program_fallbacks,
     load_seed_document,
     merge_seeds_with_existing,
     restore_missing_fallbacks,
 )
-from internship_ids import internship_id
-from validate_data import validate_catalog_file
+from scripts.internship_ids import internship_id
+from scripts.validate_data import validate_catalog_file
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = REPO_ROOT / "data" / "schema.json"

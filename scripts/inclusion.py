@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 
-from geo import is_us_location
+from scripts.geo import is_us_location
 
 _NON_STEM_RE = re.compile(
     r"\bhr\b|human resources|\bmarketing\b|\bsales\b|\bbusiness\b",
