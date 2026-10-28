@@ -56,7 +56,7 @@ def test_refresh_cli_fixture_without_pythonpath_or_network(tmp_path, guard_netwo
     stale = json.loads(
         (REPO_ROOT / "tests/fixtures/example_internships.json").read_text(encoding="utf-8")
     )[0]
-    stale.update(last_seen="2026-08-13", miss_count=1)
+    stale.update(last_seen="2026-08-13", miss_count=1, last_miss_on="2026-08-13")
     outputs["catalog"].write_text(json.dumps([stale]), encoding="utf-8")
     outputs["archived"].write_text("[]\n", encoding="utf-8")
     args = [

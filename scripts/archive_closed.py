@@ -6,9 +6,18 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import tempfile
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
+
+from scripts.catalog_publication import publish_files, recover_publication
+from scripts.validate_data import (
+    DEFAULT_SCHEMA,
+    CatalogValidationError,
+    validate_catalogs,
+    validate_rows,
+)
 
 CLOSE_REASON_ATS = "ats_closed"
 CLOSE_REASON_MISSES = "consecutive_misses"
@@ -59,6 +68,19 @@ def looks_ats_closed(*, status: int | None, body: str) -> bool:
     return any(marker in text for marker in ATS_CLOSED_MARKERS)
 
 
+def record_daily_miss(row: dict, today: str) -> None:
+    """Count at most once per day, requiring adjacent dates for a streak.
+
+    Legacy undated counts cannot establish a previous daily failure.
+    """
+    previous = row.get("last_miss_on")
+    if previous and previous >= today:
+        return
+    yesterday = (date.fromisoformat(today) - timedelta(days=1)).isoformat()
+    row["miss_count"] = int(row.get("miss_count") or 0) + 1 if previous == yesterday else 1
+    row["last_miss_on"] = today
+
+
 def observation_for_row(
     row: dict,
     *,
@@ -88,36 +110,58 @@ def apply_archive_rules(
     force_close_ids: list[str] | None = None,
     session: object | None = None,
     unavailable_companies: set[str] | None = None,
+    schema: dict | None = None,
 ) -> tuple[list[dict], list[dict]]:
     """Return still-active rows and the archived catalog including new closes."""
     forced = set(force_close_ids or [])
+    schema = (
+        schema if schema is not None else json.loads(DEFAULT_SCHEMA.read_text(encoding="utf-8"))
+    )
+    errors = validate_rows(active, schema, "active") + validate_rows(archived, schema, "archived")
+    if errors:
+        raise CatalogValidationError(errors, phase="input")
     still_active: list[dict] = []
-    newly_archived = list(archived)
+    archived_by_id = {row["id"]: row for row in archived}
     signals = observations or {}
     unavailable = unavailable_companies or set()
     for row in active:
         updated = dict(row)
-        signal = observation_for_row(row, today=today, signals=signals, session=session)
         is_fallback = updated.get("row_kind") == "program_fallback"
+        previous = archived_by_id.get(row["id"])
+        if previous is not None:
+            # Rediscovered postings retain their identity and original discovery
+            # date. Closed fallback hubs require explicit maintainer reopening.
+            if is_fallback:
+                continue
+            updated["first_seen"] = min(previous["first_seen"], updated["first_seen"])
+            del archived_by_id[row["id"]]
+        updated.pop("closed_at", None)
+        updated.pop("close_reason", None)
+        signal = observation_for_row(row, today=today, signals=signals, session=session)
         if row["id"] in forced:
             updated["closed_at"] = today
             updated["close_reason"] = CLOSE_REASON_FORCE
-            newly_archived.append(updated)
+            archived_by_id[row["id"]] = updated
             continue
         if signal.ats_closed or (not is_fallback and signal.url_status in DEAD_URL_STATUSES):
             updated["closed_at"] = today
             updated["close_reason"] = CLOSE_REASON_ATS
-            newly_archived.append(updated)
+            archived_by_id[row["id"]] = updated
             continue
         url_dead = signal.url_status in DEAD_URL_STATUSES
         if is_fallback:
             if url_dead:
-                updated["miss_count"] = int(updated.get("miss_count") or 0) + 1
+                record_daily_miss(updated, today)
                 if int(updated["miss_count"]) >= 2:
                     updated["closed_at"] = today
                     updated["close_reason"] = CLOSE_REASON_URL
-                    newly_archived.append(updated)
+                    archived_by_id[row["id"]] = updated
                     continue
+            elif signal.url_status is not None and 200 <= signal.url_status < 300:
+                updated["miss_count"] = 0
+                updated.pop("last_miss_on", None)
+            # Timeouts, rate limits, redirects without a final response, and
+            # other inconclusive results neither add a miss nor prove health.
             still_active.append(updated)
             continue
         if updated.get("company") in unavailable:
@@ -127,16 +171,17 @@ def apply_archive_rules(
             still_active.append(updated)
             continue
         if not signal.seen:
-            updated["miss_count"] = int(updated.get("miss_count") or 0) + 1
+            record_daily_miss(updated, today)
         else:
             updated["miss_count"] = 0
+            updated.pop("last_miss_on", None)
         if int(updated.get("miss_count") or 0) >= 2:
             updated["closed_at"] = today
             updated["close_reason"] = CLOSE_REASON_MISSES
-            newly_archived.append(updated)
+            archived_by_id[row["id"]] = updated
             continue
         still_active.append(updated)
-    return still_active, newly_archived
+    return still_active, list(archived_by_id.values())
 
 
 def load_catalog(path: Path) -> list[dict]:
@@ -160,11 +205,15 @@ def archive_catalog_files(
     force_close_ids: list[str] | None = None,
     session: object | None = None,
     unavailable_companies: set[str] | None = None,
+    schema_path: Path = DEFAULT_SCHEMA,
 ) -> tuple[list[dict], list[dict]]:
     """Load catalogs, apply archive rules, and write both files."""
     sweep_day = today or date.today().isoformat()
+    destinations = [Path(active_path), Path(archived_path)]
+    recover_publication(destinations)
     active = load_catalog(active_path)
     archived = load_catalog(archived_path) if Path(archived_path).exists() else []
+    schema = json.loads(Path(schema_path).read_text(encoding="utf-8"))
     new_active, new_archived = apply_archive_rules(
         active,
         archived,
@@ -172,9 +221,16 @@ def archive_catalog_files(
         force_close_ids=force_close_ids,
         session=session,
         unavailable_companies=unavailable_companies,
+        schema=schema,
     )
-    write_catalog(active_path, new_active)
-    write_catalog(archived_path, new_archived)
+    with tempfile.TemporaryDirectory(prefix="catalog-archive-") as temporary:
+        candidates = [Path(temporary) / "active.json", Path(temporary) / "archived.json"]
+        write_catalog(candidates[0], new_active)
+        write_catalog(candidates[1], new_archived)
+        errors = validate_catalogs(*candidates, schema)
+        if errors:
+            raise CatalogValidationError(errors, phase="final")
+        publish_files(candidates, destinations)
     return new_active, new_archived
 
 

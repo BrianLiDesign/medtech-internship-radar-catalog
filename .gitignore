@@ -15,6 +15,7 @@ build/
 Thumbs.db
 cache/
 logs/
+.*.publication/
 memory/
 HANDOFF_LOCAL.md
 *_SUMMARY.md

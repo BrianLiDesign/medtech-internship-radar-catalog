@@ -97,13 +97,30 @@ def merge_seeds_with_existing(seed_rows: list[dict], existing: list[dict]) -> li
     return new_seeds + kept
 
 
-def ensure_program_fallbacks(catalog: list[dict], seed_rows: list[dict]) -> list[dict]:
+def ensure_program_fallbacks(
+    catalog: list[dict], seed_rows: list[dict], *, archived: list[dict] | None = None
+) -> list[dict]:
     """Add seed fallbacks for companies that have no active catalog row.
 
-    Does not rewrite existing fallbacks (first_seen stays frozen).
+    Does not rewrite existing fallbacks (first_seen stays frozen). Archived
+    fallback closures block automatic restoration for that company and season,
+    even if the seed URL changed. Reopening requires maintainer intervention.
     """
     covered = {row["company"] for row in catalog}
-    extra = [dict(row) for row in seed_rows if row["company"] not in covered]
+    history = archived or []
+    archived_ids = {row["id"] for row in history}
+    closed_fallbacks = {
+        (row["company"], row.get("season"))
+        for row in history
+        if row.get("row_kind") == "program_fallback"
+    }
+    extra = [
+        dict(row)
+        for row in seed_rows
+        if row["company"] not in covered
+        and row["id"] not in archived_ids
+        and (row["company"], row.get("season")) not in closed_fallbacks
+    ]
     return catalog + extra
 
 
@@ -113,6 +130,7 @@ def restore_missing_fallbacks(
     *,
     season_path: Path = DEFAULT_SEASON_FILE,
     seen_on: str | None = None,
+    archived_path: Path = DEFAULT_ARCHIVED,
 ) -> list[dict]:
     """Write seed fallbacks for companies that dropped to zero active rows."""
     document = load_seed_document(seed_path)
@@ -120,7 +138,11 @@ def restore_missing_fallbacks(
     seen = seen_on or document.get("first_seen") or date.today().isoformat()
     seed_rows = [row_from_seed(seed, season=season, seen_on=seen) for seed in document["seeds"]]
     output = Path(catalog_path)
-    restored = ensure_program_fallbacks(load_existing_catalog(output), seed_rows)
+    restored = ensure_program_fallbacks(
+        load_existing_catalog(output),
+        seed_rows,
+        archived=load_existing_catalog(archived_path),
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(restored, indent=2) + "\n", encoding="utf-8")
     return restored

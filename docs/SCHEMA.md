@@ -50,6 +50,7 @@ Example rows (one `posting` and one `program_fallback`):
 | `closed_at` | Date archived |
 | `close_reason` | Why the row left the active catalog |
 | `miss_count` | Consecutive daily misses |
+| `last_miss_on` | Date of the last qualifying miss; prevents same-day double counting |
 | `canonical_apply_url` | Apply URL after tracking-param strip |
 | `program_url` | Internship portal URL; identity key for `program_fallback` |
 | `ats` | Suspected ATS name |
@@ -64,3 +65,23 @@ See [ADR 0002](adr/0002-internship-ids-uuid-v5.md). Duplicate `id` values fail v
 This is not a campus-program schema. It has no `role_type`, `domain`,
 ambassador fields, or a 60-day freshness SLO. Intern rows go stale in days;
 close/archive rules live in `scripts/archive_closed.py` (ATS-closed, two consecutive posting misses, two program-URL deaths, or force-close).
+
+## Daily archive transitions
+
+For program fallbacks, only HTTP 404/410 count as URL deaths. A 2xx response
+resets `miss_count` to zero and removes `last_miss_on`. Timeouts, 429, 5xx,
+access-denied responses, and unresolved redirects are inconclusive: they preserve
+the existing evidence but add no miss. `seen` alone is not URL-health evidence.
+
+Misses count at most once per date. Two qualifying failures must fall on adjacent
+calendar dates; a gap starts a new streak at one. Existing counts without a
+`last_miss_on` date cannot prove a daily streak and start at one on the next miss.
+Posting discovery misses use the same daily counting rule. Definitive posting
+closure and explicit force-close still archive immediately.
+
+Automatic fallback restoration consults the archive. An archived fallback blocks
+restoration for its company and season, including when a seed URL changes;
+archived IDs are also excluded. An archived posting does not block a different
+fallback. Reopening a closed fallback requires explicit maintainer reconciliation
+of the archive and seed/catalog through the validated maintenance path; a later
+healthy probe or routine refresh does not reopen it.

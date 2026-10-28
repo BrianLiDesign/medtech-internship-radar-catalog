@@ -15,7 +15,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from catalog.io import load_json_list, write_json_list
+from catalog.io import current_season, load_json_list, write_json_list
 
 from scripts.scraper_framework import discover_scrapers, upsert_catalog
 from scripts.validate_data import run_validation
@@ -109,6 +109,7 @@ def scrape_and_merge(
     artifact_path: Path | None = None,
     allowlist_path: Path = DEFAULT_ALLOWLIST,
     candidates_path: Path = DEFAULT_CANDIDATES,
+    season_path: Path | None = None,
 ) -> list[dict]:
     """Discover allowlisted scrapers, scrape, upsert by internship ID, and save."""
     if (fixture_path is not None or fixture_map_path is not None) and Path(
@@ -146,7 +147,10 @@ def scrape_and_merge(
                 rate_limit_delay=delay,
                 artifact_path=None,
             )
-            result = scraper.scrape(seen_on=seen)
+            if season_path is None:
+                result = scraper.scrape(seen_on=seen)
+            else:
+                result = scraper.scrape(seen_on=seen, season=current_season(season_path))
             if result.blocked:
                 failures.append(
                     {
@@ -195,6 +199,7 @@ def main(argv: list[str] | None = None) -> int:
         help="JSON map of company name -> fixture path for multi-company dry-runs",
     )
     parser.add_argument("--seen-on", default=None)
+    parser.add_argument("--season-file", type=Path, default=None)
     parser.add_argument("--artifact", type=Path, default=DEFAULT_ARTIFACT)
     args = parser.parse_args(argv)
     scrape_and_merge(
@@ -203,8 +208,9 @@ def main(argv: list[str] | None = None) -> int:
         fixture_map_path=args.fixture_map,
         seen_on=args.seen_on,
         artifact_path=args.artifact,
+        season_path=args.season_file,
     )
-    return run_validation(args.catalog, DEFAULT_ARCHIVED, DEFAULT_SCHEMA)
+    return run_validation(args.catalog, DEFAULT_ARCHIVED, DEFAULT_SCHEMA, phase="input")
 
 
 if __name__ == "__main__":

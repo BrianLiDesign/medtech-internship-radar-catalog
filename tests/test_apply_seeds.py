@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 
+import pytest
 from jsonschema import Draft7Validator
 from scripts.apply_seeds import (
     apply_seeds,
@@ -268,3 +269,29 @@ def test_restore_missing_fallbacks_adds_boston_scientific(tmp_path):
     bsc = next(row for row in rows if row["company"] == "Boston Scientific")
     assert bsc["row_kind"] == "program_fallback"
     assert bsc["source"] == "seed"
+
+
+@pytest.mark.parametrize("reason", ["url_dead", "force_close", "ats_closed"])
+@pytest.mark.parametrize("changed_id", [False, True])
+def test_automatic_restoration_respects_archived_fallbacks(reason, changed_id):
+    seed = {
+        "id": "seed",
+        "company": "Medtronic",
+        "season": "summer-2027",
+        "row_kind": "program_fallback",
+    }
+    closed = dict(seed, close_reason=reason, closed_at="2026-08-14")
+    if changed_id:
+        closed["id"] = "previous-url"
+    assert ensure_program_fallbacks([], [seed], archived=[closed]) == []
+
+
+def test_archived_posting_does_not_block_company_fallback():
+    seed = {
+        "id": "fallback",
+        "company": "Medtronic",
+        "season": "summer-2027",
+        "row_kind": "program_fallback",
+    }
+    closed = dict(seed, id="posting", row_kind="posting", close_reason="ats_closed")
+    assert ensure_program_fallbacks([], [seed], archived=[closed]) == [seed]

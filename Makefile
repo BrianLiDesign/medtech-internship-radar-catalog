@@ -28,4 +28,4 @@ validate:
 	$(PYTHON) -m scripts.validate_data
 
 e2e:
-	$(PYTHON) -m pytest tests/test_refresh_catalog.py tests/test_cli.py -q
+	$(PYTHON) -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q
