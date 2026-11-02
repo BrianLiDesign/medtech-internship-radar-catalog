@@ -127,8 +127,9 @@ Closed listings for this season: [README-Inactive.md](README-Inactive.md).
 Listings live in [`data/active/internships.json`](data/active/internships.json). This README is generated — do not hand-edit the tables.
 
 ```bash
-python -m scripts.generate_dashboard
+python -m pip install -r requirements.txt -r requirements-dev.txt
 python -m scripts.validate_data
+python -m scripts.generate_dashboard
 ```
 
 - Contribute: [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -136,7 +137,8 @@ python -m scripts.validate_data
 - Automation: [docs/AUTOMATION.md](docs/AUTOMATION.md)
 - Development: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
 - Security: [SECURITY.md](SECURITY.md)
-- Maintainer notes: [PLAN.md](PLAN.md) · [HANDOFF.md](HANDOFF.md) · [CONTEXT.md](CONTEXT.md)
+- Coverage and verification: [dated evidence](docs/verification/2026-10-19-documentation.md)
+- Maintainer starting point: [PLAN.md](PLAN.md)
 
 ## License
 

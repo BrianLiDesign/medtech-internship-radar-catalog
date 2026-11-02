@@ -21,7 +21,7 @@ A field on each row (`summer-2027`, later `summer-2028`, …). The repo is **eve
 
 ## Allowlist
 
-`config/allowlist.json` — companies approved for automated scraping and README coverage. v1 is twelve device + diabetes employers. Post-v1 wave 1 adds J&J MedTech, Siemens Healthineers, Philips, Penumbra, and Align. Wave 2 adds Smith+Nephew through Inspire Medical (32 total).
+`config/allowlist.json` — companies approved for automated scraping and README coverage. Current approved scope is **32 companies**. The historical v1 baseline was twelve device + diabetes employers. Approved wave 1 added J&J MedTech, Siemens Healthineers, Philips, Penumbra, and Align. Wave 2 added Smith+Nephew through Inspire Medical (32 total).
 
 ## Candidates
 
@@ -50,11 +50,24 @@ _Avoid_: chronological README, by-age README, sorted README
 
 ## Verification / liveness
 
-`last_seen` and `miss_count`. Archive after ATS-closed **or** two consecutive daily misses. Program-fallback rows need a higher bar than a single failed fetch.
+`last_seen`, `miss_count`, and `last_miss_on`. Posting closure is immediate for
+ATS-closed/404/410 or force-close; discovery misses need two adjacent calendar
+dates, counted once per date. Failed scrapers preserve posting miss state unless
+closure is definitive. Fallbacks need two adjacent-date 404/410 probes; 2xx resets
+the streak, inconclusive probes preserve it. Archived fallbacks block automatic
+restoration for the same company/season. See [AUTOMATION](docs/AUTOMATION.md).
+
+## Coverage
+
+Implementation coverage means registered company scrapers (32/32). Published
+coverage includes fallback hubs; it does not prove open postings. Verified live
+coverage needs dated source checks. See [current evidence](docs/verification/2026-10-19-documentation.md).
 
 ## Refresh
 
-The daily automation that re-scrapes allowlisted companies, archives closed rows, regenerates the README, and opens a PR — never pushes listings directly to `main`.
+The daily automation that re-scrapes allowlisted companies, archives closed rows, regenerates the README, and opens or updates a PR. On changes, the workflow dispatches CI for that commit,
+waits for success, then attempts a squash merge with a matching-head check and branch
+deletion. Failures leave work for inspection. See [AUTOMATION](docs/AUTOMATION.md).
 
 ## Contribution phases
 
@@ -69,4 +82,5 @@ The daily automation that re-scrapes allowlisted companies, archives closed rows
 
 ## Brand
 
-Public docs and README do **not** mention Student Program Radar. This is a standalone intern listings catalog. Internally, that other repo is only a **pattern** for skeleton habits (schema gate, allowlist, generated README, refresh-via-PR).
+Public docs and README use only this catalog's brand. Internal skeleton references
+do not authorize public cross-links or shared program schemas.

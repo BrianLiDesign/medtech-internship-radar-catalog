@@ -1,3 +1,8 @@
+> Historical bootstrap packet (2026-08-14). Retained checkboxes and no-remote
+> blockers describe the initial state, not remaining work. Use [CURRENT-SLICE](CURRENT-SLICE.md)
+> and [PLAN](../../PLAN.md) for current work and [dated evidence](../verification/2026-10-19-documentation.md)
+> for verification limits.
+
 # Slice 1 kickoff packet
 
 **Role:** PM coordinates; engineer implements.  

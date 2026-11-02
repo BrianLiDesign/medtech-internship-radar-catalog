@@ -6,7 +6,12 @@ Instructions for AI coding agents working on the MedTech Internship Radar Catalo
 
 Public, evergreen data catalog of **US STEM internships** (and summer-shaped co-ops) at allowlisted medtech / diabetes device companies. Python 3.9+ scrapers populate `data/active/internships.json`. JSON Schema validates all records. GitHub Actions runs CI and daily refresh PRs.
 
-Read [PLAN.md](PLAN.md) for the build order. Read [HANDOFF.md](HANDOFF.md) for locked v1 product decisions. Read [CONTEXT.md](CONTEXT.md) for terms.
+Read [PLAN.md](PLAN.md) and [CURRENT-SLICE](docs/pm/CURRENT-SLICE.md) before choosing work.
+The approved scope is 32 companies, default season `summer-2027`. HANDOFF.md
+preserves the historical 12-company decisions and acceptance, superseded by approved
+waves. Read [CONTEXT.md](CONTEXT.md) for terms; when changing ingestion or archive
+behavior, read [ELIGIBILITY](docs/ELIGIBILITY.md) and [AUTOMATION](docs/AUTOMATION.md).
+Dated coverage and verification limits are in [verification evidence](docs/verification/2026-10-19-documentation.md).
 
 ## Setup
 
@@ -24,7 +29,7 @@ make lint      # Ruff + compileall
 make format    # Ruff fix + format
 make test      # pytest
 make validate  # schema validation
-make e2e       # fixture dry-run: scrape → validate → archive → generate README
+make e2e       # mocked refresh + module CLI tests using temporary outputs
 ```
 
 If `make` is unavailable (typical on Windows PowerShell):
@@ -61,12 +66,12 @@ python -m scripts.validate_data
 ## Scraper development
 
 1. Subclass the internship base scraper in `config/scrapers/<company>_scraper.py`
-2. Implement discovery + parse into schema-compliant **posting** rows; if the ATS has no reqs, emit one **program_fallback** row
+2. Implement discovery + parse into schema-compliant **posting** rows; apply the shared eligibility gate to every parsed posting; the refresh pipeline restores approved fallback seeds when appropriate (scrapers return postings, not invented fallback rows)
 3. Register via `<Company>Scraper` naming convention
 4. Add company to `config/allowlist.json` only when in scope
 5. Test with mocked HTTP
 6. Prefer Greenhouse/Lever/stable JSON; do not block coverage on reverse-engineering Workday
-7. Program IDs are UUID v5 from `scripts/internship_ids.py` — never hardcode arbitrary IDs
+7. Internship IDs are UUID v5 from `scripts/internship_ids.py` — never hardcode arbitrary IDs
 
 ## Security
 
@@ -76,8 +81,10 @@ python -m scripts.validate_data
 
 ## Pull requests
 
-- Run `make lint test validate e2e` before submitting (once those targets exist)
-- Scraper PRs must not include generated catalog data changes unless they are the automation refresh PR
+- Run `make lint test validate e2e` before submitting
+- Scraper PRs must not include generated catalog data changes; use automation refresh or a separate reviewed maintainer cleanup PR.
+- Change README content in `scripts/generate_dashboard.py` and regenerate all three views.
+- Use repository-root `python -m scripts.*` commands; no PYTHONPATH override or editable install is needed.
 
 ## Pattern repo (internal only)
 
