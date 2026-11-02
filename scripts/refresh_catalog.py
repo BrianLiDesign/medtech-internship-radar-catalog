@@ -20,7 +20,7 @@ from scripts.archive_closed import archive_catalog_files
 from scripts.catalog_publication import publish_files, recover_publication
 from scripts.generate_dashboard import write_readme
 from scripts.refresh_diagnostics import diagnostics_path, write_diagnostics
-from scripts.scrape_internships import scrape_and_merge
+from scripts.scrape_internships import qualification_review_path, scrape_and_merge
 from scripts.validate_data import (
     CatalogValidationError,
     report_validation,
@@ -106,7 +106,10 @@ def refresh_catalog(
         )
     ]
     protected = {path.resolve() for path in destinations}
-    if len(protected) != 6 or Path(artifact_path).resolve() in protected:
+    if len(protected) != 6 or any(
+        path.resolve() in protected
+        for path in (Path(artifact_path), qualification_review_path(Path(artifact_path)))
+    ):
         raise ValueError("refresh outputs and scraper artifact must use distinct destinations")
     diagnostic_directory = diagnostics_path(Path(artifact_path)).resolve()
     if any(

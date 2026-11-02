@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 
@@ -39,6 +40,7 @@ class PinpointInternshipScraper(ListingCacheScraper):
             short = str(department or "")
         req_id = job.get("requisition_id") or job.get("id")
         return {
+            **posting_evidence(job),
             "title": title,
             "apply_url": apply_url,
             "location": location,

@@ -6,6 +6,7 @@ import json
 from urllib.parse import urlencode
 
 from scripts.geo import is_us_location
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper
 
 JOBS_PATH = "/jobs"
@@ -73,6 +74,7 @@ def _job_to_parsed(job: dict) -> dict | None:
         return None
     req_id = job.get("requisitionID") or job.get("reference") or ""
     return {
+        **posting_evidence(job),
         "title": title,
         "apply_url": apply_url,
         "location": location,

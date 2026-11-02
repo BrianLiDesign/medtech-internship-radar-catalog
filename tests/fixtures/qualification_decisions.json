@@ -1,0 +1,287 @@
+[
+  {
+    "id": "unknown",
+    "text": "",
+    "outcome": "accept"
+  },
+  {
+    "id": "doctoral-required",
+    "text": "PhD required.",
+    "outcome": "reject"
+  },
+  {
+    "id": "enrollment",
+    "text": "Currently enrolled in a PhD program.",
+    "outcome": "reject"
+  },
+  {
+    "id": "preferred-plus-required-skill",
+    "text": "PhD preferred and Python required.",
+    "outcome": "accept"
+  },
+  {
+    "id": "required-plus-preferred-skill",
+    "text": "PhD required and Python preferred.",
+    "outcome": "reject"
+  },
+  {
+    "id": "enrollment-with-preference",
+    "text": "Currently enrolled in a PhD program with Python experience preferred.",
+    "outcome": "reject"
+  },
+  {
+    "id": "office-is-skill",
+    "text": "PhD required with MS Office proficiency.",
+    "outcome": "reject"
+  },
+  {
+    "id": "microsoft-is-skill",
+    "text": "PhD required with Microsoft Office proficiency.",
+    "outcome": "reject"
+  },
+  {
+    "id": "prior-bs",
+    "text": "Bachelor's degree completed and must be pursuing a doctoral degree.",
+    "outcome": "reject"
+  },
+  {
+    "id": "slash-alternatives",
+    "text": "Pursuing a BS/MS/PhD in engineering.",
+    "outcome": "accept"
+  },
+  {
+    "id": "or-alternatives",
+    "text": "Pursuing a BS, MS, or PhD in engineering.",
+    "outcome": "accept"
+  },
+  {
+    "id": "bachelor-or-doctorate",
+    "text": "Bachelor's or PhD required.",
+    "outcome": "accept"
+  },
+  {
+    "id": "colleagues",
+    "text": "Work with PhD scientists on software.",
+    "outcome": "accept"
+  },
+  {
+    "id": "preferred",
+    "text": "PhD preferred.",
+    "outcome": "accept"
+  },
+  {
+    "id": "ambiguous",
+    "text": "PhD in engineering.",
+    "outcome": "review"
+  },
+  {
+    "id": "unlinked-degrees",
+    "text": "PhD and MS.",
+    "outcome": "review"
+  },
+  {
+    "id": "cumulative-degrees",
+    "text": "BS and PhD required.",
+    "outcome": "reject"
+  },
+  {
+    "id": "required-section",
+    "text": "Required qualifications:\nPhD in engineering.\nPython experience.",
+    "outcome": "reject"
+  },
+  {
+    "id": "preferred-section",
+    "text": "Preferred qualifications:\nPhD in engineering.\nRequired qualifications:\nPython experience.",
+    "outcome": "accept"
+  },
+  {
+    "id": "negation",
+    "text": "PhD not required.",
+    "outcome": "accept"
+  },
+  {
+    "id": "negated-preference",
+    "text": "PhD not preferred.",
+    "outcome": "review"
+  },
+  {
+    "id": "conditional",
+    "text": "PhD required unless equivalent experience.",
+    "outcome": "review"
+  },
+  {
+    "id": "noun-alternatives",
+    "text": "Must have a BS degree or a PhD degree.",
+    "outcome": "accept"
+  },
+  {
+    "id": "article-alternatives",
+    "text": "Pursuing a BS, an MS, or a PhD in engineering.",
+    "outcome": "accept"
+  },
+  {
+    "id": "shared-must",
+    "text": "Must have Python proficiency and a PhD.",
+    "outcome": "reject"
+  },
+  {
+    "id": "conditional-reference",
+    "text": "PhD preferred, but required for some projects.",
+    "outcome": "review"
+  },
+  {
+    "id": "colleague-experience",
+    "text": "Experience collaborating with PhD scientists required.",
+    "outcome": "accept"
+  },
+  {
+    "id": "conflicting-modality",
+    "text": "Must be pursuing a PhD preferred.",
+    "outcome": "review"
+  },
+  {
+    "id": "optional",
+    "text": "PhD is optional.",
+    "outcome": "accept"
+  },
+  {
+    "id": "conflicting-choice",
+    "text": "PhD required or preferred.",
+    "outcome": "review"
+  },
+  {
+    "id": "conditional-project",
+    "text": "PhD may be required depending on project.",
+    "outcome": "review"
+  },
+  {
+    "id": "required-with-colleagues",
+    "text": "Must have a PhD and work with PhD scientists.",
+    "outcome": "reject"
+  },
+  {
+    "id": "required-with-colleague-preference",
+    "text": "Must have a PhD, experience collaborating with PhD scientists preferred.",
+    "outcome": "reject"
+  },
+  {
+    "id": "subject-before-must",
+    "text": "Candidates must have Python proficiency and a PhD.",
+    "outcome": "reject"
+  },
+  {
+    "id": "abbreviation-case",
+    "text": "ph.D. required. Python preferred.",
+    "outcome": "reject"
+  },
+  {
+    "id": "abbreviation-space",
+    "text": "Ph. D. required. Python preferred.",
+    "outcome": "reject"
+  },
+  {
+    "id": "applicant-purpose",
+    "text": "Must have a PhD to work with our research team.",
+    "outcome": "reject"
+  },
+  {
+    "id": "applicant-purpose-colleagues",
+    "text": "Must have a PhD to collaborate with PhD scientists.",
+    "outcome": "reject"
+  },
+  {
+    "id": "negated-optional",
+    "text": "A PhD is not optional for this position.",
+    "outcome": "reject"
+  },
+  {
+    "id": "discipline-alternative",
+    "text": "Must have a BS in engineering or a PhD in engineering.",
+    "outcome": "accept"
+  },
+  {
+    "id": "discipline-ms-alternative",
+    "text": "Must be pursuing a PhD in Computer Science or a Master's degree in Engineering.",
+    "outcome": "accept"
+  },
+  {
+    "id": "required-h5",
+    "text": "<h5>Required qualifications: PhD</h5><h5>Preferred qualifications: Python</h5>",
+    "outcome": "reject"
+  },
+  {
+    "id": "graduation-season",
+    "text": "Summer 2027 internship. Expected graduation: Spring 2028.",
+    "outcome": "accept"
+  },
+  {
+    "id": "graduation-and-placement",
+    "text": "Graduating in Spring 2028; internship term: Summer 2026.",
+    "outcome": "reject"
+  },
+  {
+    "id": "graduation-heading",
+    "text": "Expected graduation:\nSpring 2028\nInternship term: Summer 2027.",
+    "outcome": "accept"
+  },
+  {
+    "id": "same-clause-dates",
+    "text": "Internship in Summer 2027 for students graduating in Spring 2028.",
+    "outcome": "accept"
+  },
+  {
+    "id": "legal-authorization-role",
+    "title": "Intern",
+    "text": "Develop software. Must have legal authorization to work in the United States.",
+    "outcome": "accept"
+  },
+  {
+    "id": "legal-role-control",
+    "title": "Intern",
+    "text": "Develop software for our legal department.",
+    "outcome": "reject"
+  },
+  {
+    "id": "finance-role-authorization",
+    "title": "Intern",
+    "text": "Finance work with data. Must have legal authorization to work in the United States.",
+    "outcome": "reject"
+  },
+  {
+    "id": "independent-doctoral-after-alternative",
+    "text": "Must have a BS in engineering or a PhD in engineering. Must be enrolled in a PhD program.",
+    "outcome": "reject"
+  },
+  {
+    "id": "graduation-only-coop",
+    "title": "Software Co-op",
+    "text": "Expected graduation: Summer 2027.",
+    "outcome": "reject"
+  },
+  {
+    "id": "reversed-graduation-season",
+    "text": "Internship term: Summer 2027. Expected graduation: 2028 Spring.",
+    "outcome": "accept"
+  },
+  {
+    "id": "graduate-student-placement",
+    "text": "Internship for graduate students in Summer 2026.",
+    "outcome": "reject"
+  },
+  {
+    "id": "bare-placement-heading",
+    "text": "Expected graduation:\nSpring 2028\nInternship term\nSummer 2026",
+    "outcome": "reject"
+  },
+  {
+    "id": "conjoined-discipline-alternative",
+    "text": "Must have a BS in mathematics and statistics or a PhD in computer science.",
+    "outcome": "accept"
+  },
+  {
+    "id": "country-qualified-authorization",
+    "title": "Intern",
+    "text": "Develop software. Legal U.S. work authorization is required.",
+    "outcome": "accept"
+  }
+]

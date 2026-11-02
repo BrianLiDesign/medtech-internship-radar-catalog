@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper
 
 PAGE_SIZE = 50
@@ -85,6 +86,7 @@ class AlgoliaInternshipScraper(ListingCacheScraper):
             return None
         req_id = job.get("id") or job.get("objectID") or job.get("JobRequisition")
         return {
+            **posting_evidence(job),
             "title": title,
             "apply_url": apply_url,
             "location": location,

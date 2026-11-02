@@ -33,13 +33,13 @@ DEFAULT_FIXTURE_MAP = REPO_ROOT / "config" / "fixtures" / "scrape_map.json"
 class FixtureResponse:
     """Minimal JSON response object for fixture sessions."""
 
-    def __init__(self, payload: dict, status_code: int = 200) -> None:
+    def __init__(self, payload: dict | list, status_code: int = 200) -> None:
         self.payload = payload
         self.status_code = status_code
         self.headers = {"Content-Type": "application/json"}
         self.text = json.dumps(payload)
 
-    def json(self) -> dict:
+    def json(self) -> dict | list:
         return self.payload
 
     def raise_for_status(self) -> None:
@@ -66,14 +66,17 @@ class FixtureHtmlResponse:
 class FixtureSession:
     """Session that returns a local JSON or HTML fixture for every request."""
 
-    def __init__(self, payload: dict | str) -> None:
+    def __init__(self, payload: dict | list | str) -> None:
         self.payload = payload
 
     def get(self, url: str, timeout: float | None = None, headers: dict | None = None):
         del url, timeout, headers
-        if isinstance(self.payload, dict):
+        if isinstance(self.payload, (dict, list)):
             return FixtureResponse(self.payload)
         return FixtureHtmlResponse(self.payload)
+
+    def post(self, url: str, *, json=None, timeout=None, headers=None):
+        return self.get(url, timeout=timeout, headers=headers)
 
 
 def load_fixture_map(path: Path) -> dict[str, Path]:
@@ -132,6 +135,7 @@ def scrape_and_merge(
     delay = 0 if use_fixtures else rate_limit_delay
     merged = existing
     failures: list[dict] = []
+    reviews: list[dict] = []
     _write_failure_artifact(artifact_path, failures)
     for company, scraper_cls in discover_scrapers().items():
         if company not in allowlist or company in candidates:
@@ -160,6 +164,7 @@ def scrape_and_merge(
                     }
                 )
                 continue
+            reviews.extend(result.reviews)
             merged = upsert_catalog(merged, result.postings, seen_on=seen)
         except Exception as exc:
             failures.append(
@@ -171,8 +176,18 @@ def scrape_and_merge(
             )
             continue
     _write_failure_artifact(artifact_path, failures)
+    if artifact_path is not None:
+        output = qualification_review_path(Path(artifact_path))
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(reviews, indent=2) + "\n", encoding="utf-8")
+        print(f"[REVIEW] {len(reviews)} qualification decisions; evidence: {output}")
     write_json_list(catalog_path, merged)
     return merged
+
+
+def qualification_review_path(artifact_path: Path) -> Path:
+    """Local source evidence stays outside sanitized refresh diagnostics."""
+    return artifact_path.with_name(artifact_path.stem + "-qualification-reviews.json")
 
 
 def _write_failure_artifact(artifact_path: Path | None, failures: list[dict]) -> None:

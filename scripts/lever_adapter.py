@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from scripts.geo import is_us_location
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_unix
 
 
@@ -40,6 +41,7 @@ class LeverInternshipScraper(ListingCacheScraper):
             posting.get("categories") if isinstance(posting.get("categories"), dict) else {}
         )
         return {
+            **posting_evidence(posting),
             "title": title,
             "apply_url": apply_url,
             "location": location,

@@ -5,6 +5,7 @@ from __future__ import annotations
 from urllib.parse import urlencode
 
 from scripts.geo import is_us_location
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 100
@@ -67,6 +68,7 @@ class SmartRecruitersInternshipScraper(ListingCacheScraper):
             short = str(department or "")
         req_id = job.get("refNumber") or job.get("ref") or job_id
         return {
+            **posting_evidence(job),
             "title": title,
             "apply_url": apply_url,
             "location": location,

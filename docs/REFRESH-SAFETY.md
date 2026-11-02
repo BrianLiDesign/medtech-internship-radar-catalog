@@ -65,7 +65,7 @@ catalog commit list and cannot become refresh PR inputs.
 Use temporary outputs and mocked HTTP, never production fixture ingestion:
 
 ```bash
-python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py tests/test_qualification_refresh.py -q
 ```
 
 `make e2e` runs this same group. Tests exercise persisted output invariants, CLI

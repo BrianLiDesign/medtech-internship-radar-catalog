@@ -5,6 +5,7 @@ from __future__ import annotations
 from urllib.parse import urlencode
 
 from scripts.geo import is_us_location
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 25
@@ -71,6 +72,7 @@ class OracleCEInternshipScraper(ListingCacheScraper):
         origin = self.origin.rstrip("/")
         apply_url = f"{origin}/hcmUI/CandidateExperience/en/sites/{self.site_number}/job/{job_id}"
         return {
+            **posting_evidence(job),
             "title": title,
             "apply_url": apply_url,
             "location": location,

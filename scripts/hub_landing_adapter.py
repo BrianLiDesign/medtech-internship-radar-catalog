@@ -10,6 +10,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urljoin, urlparse
 
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper
 
 _INTERN_RE = re.compile(r"\bintern(?:ship)?s?\b|\bco-?ops?\b", re.IGNORECASE)
@@ -104,6 +105,7 @@ def _jobposting_to_parsed(job: dict, *, origin: str, ats: str, hub_url: str) -> 
     elif identifier is not None:
         req_id = str(identifier).strip()
     return {
+        **posting_evidence(job),
         "title": title,
         "apply_url": apply_url,
         "location": location,

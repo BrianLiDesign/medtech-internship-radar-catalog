@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from urllib.parse import urlencode
 
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_unix
 
 PAGE_SIZE = 10
@@ -63,6 +64,7 @@ class EightfoldInternshipScraper(ListingCacheScraper):
             return None
         req_id = position.get("atsJobId") or position.get("displayJobId") or position.get("id")
         return {
+            **posting_evidence(position),
             "title": title,
             "apply_url": apply_url,
             "location": location,

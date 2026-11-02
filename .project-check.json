@@ -78,7 +78,9 @@
         "-m",
         "pytest",
         "tests/test_refresh_catalog.py",
+        "tests/test_refresh_safety.py",
         "tests/test_cli.py",
+        "tests/test_qualification_refresh.py",
         "-q"
       ],
       "timeoutSeconds": 120

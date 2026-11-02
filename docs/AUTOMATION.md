@@ -9,7 +9,7 @@ Pipeline: **scrape → validate → archive → generate README**, computed in s
 Uses the Boston Scientific Eightfold fixture against **temp copies** of the catalog. Never merge `--fixture` into `data/active/internships.json` — that writes synthetic job IDs as if they were live postings.
 
 ```bash
-python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py tests/test_qualification_refresh.py -q
 ```
 
 Or the Makefile target:
@@ -21,7 +21,7 @@ make e2e
 If `make` is unavailable (typical on Windows PowerShell):
 
 ```bash
-python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py tests/test_qualification_refresh.py -q
 ```
 
 `--fixture` is for mocked-HTTP tests only. Pass `--catalog` (and `--archived` / `--readme` / `--inactive` / `--newest` / `--health` / `--artifact`) to temp files if you invoke `refresh_catalog.py --fixture` yourself. A live sweep is:

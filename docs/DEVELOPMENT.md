@@ -43,7 +43,7 @@ python -m ruff format --check scripts tests config/scrapers
 python -m compileall -q scripts config/scrapers
 python -m pytest -q
 python -m scripts.validate_data
-python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q
+python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py tests/test_qualification_refresh.py -q
 ```
 
 ## Project layout
@@ -100,7 +100,7 @@ python -m scripts.generate_dashboard
   Use `python -m scripts.<command>` so both `scripts` and `catalog` resolve from
   the checkout. No editable install or `PYTHONPATH` override is needed.
 - **Stale README:** regenerate with `python -m scripts.generate_dashboard`.
-- **Fixture dry-run:** `python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py -q` (`--fixture` must not write `data/active/internships.json`)
+- **Fixture dry-run:** `python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py tests/test_cli.py tests/test_qualification_refresh.py -q` (`--fixture` must not write `data/active/internships.json`)
 
 ## Related docs
 

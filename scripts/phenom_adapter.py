@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from scripts.inclusion import posting_evidence
 from scripts.scraper_framework import ListingCacheScraper, posted_at_from_iso
 
 PAGE_SIZE = 50
@@ -82,6 +83,7 @@ class PhenomInternshipScraper(ListingCacheScraper):
             return None
         req_id = job.get("reqId") or job.get("jobId") or job.get("jobSeqNo")
         return {
+            **posting_evidence(job),
             "title": title,
             "apply_url": apply_url,
             "location": location,

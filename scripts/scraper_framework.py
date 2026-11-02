@@ -13,7 +13,7 @@ from pathlib import Path
 import requests
 from catalog.io import current_season
 
-from scripts.inclusion import include_posting
+from scripts.inclusion import PostingDecision, classify_posting, evidence_text
 from scripts.internship_ids import canonical_apply_url, internship_id
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -38,6 +38,7 @@ class ScrapeResult:
     postings: list[dict] = field(default_factory=list)
     blocked: bool = False
     error: str | None = None
+    reviews: list[dict] = field(default_factory=list)
 
 
 class InternshipScraper(ABC):
@@ -87,12 +88,33 @@ class InternshipScraper(ABC):
             )
         catalog_season = season or current_season(DEFAULT_SEASON_FILE)
         postings: list[dict] = []
+        reviews: list[dict] = []
         for url in urls:
             parsed = self.parse_posting(url)
             if not parsed:
                 continue
+            decision = classify_parsed_posting(parsed, target_season=catalog_season)
+            if decision.outcome == "review":
+                from dataclasses import asdict
+
+                reviews.append(
+                    {
+                        "company": self.company,
+                        "id": internship_id({**parsed, "company": self.company}),
+                        "apply_url": parsed.get("apply_url", url),
+                        "req_id": parsed.get("req_id"),
+                        "title": parsed.get("title", ""),
+                        "outcome": "review",
+                        "seen_on": seen_on,
+                        "target_season": catalog_season,
+                        "reason": decision.reason,
+                        "qualifications": [asdict(item) for item in decision.qualifications],
+                    }
+                )
+            if decision.outcome != "accept":
+                continue
             postings.append(self.to_catalog_row(parsed, seen_on=seen_on, season=catalog_season))
-        return ScrapeResult(company=self.company, postings=postings)
+        return ScrapeResult(company=self.company, postings=postings, reviews=reviews)
 
     def fetch_json(self, url: str, *, json_body: dict | None = None):
         """GET or POST JSON with timeout and rate limit. Blocked responses yield None.
@@ -153,7 +175,7 @@ class InternshipScraper(ABC):
         title = parsed["title"]
         location = parsed["location"]
         tag_text = " ".join(
-            part
+            evidence_text(part)
             for part in (
                 title,
                 parsed.get("short_description") or "",
@@ -229,8 +251,6 @@ class ListingCacheScraper(InternshipScraper):
     def parse_posting(self, url: str) -> dict | None:
         parsed = self._positions_by_url.get(url)
         if parsed is None:
-            return None
-        if not keep_parsed_posting(parsed):
             return None
         return parsed
 
@@ -342,9 +362,23 @@ def posted_at_from_iso(value: object) -> str | None:
         return None
 
 
-def keep_parsed_posting(parsed: dict) -> bool:
+def keep_parsed_posting(parsed: dict, *, target_season: str | None = None) -> bool:
     """Apply the shared inclusion classifier to a parsed posting."""
-    return include_posting(parsed.get("title", ""), parsed.get("location", ""))
+    return classify_parsed_posting(parsed, target_season=target_season).outcome == "accept"
+
+
+def classify_parsed_posting(parsed: dict, *, target_season: str | None = None) -> PostingDecision:
+    """Retain the decision and evidence for ingestion diagnostics."""
+    return classify_posting(
+        parsed.get("title", ""),
+        parsed.get("location", ""),
+        target_season=target_season,
+        season=parsed.get("season") or "",
+        degree=parsed.get("degree") or "",
+        degree_requirements=parsed.get("degree_requirements") or "",
+        description=parsed.get("description") or "",
+        short_description=parsed.get("short_description") or "",
+    )
 
 
 def _looks_unauthorized(payload: object) -> bool:
