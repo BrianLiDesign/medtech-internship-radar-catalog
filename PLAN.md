@@ -1,3 +1,47 @@
+# Development plan
+
+Current contributor starting point, reconciled 2026-10-19. Read
+[CURRENT-SLICE](docs/pm/CURRENT-SLICE.md) for current work and
+[verification evidence](docs/verification/2026-10-19-documentation.md) for dated results.
+
+## Current scope and implementation
+
+The catalog is implemented: schema, stable UUID v5 identities, 32 registered company
+scrapers, fallback seeds, eligibility gate, archive rules, issue merge, three
+generated README views, CI, and daily refresh via PR. The approved allowlist is
+**32 device companies** (original 12 plus waves 1 and 2); the default season remains
+**summer-2027** in `config/current_season.json`. Further expansion needs an explicit
+scope decision. The original six-slice build sequence below is historical.
+
+Implementation coverage is not verified live coverage. The October 19 snapshot has
+100 posting rows across 15 companies and 17 fallback hubs, with Medtronic recorded
+as failed. Those counts do not certify current eligibility or every Apply URL.
+
+## Start here
+
+1. Follow [DEVELOPMENT](docs/DEVELOPMENT.md) to install dependencies and run
+   `make lint test validate e2e`, or its Python module equivalents on Windows.
+2. For ingestion changes, read [ELIGIBILITY](docs/ELIGIBILITY.md); for refresh and
+   closing behavior, read [AUTOMATION](docs/AUTOMATION.md). Tests use mocked HTTP.
+3. Preserve generator ownership: change `scripts/generate_dashboard.py`, then run
+   `python -m scripts.generate_dashboard` for all three README views.
+4. Review existing posting eligibility in a separate maintainer cleanup PR using
+   the evidence procedure in ELIGIBILITY. The classifier does not purge stored rows.
+5. Assess scraper failures and source changes using dated evidence. Do not equate
+   an empty/blocked endpoint or fallback hub with a verified open internship.
+
+Website work, sponsorship filtering, off-season/new-grad roles, and broader employer
+categories remain outside scope. [HANDOFF](HANDOFF.md) preserves original decisions;
+its old kickoff steps and acceptance waivers are not current operating instructions.
+
+## Historical build plan (2026-08-14)
+
+The following is retained as the original build order, including its start-state
+assumptions and completion criteria. Current instructions above supersede it.
+
+<details>
+<summary>Original six-slice plan</summary>
+
 # Development plan — next steps
 
 **Status:** Ready to implement  
@@ -153,3 +197,5 @@ Copy **habits** from the sibling catalog (schema gate, allowlist, generated READ
 | 5 | Slice 5–6 | “Archive rules, daily refresh PR, issue template.” |
 
 Do not combine Slice 1 and Slice 4 in one session. The README with 12 fallbacks is the milestone that unblocks everything else.
+
+</details>

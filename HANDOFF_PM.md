@@ -1,3 +1,11 @@
+# Historical PM kickoff prompt
+
+**Archived 2026-10-19:** The original bootstrap prompt below is retained for decision
+history. Do not execute it as current guidance. The catalog now has 32 approved
+companies, implemented scrapers, CI, and a configured GitHub remote. Start with
+[PLAN](PLAN.md), [CURRENT-SLICE](docs/pm/CURRENT-SLICE.md), and
+[dated verification](docs/verification/2026-10-19-documentation.md).
+
 # PM handoff prompt
 
 Copy everything in the fenced block below into a new chat with a project-manager agent (or a human PM). The agent should **not** implement Slice 1 unless you explicitly ask it to; its job is to run the project.

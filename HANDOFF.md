@@ -1,19 +1,40 @@
 # Handoff: MedTech Internship Radar Catalog (v1)
 
-**Status:** Ready for implementation — do not reopen grill decisions unless scope changes  
-**Audience:** Engineer (or PM + engineer) building the repo from zero  
+**Status:** Historical v1 design and acceptance record (2026-08-14)
+**Audience:** Maintainers reviewing original decisions and acceptance
 **Source:** Design grill (2026-08-14) in `student-program-radar-catalog` chat  
 **Repo:** `medtech-internship-radar-catalog`  
 **Pattern source (ideas only):** `../student-program-radar-catalog` — copy skeleton habits, **not** program scrapers or the program schema
 
-**Build order:** [PLAN.md](PLAN.md) — start at Slice 1; do not open scrapers until Slice 2’s README exists.  
-**PM kickoff prompt:** [HANDOFF_PM.md](HANDOFF_PM.md)
+**Current starting point:** [PLAN.md](PLAN.md), [CURRENT-SLICE](docs/pm/CURRENT-SLICE.md), and [DEVELOPMENT](docs/DEVELOPMENT.md).
+**Historical PM kickoff:** [HANDOFF_PM.md](HANDOFF_PM.md)
 
 Next session skills: **tdd** for schema/IDs/generator; **diagnose** for scraper/ATS failures; **context7-mcp** for `requests`, `beautifulsoup4`, `jsonschema`. Do **not** use live network in CI.
 
 ---
 
-## 1. Goal
+## Current superseding guidance (2026-10-19)
+
+The original 12-company scope, initial empty-repo state, ticket checkboxes, and
+no-remote waiver below describe v1 history. Approved waves expanded the allowlist
+to **32 companies**; season remains **summer-2027**. J&J MedTech, Siemens Healthineers,
+Philips, Penumbra, and Align are now in scope. `origin`, CI, and the daily refresh
+workflow exist. Do not restart bootstrap or apply the old no-remote waiver.
+
+Follow [AUTOMATION](docs/AUTOMATION.md) for the PR/CI/squash-merge refresh path,
+daily archive evidence, failed-scraper handling, and archived-fallback restoration
+blocks. Follow [ELIGIBILITY](docs/ELIGIBILITY.md) for the shared ingestion gate and
+reviewed cleanup of existing records. Use repository-root `python -m scripts.*`
+commands. The 32 adapters establish implementation coverage, not live verification.
+See [dated evidence and limitations](docs/verification/2026-10-19-documentation.md).
+
+Everything from section 1 onward is the preserved historical record. Old commands,
+future-tense tickets, and unchecked boxes are not the current backlog. The August
+T6.2 sign-off is a completed acceptance record, not a renewed live acceptance claim.
+
+---
+
+## 1. Historical goal
 
 Ship a **public, evergreen listings catalog** of **US Summer 2027 STEM internships** (plus summer-shaped co-ops) at **12 flagship device + diabetes companies**, as JSON + a Simplify-style generated README. Students browse by role family and click **Apply**.
 
@@ -110,7 +131,7 @@ Omit empty sections. Jump links at top with counts.
 
 ---
 
-## 3. Current baseline (start state)
+## 3. Historical baseline (start state)
 
 | Fact | Value |
 |------|--------|
@@ -403,7 +424,7 @@ Suggested lanes if split:
   - [x] Contribution phases match Q25
   - [x] How to add a company (candidates → allowlist → scraper) is documented
 
-#### T6.2 PM/owner acceptance
+#### T6.2 Historical PM/owner acceptance (completed 2026-08-14)
 - **Depends on:** T2.2, T3.2, T5.2 (or waivers)  
 - **Checklist:**
   - [x] All 12 companies have ≥1 row with working Apply URL

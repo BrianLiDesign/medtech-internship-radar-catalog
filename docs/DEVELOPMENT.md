@@ -11,12 +11,12 @@ Local setup, tests, and workflows for the MedTech Internship Radar Catalog.
 ## Setup
 
 ```bash
-git clone <this-repo>
+git clone https://github.com/BrianLiDesign/medtech-internship-radar-catalog.git
 cd medtech-internship-radar-catalog
 python -m venv .venv
 
-# Windows
-.venv\Scripts\activate
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
 
 # macOS / Linux
 source .venv/bin/activate
@@ -32,7 +32,7 @@ make lint      # Ruff + compileall
 make format    # Ruff fix + format
 make test      # pytest
 make validate  # schema validation
-make e2e       # fixture dry-run: scrape → validate → archive → generate README
+make e2e       # mocked refresh + module CLI tests, with temporary outputs
 ```
 
 If `make` is unavailable (typical on Windows PowerShell):
@@ -53,7 +53,7 @@ python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py test
 | `data/active/internships.json` | Published active catalog (automation / maintainer only) |
 | `data/archived/internships.json` | Archived rows |
 | `data/schema.json` | JSON Schema for internship rows |
-| `config/allowlist.json` | v1 companies approved for scraping and README coverage |
+| `config/allowlist.json` | Current 32 approved companies; original v1 was 12 |
 | `config/candidates.json` | Employers parked for a later allowlist |
 | `config/current_season.json` | README default season (`summer-2027` for v1) |
 | `config/scrapers/` | Company scrapers (`<Company>Scraper`) |
@@ -69,19 +69,40 @@ python -m pytest tests/test_refresh_catalog.py tests/test_refresh_safety.py test
    `scripts/internship_ids.py`. Do not change an existing `id` without a
    migration plan.
 3. **Mock HTTP in tests.** CI must not hit live ATS endpoints.
-4. **Run** `make lint test validate` (and `make e2e` when scraper/refresh
-   behavior changes) before opening a pull request.
+4. **Run** `make lint test validate e2e` (or the Python equivalents above) before
+   opening a pull request.
 5. **Never commit secrets**, session cookies, or credentials.
 6. **Do not hand-edit README tables.** `scripts/generate_dashboard.py` owns them.
 
 ## Adding a scraper
 
+Shared inclusion rules, adapter evidence, missing-information policy, and the
+reviewed cleanup path are documented in [ELIGIBILITY.md](ELIGIBILITY.md).
+
 See [SCRAPER_CHECKLIST.md](SCRAPER_CHECKLIST.md). New employers start in
 `config/candidates.json`, then the allowlist, then a scraper — see
 [CONTRIBUTING.md](../CONTRIBUTING.md).
 
-v1 does **not** require reverse-engineering Workday. Greenhouse, Lever, or other
+The approved scope is 32 companies and the default season is `summer-2027`.
+Registration and mocked adapter tests do not certify live coverage; see the
+[dated verification record](verification/2026-10-19-documentation.md).
+
+Coverage does **not** require reverse-engineering Workday. Greenhouse, Lever, or other
 stable JSON is enough; Workday companies can remain on a program-fallback row.
+
+## Module commands and generated files
+
+Run from the repository root. Use `python -m scripts.<command>`; no editable
+install or `PYTHONPATH` override is needed. The command handoff is implemented in
+[PR #14](https://github.com/BrianLiDesign/medtech-internship-radar-catalog/pull/14).
+`make e2e` is exactly the targeted pytest command shown above, not a live scrape.
+It exercises fixture refresh and module entrypoints in temporary outputs.
+
+For README wording/layout, edit `scripts/generate_dashboard.py` and run
+`python -m scripts.generate_dashboard`. It writes `README.md`, `README-Newest.md`,
+and `README-Inactive.md` from the existing catalogs; it does not refresh listings.
+Setup installs require package access; local tests and fixture refresh use mocked HTTP.
+See [dated command verification](verification/2026-10-19-documentation.md).
 
 ## Merging an issue into the catalog
 
@@ -93,6 +114,10 @@ python -m scripts.merge_issue --dry-run --company "..." --title "..." \
 python -m scripts.validate_data
 python -m scripts.generate_dashboard
 ```
+
+The example is a preview only. Remove `--dry-run` only for a reviewed maintainer
+change, validate and regenerate, then submit a PR. `merge_issue` validates identity
+and schema; maintainers must independently review eligibility.
 
 ## Troubleshooting
 
