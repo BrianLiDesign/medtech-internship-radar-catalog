@@ -118,7 +118,7 @@ All listings newest first: [README-Newest.md](README-Newest.md).
 
 | Last sweep | Updated this sweep | Failed scrapers | Archived |
 | --- | --- | --- | --- |
-| 2026-10-25 | 59 | Medtronic | 86 |
+| 2026-10-25 | 59 | Medtronic | 83 |
 
 Closed listings for this season: [README-Inactive.md](README-Inactive.md).
 
