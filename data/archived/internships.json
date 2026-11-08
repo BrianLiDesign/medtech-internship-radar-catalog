@@ -3154,5 +3154,30 @@
     "last_miss_on": "2026-11-07",
     "closed_at": "2026-11-07",
     "close_reason": "consecutive_misses"
+  },
+  {
+    "id": "ea7a12b8-a5c1-57c0-ab25-ac5ea8dd813e",
+    "company": "Intuitive",
+    "title": "AI Research Intern",
+    "apply_url": "https://jobs.smartrecruiters.com/Intuitive/744000151714759",
+    "season": "summer-2027",
+    "role_family": "BME/R&D",
+    "location": "Sunnyvale, CA, United States",
+    "degree": "unspecified",
+    "row_kind": "posting",
+    "source": "scrape",
+    "first_seen": "2026-10-19",
+    "last_seen": "2026-11-06",
+    "work_auth": "unspecified",
+    "eligibility": "open",
+    "miss_count": 2,
+    "canonical_apply_url": "https://jobs.smartrecruiters.com/Intuitive/744000151714759",
+    "ats": "smartrecruiters",
+    "short_description": "",
+    "req_id": "JOB219611",
+    "posted_at": "2026-09-24",
+    "last_miss_on": "2026-11-08",
+    "closed_at": "2026-11-08",
+    "close_reason": "consecutive_misses"
   }
 ]
