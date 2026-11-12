@@ -3205,5 +3205,29 @@
     "last_miss_on": "2026-11-11",
     "closed_at": "2026-11-11",
     "close_reason": "consecutive_misses"
+  },
+  {
+    "id": "140b0916-7b6c-5410-8957-d788c061bf40",
+    "company": "Stryker",
+    "title": "Summer 2027 Internship - Biomedical Engineering - Illinois",
+    "apply_url": "https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Cary-Illinois/Summer-2027-Internship---Biomedical-Engineering---Illinois_R572593",
+    "season": "summer-2027",
+    "role_family": "BME/R&D",
+    "location": "Cary, IL 60013, United States",
+    "degree": "unspecified",
+    "row_kind": "posting",
+    "source": "scrape",
+    "first_seen": "2026-10-19",
+    "last_seen": "2026-11-10",
+    "work_auth": "unspecified",
+    "eligibility": "open",
+    "miss_count": 2,
+    "canonical_apply_url": "https://stryker.wd1.myworkdayjobs.com/StrykerCareers/job/Cary-Illinois/Summer-2027-Internship---Biomedical-Engineering---Illinois_R572593",
+    "ats": "paradox",
+    "short_description": "",
+    "req_id": "R572593",
+    "last_miss_on": "2026-11-12",
+    "closed_at": "2026-11-12",
+    "close_reason": "consecutive_misses"
   }
 ]
