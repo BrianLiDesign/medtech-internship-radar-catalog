@@ -1,8 +1,9 @@
 {
-  "last_sweep": "2026-11-12",
+  "last_sweep": "2026-11-13",
   "updated_count": 35,
   "failed_scrapers": [
-    "Medtronic"
+    "Medtronic",
+    "Smith+Nephew"
   ],
-  "archived_count": 134
+  "archived_count": 137
 }
