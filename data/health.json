@@ -1,10 +1,8 @@
 {
-  "last_sweep": "2026-11-14",
+  "last_sweep": "2026-11-15",
   "updated_count": 36,
   "failed_scrapers": [
-    "Medtronic",
-    "Olympus",
-    "Teleflex"
+    "Medtronic"
   ],
-  "archived_count": 139
+  "archived_count": 138
 }
