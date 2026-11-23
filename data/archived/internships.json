@@ -3775,5 +3775,30 @@
     "last_miss_on": "2026-11-22",
     "closed_at": "2026-11-22",
     "close_reason": "consecutive_misses"
+  },
+  {
+    "id": "83fb976f-626b-5e88-8a60-2bcf7ebe9faf",
+    "company": "GE HealthCare",
+    "title": "Operations Management Leadership Program - Internship",
+    "apply_url": "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Waukesha/Operations-Management-Leadership-Program---Internship_R4046211-1/apply",
+    "season": "summer-2027",
+    "role_family": "Quality/manufacturing",
+    "location": "Waukesha, Wisconsin, United States of America",
+    "degree": "unspecified",
+    "row_kind": "posting",
+    "source": "scrape",
+    "first_seen": "2026-09-11",
+    "last_seen": "2026-11-21",
+    "work_auth": "unspecified",
+    "eligibility": "open",
+    "miss_count": 2,
+    "canonical_apply_url": "https://gehc.wd5.myworkdayjobs.com/GEHC_ExternalSite/job/Waukesha/Operations-Management-Leadership-Program---Internship_R4046211-1/apply",
+    "ats": "phenom",
+    "short_description": "Manufacturing & Logistics",
+    "req_id": "R4046211",
+    "posted_at": "2026-11-20",
+    "last_miss_on": "2026-11-23",
+    "closed_at": "2026-11-23",
+    "close_reason": "consecutive_misses"
   }
 ]
